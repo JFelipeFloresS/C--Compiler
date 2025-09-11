@@ -21,3 +21,8 @@
 	pushi	1
 	addi
 	outi
+
+#line	7
+	' * Write
+	pushi	123456789
+	outi

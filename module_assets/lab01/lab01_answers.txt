@@ -1,0 +1,62 @@
+Answer the following Questions
+
+First, analyze the source code of the mini-compiler. Then, try to answer the following questions to
+check that you fully understand the language implementation (this is the main purpose of this first
+lab). Self-evaluation is provided with a document containing the answers, uploaded to Canvas (you
+do not need to send or upload your answers).
+
+1. Identify the Java packages that implement the different phases of the compiler (lexical, syntax and semantic analysis, and code generation).
+Lexical: /src/parser
+Syntax: /src/parser
+Semantic analysis: /src/semantic
+Code generation: /src/codegeneration
+
+2. Which file describes the lexical specification of the language?
+/src/parser/Cmm.g4
+
+3. Which file describes the syntax specification of the language?
+/src/parser/Cmm.g4
+
+4. In which package(s) is (are) the Abstract Syntax Tree (AST) implemented?
+/src/ast and /src/ast/types
+
+5. What is the type (i.e., class or interface) that generalizes any node of the AST?
+/src/ast/ASTNode.java
+
+6. What is the concrete (non-abstract) AST node that represents the whole source program?
+/src/ast/Program.java
+
+7. Do you recognize the design pattern used to model ASTs?
+Composite Design Pattern
+
+8. How many passes (AST traversals) are performed in the semantic-analysis phase?
+2: IdentificationVisitor and TypeCheckingVisitor
+
+9 .What general type models/represents any AST traversal? Do you know the design pattern used?
+/src/visitor/Visitor.java
+Visitor Design Pattern
+
+10. Enumerate the different traversals defined in this particular implementation?
+1. IdentificationVisitor
+2. TypeCheckingVisitor
+3. OffsetVisitor - not in answer sheet?
+4. ExecuteCGVisitor
+    4.1. ValueCGVisitor
+    4.2. AddressCGVisitor
+
+11. Which is the pass (traversal) that checks that variables must be defined before their use? Which phase does that traversal belong to?
+IdentificationVisitor during semantic analysis
+
+12. Where is the main responsibility to infer the type of an addition expression placed? (i.e., what method should be modified if we want to change the current behavior)
+/src/ast/types/Type.java
+Change method arithmetic
+
+13. Where is the responsibility of computing the MAPL size in bytes for each type in the source language placed?
+/src/ast/types/Type.java
+Method numberOfBytes
+
+14. In code generation, why are there two different classes for pushing values and addresses of expressions?
+because the behaviour is different between left and right sides of the AST nodes
+
+15. Which traversal directs the code generation process of the whole program (using other traversals)?
+ExecuteCGVisitor
