@@ -1,0 +1,8 @@
+
+int a;
+
+void main() {
+	a = 2;
+	write (a*2) + 1;
+}
+

@@ -1,0 +1,23 @@
+
+#source	"input.txt"
+
+	' * Variable definitions
+	' * int a (offset 0)
+
+	' * Sentences
+
+#line	5
+	' * Assignment
+	pusha	0
+	pushi	2
+	storei
+
+#line	6
+	' * Write
+	pusha	0
+	loadi
+	pushi	2
+	muli
+	pushi	1
+	addi
+	outi
