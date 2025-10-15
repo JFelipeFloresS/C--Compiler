@@ -1,6 +1,12 @@
-// Generated from Z:/Users/ortin/Dropbox/Asignaturas/PLD-CIT/labs/lab01/students/mini-compiler/src/parser/Cmm.g4 by ANTLR 4.7
+// Generated from /Users/masters/Projects/lab05/src/parser/Cmm.g4 by ANTLR 4.13.2
+package parser;
 
-	package parser;
+	import ast.*;
+	import ast.definitions.*;
+	import ast.expressions.*;
+	import ast.locatable.*;
+	import ast.statements.*;
+	import ast.types.*;
 
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -12,6 +18,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
  * which can be extended to create a listener which only needs to handle a subset
  * of the available methods.
  */
+@SuppressWarnings("CheckReturnValue")
 public class CmmBaseListener implements CmmListener {
 	/**
 	 * {@inheritDoc}
@@ -30,42 +37,6 @@ public class CmmBaseListener implements CmmListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVarDefinitions(CmmParser.VarDefinitionsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitVarDefinitions(CmmParser.VarDefinitionsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterType(CmmParser.TypeContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitType(CmmParser.TypeContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterStatements(CmmParser.StatementsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitStatements(CmmParser.StatementsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterStatement(CmmParser.StatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -78,6 +49,66 @@ public class CmmBaseListener implements CmmListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterProcedureInvocation(CmmParser.ProcedureInvocationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitProcedureInvocation(CmmParser.ProcedureInvocationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterVarDefinition(CmmParser.VarDefinitionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVarDefinition(CmmParser.VarDefinitionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArrayIndex(CmmParser.ArrayIndexContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArrayIndex(CmmParser.ArrayIndexContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterFunctionDefinition(CmmParser.FunctionDefinitionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFunctionDefinition(CmmParser.FunctionDefinitionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBlock(CmmParser.BlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBlock(CmmParser.BlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterExpression(CmmParser.ExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -85,6 +116,30 @@ public class CmmBaseListener implements CmmListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitExpression(CmmParser.ExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterFunctionInvocation(CmmParser.FunctionInvocationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFunctionInvocation(CmmParser.FunctionInvocationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterType(CmmParser.TypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitType(CmmParser.TypeContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

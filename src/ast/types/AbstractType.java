@@ -1,46 +1,49 @@
-/**
-  * Default implementation of Type.
-  * 
-  * @author  Francisco Ortin
-  */
-
 package ast.types;
 
+import ast.expressions.Expression;
+import ast.locatable.AbstractLocatable;
 
-import ast.*;
+import java.util.Objects;
 
+public abstract class AbstractType extends AbstractLocatable implements Type {
 
-public abstract class AbstractType implements Type {
-	
+    private final Expression size;
 
-	/******** Semantic Analysis ***************/
-	
-	@Override
-	public Type arithmetic(Type type, Locatable node) {
-		// * By default, not allowed (type error)
-		return new ErrorType("An arithmetic expression cannot be performed with the ast.types " + this.getClass().getSimpleName() + " and " + type.getClass().getSimpleName() + ".", node);
-	}
-	
+    protected AbstractType(int line, int column, Expression size) {
+        super(line, column);
+        this.size = size;
+    }
 
-	@Override
-	public Type assignment(Type type, Locatable node) {
-		if (type instanceof ErrorType)
-			return type;
-		if (this.getClass().equals(type.getClass()))
-			// * Both operands have the same type
-			return type;
-		return new ErrorType("Assignments require left- and right-hand sides to have the same type", node);
-	}
+    public Expression getSize() {
+        return size;
+    }
 
+    @Override
+    public String toString() {
+        return String.format(
+            "%s%s",
+            this.getClass().getSimpleName(),
+            size != null
+            ? String.format(
+                " arraySize(%s)",
+                size.getClass().getSimpleName()
+            )
+            : ""
+        );
+    }
 
-	/******** Code Generation ***************/
-	
-	@Override
-	public abstract char suffix();
-	
-	@Override
-	public abstract int numberOfBytes();
-	
-	
+    @Override
+    public boolean equals(Object o) {
+        if (! (o instanceof AbstractType that)) return false;
+        return this.getLine() == that.getLine()
+            && this.getColumn() == that.getColumn()
+            && Objects.equals(this.size, that.size);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(Integer.hashCode(getLine()),
+                Integer.hashCode(getColumn()),
+                size.hashCode());
+    }
 }

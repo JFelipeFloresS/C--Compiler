@@ -1,57 +1,24 @@
-/**
-  * Internal representation of "int" type in the source language.
-  * 
-  * @author  Francisco Ortin
-  */
-
 package ast.types;
 
-import ast.Locatable;
-import visitor.Visitor;
+import ast.expressions.Expression;
 
 public class IntType extends AbstractType {
+    public IntType(int line, int column, Expression size) {
+        super(line, column, size);
+    }
 
-	private static final IntType instance=new IntType();
-	
-	
-	public static IntType getInstance() { return instance; }
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof IntType that)) return false;
+        return this.getLine() == that.getLine() &&
+                this.getColumn() == that.getColumn() &&
+                (this.getSize() == null ? that.getSize() == null : this.getSize().equals(that.getSize()));
+    }
 
-	
-	@Override
-	public Type arithmetic(Type type, Locatable node) {
-		if (type instanceof ErrorType)
-			return type;
-		if (type instanceof IntType)
-			// int + int -> int
-			return this;
-		return new ErrorType(String.format(
-				"Arithmetic operations of integers do not allow a second operand with type %s",  type),
-				node);
-	}
-
-	
-	@Override
-	public char suffix() {
-		return 'i';
-	}
-
-	@Override
-	public int numberOfBytes() {
-		return 2;
-	}
-
-	
-	@Override
-	public String toString() {
-		return "int";
-	}
-
-	
-
-	@Override
-	public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
-		return visitor.visit(this,param);
-	}
-
-
+    @Override
+    public int hashCode() {
+        return super.hashCode()
+                + 31 * "IntType".hashCode()
+                + 31 * (getSize() != null ? getSize().hashCode() : 0);
+    }
 }

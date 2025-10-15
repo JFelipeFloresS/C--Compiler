@@ -4,24 +4,23 @@
  * @author  Francisco Ortin
  */
 
-import org.antlr.v4.runtime.*;
-
+import ast.Program;
 import introspector.model.IntrospectorModel;
 import introspector.view.IntrospectorView;
-import parser.*;
-import semantic.*;
-import ast.Program;
-import codegeneration.*;
-import errorhandler.*;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import parser.CmmLexer;
+import parser.CmmParser;
 
 
 public class MainIntrospector {
 	
 	public static void main(String... args) throws Exception {
-		   if (args.length<2) {
-		        System.err.println("Please, pass me the input and output file names.");
-		        return;
-		    }
+	   if (args.length<1) {
+			System.err.println("Please, pass me the input and output file names.");
+			return;
+		}
 		   		 			
 		 // * Creates one lexer that feeds off of input CharStream
 		CharStream input = CharStreams.fromFileName(args[0]);
@@ -35,19 +34,6 @@ public class MainIntrospector {
 		if (parser.getNumberOfSyntaxErrors() >0) {
 			System.err.println("Program with syntax errors. No code was generated.");
 			return;
-		}
-		
-		// * The AST is traversed
-		ast.accept(new IdentificationVisitor(), null);
-		ast.accept(new TypeCheckingVisitor(), null);
-		
-		if (ErrorHandler.getErrorHandler().anyError()) {
-			ErrorHandler.getErrorHandler().showErrors(System.err);
-			System.err.println("Program with semantic errors. No code was generated.");
-		}
-		else {
-			ast.accept(new OffsetVisitor(), null);
-			ast.accept(new ExecuteCGVisitor(new CG(args[1], args[0])), null);
 		}
 	
 		// * The AST is shown

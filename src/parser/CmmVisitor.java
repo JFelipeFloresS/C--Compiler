@@ -1,8 +1,14 @@
-// Generated from Z:/Users/ortin/Dropbox/Asignaturas/PLD-CIT/labs/lab01/students/mini-compiler/src/parser/Cmm.g4 by ANTLR 4.7
+// Generated from /Users/masters/Projects/lab05/src/parser/Cmm.g4 by ANTLR 4.13.2
+package parser;
 
-	package parser;
+	import ast.*;
+	import ast.definitions.*;
+	import ast.expressions.*;
+	import ast.locatable.*;
+	import ast.statements.*;
+	import ast.types.*;
 
-	import org.antlr.v4.runtime.tree.ParseTreeVisitor;
+import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
  * This interface defines a complete generic visitor for a parse tree produced
@@ -19,33 +25,57 @@ public interface CmmVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitProgram(CmmParser.ProgramContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link CmmParser#varDefinitions}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitVarDefinitions(CmmParser.VarDefinitionsContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link CmmParser#type}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitType(CmmParser.TypeContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link CmmParser#statements}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitStatements(CmmParser.StatementsContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link CmmParser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitStatement(CmmParser.StatementContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link CmmParser#procedureInvocation}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitProcedureInvocation(CmmParser.ProcedureInvocationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link CmmParser#varDefinition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVarDefinition(CmmParser.VarDefinitionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link CmmParser#arrayIndex}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArrayIndex(CmmParser.ArrayIndexContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link CmmParser#functionDefinition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunctionDefinition(CmmParser.FunctionDefinitionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link CmmParser#block}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBlock(CmmParser.BlockContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link CmmParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitExpression(CmmParser.ExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link CmmParser#functionInvocation}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunctionInvocation(CmmParser.FunctionInvocationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link CmmParser#type}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitType(CmmParser.TypeContext ctx);
 }
