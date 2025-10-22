@@ -1,8 +1,10 @@
 package ast.definitions;
 
 import ast.types.Type;
+import visitor.Visitor;
 
 import java.util.List;
+import java.util.Objects;
 
 public class VariableDefinition extends AbstractDefinition {
 
@@ -21,11 +23,12 @@ public class VariableDefinition extends AbstractDefinition {
     public String toString() {
         String namesStr = String.join(", ", this.getNames());
         return String.format(
-                "VariableDefinition:%s" +
-                "type: %s%s" +
+                "VariableDefinition (%d, %d):%n\t" +
+                "type: %s%n\t" +
                 "names: %s",
-                "\n\t",
-                this.getType().toString(), "\n\t",
+                this.getLine(),
+                this.getColumn(),
+                this.getType().toString(),
                 namesStr
         );
     }
@@ -34,22 +37,29 @@ public class VariableDefinition extends AbstractDefinition {
     public boolean equals(Object o) {
         if (!(o instanceof VariableDefinition that)) return false;
 
-        if (this.getLine() != that.getLine()) return false;
-        if (this.getColumn() != that.getColumn()) return false;
-
-        boolean areNamesEqual = this.getNames().size() == that.getNames().size();
-        if (areNamesEqual) {
-            for (int i = 0; i < this.getNames().size(); i++) {
-                if (!this.getNames().get(i).equals(((VariableDefinition) o).getNames().get(i))) {
-                    areNamesEqual = false;
-                    break;
-                }
-            }
+        if (this.getLine() != that.getLine()) {
+          System.out.println("VariableDefinition line numbers differ: " + this.getLine() + " != " + that.getLine());
+          return false;
         }
-        if (!areNamesEqual) return false;
 
-        if (!this.getType().equals(that.getType())) return false;
-        return this.getNames().equals(that.getNames());
+        if (this.getColumn() != that.getColumn()) {
+          System.out.println("VariableDefinition column numbers differ: " + this.getColumn() + " != " + that.getColumn());
+          return false;
+        }
+
+        if (!Objects.deepEquals(this.names, that.names)) {
+          System.out.println("VariableDefinition names differ: " +
+              String.join(", ", this.names) + " != " +
+              String.join(", ", that.names));
+          return false;
+        }
+
+        if (!this.getType().equals(that.getType())) {
+          System.out.println("VariableDefinition types differ: " + this.getType() + " != " + that.getType());
+          return false;
+        }
+
+        return  true;
     }
 
     @Override
@@ -58,4 +68,10 @@ public class VariableDefinition extends AbstractDefinition {
         result = 31 * result + names.hashCode();
         return result;
     }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
+    }
+
 }

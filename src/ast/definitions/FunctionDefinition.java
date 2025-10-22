@@ -2,48 +2,50 @@ package ast.definitions;
 
 import ast.statements.Statement;
 import ast.types.Type;
+import visitor.Visitor;
 
 import java.util.List;
+import java.util.Objects;
 
 public class FunctionDefinition extends AbstractDefinition implements Definition {
 
     private final String name;
-    private final List<VariableDefinition> params;
-    private final List<Statement> body;
+    private final List<VariableDefinition> localVars;
+    private final List<Statement> stmtsBlock;
 
-    public FunctionDefinition(int line, int col, Type type, String name, List<VariableDefinition> params, List<Statement> body) {
+    public FunctionDefinition(int line, int col, Type type, String name, List<VariableDefinition> localVars, List<Statement> stmtsBlock) {
         super(line, col, type);
         this.name = name;
-        this.params = params;
-        this.body = body;
+        this.localVars = localVars;
+        this.stmtsBlock = stmtsBlock;
     }
 
     public String getName() {
         return this.name;
     }
 
-    public List<Statement> getBody() {
-        return this.body;
+    public List<VariableDefinition> getLocalVars() {
+        return this.localVars;
     }
 
-    public List<VariableDefinition> getParams() {
-        return params;
+    public List<Statement> getStmtsBlock() {
+        return this.stmtsBlock;
     }
 
     @Override
     public String toString() {
-        String paramNames = String.join(", ", this.getParams().stream().map(varDef -> varDef.getClass().getSimpleName()).toArray(String[]::new));
         return String.format(
-                "FunctionDefinition:%s" +
-                "functionType: %s%s" +
-                "name: %s%s" +
-                "param: %s%s" +
+                "FunctionDefinition (%d, %d):%n\t" +
+                "functionType: %s%n\t" +
+                "name: %s%n\t" +
+                "local variables count: %d%n\t" +
                 "body stmts count: %d",
-                "\n\t",
-                this.getType().toString(), "\n\t",
-                this.getName(), "\n\t",
-                paramNames, "\n\t",
-                this.getBody().size()
+                this.getLine(),
+                this.getColumn(),
+                this.getType().toString(),
+                this.getName(),
+                this.getLocalVars() != null ? this.getLocalVars().size() : 0,
+                this.getStmtsBlock() != null ? this.getStmtsBlock().size() : 0
         );
     }
 
@@ -51,40 +53,52 @@ public class FunctionDefinition extends AbstractDefinition implements Definition
     public boolean equals(Object o) {
         if (!(o instanceof FunctionDefinition that)) return false;
 
-        boolean areParamsEqual = this.params.size() == that.params.size();
-        if (areParamsEqual) {
-            for (int i = 0; i < this.params.size(); i++) {
-                if (!this.params.get(i).equals(that.params.get(i))) {
-                    areParamsEqual = false;
-                    break;
-                }
-            }
+        if (this.getLine() != that.getLine()) {
+          System.out.println("FunctionDefinition line numbers differ: " + this.getLine() + " != " + that.getLine());
+          return false;
         }
-        if (!areParamsEqual) return false;
 
-        boolean isBodyEqual = this.body.size() == that.body.size();
-        if (isBodyEqual) {
-            for (int i = 0; i < this.body.size(); i++) {
-                if (!this.body.get(i).equals(that.body.get(i))) {
-                    isBodyEqual = false;
-                    break;
-                }
-            }
+        if (this.getColumn() != that.getColumn()) {
+          System.out.println("FunctionDefinition column numbers differ: " + this.getColumn() + " != " + that.getColumn());
+          return false;
         }
-        if (!isBodyEqual) return false;
 
-        return this.getLine() == that.getLine() &&
-               this.getColumn() == that.getColumn() &&
-               this.getType().equals(that.getType()) &&
-               this.name.equals(that.name);
+        if (!this.getType().equals(that.getType())) {
+          System.out.println("FunctionDefinition types differ: " + this.getType() + " != " + that.getType());
+          return false;
+        }
+
+        if (!this.name.equals(that.name)) {
+          System.out.println("FunctionDefinition names differ: " + this.name + " != " + that.name);
+          return false;
+        }
+
+        if (!Objects.deepEquals(this.localVars, that.localVars)) {
+          System.out.println("FunctionDefinition localVars differ: " +
+              String.join(", ", this.localVars.stream().map(VariableDefinition::toString).toArray(String[]::new)) + " != " +
+              String.join(", ", that.localVars.stream().map(VariableDefinition::toString).toArray(String[]::new)));
+          return false;
+        }
+
+        if (!Objects.deepEquals(this.stmtsBlock, that.stmtsBlock)) {
+          System.out.println("FunctionDefinition stmtsBlock differ: " +
+              String.join(", ", this.stmtsBlock.stream().map(Statement::toString).toArray(String[]::new)) + " != " +
+              String.join(", ", that.stmtsBlock.stream().map(Statement::toString).toArray(String[]::new)));
+          return false;
+        }
+
+        return  true;
     }
 
     @Override
     public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + name.hashCode();
-        result = 31 * result + params.hashCode();
-        result = 31 * result + body.hashCode();
+        int result = name.hashCode();
+        result = 31 * result + stmtsBlock.hashCode();
         return result;
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
     }
 }

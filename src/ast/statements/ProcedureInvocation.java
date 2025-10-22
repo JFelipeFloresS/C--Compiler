@@ -1,22 +1,24 @@
 package ast.statements;
 
 import ast.expressions.Expression;
+import ast.expressions.Id;
+import visitor.Visitor;
 
 import java.util.List;
 
 public class ProcedureInvocation extends AbstractStatement {
 
-    private final String procedureName;
+    private final Id procedureId;
     private final List<Expression> parameters;
 
-    public ProcedureInvocation(int line, int column, String procedureName, List<Expression> parameters) {
+    public ProcedureInvocation(int line, int column, Id procedureId, List<Expression> parameters) {
         super(line, column);
-        this.procedureName = procedureName;
+        this.procedureId = procedureId;
         this.parameters = parameters;
     }
 
-    public String getProcedureName() {
-        return procedureName;
+    public Id getProcedureId() {
+        return procedureId;
     }
 
     public List<Expression> getParameters() {
@@ -28,10 +30,10 @@ public class ProcedureInvocation extends AbstractStatement {
         String paramString = String.join(", ", parameters.stream().map(p -> p.getClass().getSimpleName()).toArray(String[]::new));
         return String.format(
                 "ProcedureInvocation:%s" +
-                "procedureName: %s%s" +
+                "procedureId: %s%s" +
                 "parameters: %s",
                 "\n\t",
-                procedureName, "\n\t",
+            procedureId, "\n\t",
                 paramString
         );
     }
@@ -41,7 +43,7 @@ public class ProcedureInvocation extends AbstractStatement {
         if (!(o instanceof ProcedureInvocation that)) return false;
         if (this.getLine() != that.getLine()) return false;
         if (this.getColumn() != that.getColumn()) return false;
-        if (!this.procedureName.equals(that.procedureName)) return false;
+        if (!this.procedureId.equals(that.procedureId)) return false;
         if (this.parameters.size() != that.parameters.size()) return false;
         for (int i = 0; i < this.parameters.size(); i++) {
             if (!this.parameters.get(i).equals(that.parameters.get(i))) return false;
@@ -51,7 +53,7 @@ public class ProcedureInvocation extends AbstractStatement {
 
     @Override
     public int hashCode() {
-        int result = procedureName.hashCode();
+        int result = procedureId.hashCode();
         for (Expression param : parameters) {
             result = 31 * result + param.hashCode();
         }
@@ -59,4 +61,10 @@ public class ProcedureInvocation extends AbstractStatement {
         result = 31 * result + getColumn();
         return result;
     }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
+    }
+
 }

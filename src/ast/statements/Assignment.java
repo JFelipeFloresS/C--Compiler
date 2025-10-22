@@ -1,6 +1,7 @@
 package ast.statements;
 
 import ast.expressions.Expression;
+import visitor.Visitor;
 
 public class Assignment extends AbstractStatement {
 
@@ -46,5 +47,10 @@ public class Assignment extends AbstractStatement {
     @Override
     public int hashCode() {
         return 31 * target.hashCode() + value.hashCode();
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
     }
 }

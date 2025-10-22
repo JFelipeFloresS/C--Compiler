@@ -21,12 +21,8 @@ public abstract class AbstractLocatable implements Locatable {
     }
 
     @Override
-    public boolean equals(Object o) {
-        throw new RuntimeException("equals not implemented for " + this.getClass().getName());
-    }
+    public abstract boolean equals(Object o);
 
     @Override
-    public int hashCode() {
-        throw new RuntimeException("hashCode not implemented for " + this.getClass().getName());
-    }
+    public abstract int hashCode();
 }

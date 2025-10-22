@@ -1,5 +1,7 @@
 package ast.expressions;
 
+import visitor.Visitor;
+
 public abstract class AbstractBinaryExpression extends AbstractExpression implements Expression {
 
     private final Expression left;
@@ -66,4 +68,7 @@ public abstract class AbstractBinaryExpression extends AbstractExpression implem
         result = 31 * result + operator.hashCode();
         return result;
     }
+
+    @Override
+    public abstract <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param);
 }

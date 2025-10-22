@@ -1,5 +1,7 @@
 package ast.expressions;
 
+import visitor.Visitor;
+
 public class Parenthesis extends AbstractExpression {
 
     private final Expression expression;
@@ -30,4 +32,19 @@ public class Parenthesis extends AbstractExpression {
         if (this.getColumn() != that.getColumn()) return false;
       return this.expression.equals(that.expression);
     }
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = 31 * result + this.getLine();
+        result = 31 * result + this.getColumn();
+        result = 31 * result + this.expression.hashCode();
+        return result;
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
+    }
+
 }

@@ -1,5 +1,7 @@
 package ast.expressions;
 
+import visitor.Visitor;
+
 public class CharLiteral extends AbstractExpression {
 
     private final char value;
@@ -36,4 +38,10 @@ public class CharLiteral extends AbstractExpression {
     public int hashCode() {
         return (int) value + getLine() + getColumn();
     }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
+    }
+
 }

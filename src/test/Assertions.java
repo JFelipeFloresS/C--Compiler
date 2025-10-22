@@ -33,6 +33,7 @@ public class Assertions {
     }
 
     public static void assertEquals(Locatable expected, Locatable actual) {
+        System.out.println("Expected: " + expected + "\nActual: " + actual + "\n");
         if (!expected.equals(actual)) {
             throw new AssertionError("\nExpected: " + expected + ".\nActual: " + actual + ".\n"
             + "Expected position: (" + expected.getLine() + ", " + expected.getColumn() + ")\nActual position: ("

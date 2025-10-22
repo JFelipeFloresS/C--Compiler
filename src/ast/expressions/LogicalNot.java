@@ -1,5 +1,7 @@
 package ast.expressions;
 
+import visitor.Visitor;
+
 public class LogicalNot extends AbstractExpression {
 
     private final Expression expression;
@@ -40,4 +42,10 @@ public class LogicalNot extends AbstractExpression {
         result = 31 * result + this.expression.hashCode();
         return result;
     }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
+    }
+
 }

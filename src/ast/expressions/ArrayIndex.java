@@ -1,5 +1,7 @@
 package ast.expressions;
 
+import visitor.Visitor;
+
 public class ArrayIndex extends AbstractExpression {
 
     private final Expression nextIndex;
@@ -46,4 +48,10 @@ public class ArrayIndex extends AbstractExpression {
             index.hashCode() ^
             (nextIndex != null ? nextIndex.hashCode() : 0);
     }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
+    }
+
 }

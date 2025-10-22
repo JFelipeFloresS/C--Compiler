@@ -108,6 +108,13 @@ public class LexerTest {
 			new LexicalInfo(17, 15, "w", CmmLexer.ID, "w"),
 			new LexicalInfo(17, 16, ";", CmmLexer.SEMICOLON, ";"),
 
+      // void readWriteIfElseWhileCast() {
+      new LexicalInfo(19, 1, "void", CmmLexer.VOID, "void"),
+      new LexicalInfo(19, 6, "readWriteIfElseWhileCast", CmmLexer.ID, "readWriteIfElseWhileCast"),
+      new LexicalInfo(19, 30, "(", CmmLexer.LEFT_PAREN, "("),
+      new LexicalInfo(19, 31, ")", CmmLexer.RIGHT_PAREN, ")"),
+      new LexicalInfo(19, 33, "{", CmmLexer.LEFT_BRACE, "{"),
+
 			// read v[i];
 			new LexicalInfo(20, 1, "read", CmmLexer.READ, "read"),
 			new LexicalInfo(20, 6, "v", CmmLexer.ID, "v"),
@@ -230,7 +237,7 @@ public class LexerTest {
 			new LexicalInfo(48, 10, "realNumber", CmmLexer.ID, "realNumber"),
 			new LexicalInfo(48, 20, ";", CmmLexer.SEMICOLON, ";"),
 
-			// realNumber = (double)a;
+			// realNumber = (double)a; }
 			new LexicalInfo(49, 1, "realNumber", CmmLexer.ID, "realNumber"),
 			new LexicalInfo(49, 12, "=", CmmLexer.ASSIGN, "="),
 			new LexicalInfo(49, 14, "(", CmmLexer.LEFT_PAREN, "("),
@@ -238,6 +245,14 @@ public class LexerTest {
 			new LexicalInfo(49, 21, ")", CmmLexer.RIGHT_PAREN, ")"),
 			new LexicalInfo(49, 22, "a", CmmLexer.ID, "a"),
 			new LexicalInfo(49, 23, ";", CmmLexer.SEMICOLON, ";"),
+      new LexicalInfo(49, 25, "}", CmmLexer.RIGHT_BRACE, "}"),
+
+      // void invokeExpressions() {
+      new LexicalInfo(51, 1, "void", CmmLexer.VOID, "void"),
+      new LexicalInfo(51, 6, "invokeExpressions", CmmLexer.ID, "invokeExpressions"),
+      new LexicalInfo(51, 23, "(", CmmLexer.LEFT_PAREN, "("),
+      new LexicalInfo(51, 24, ")", CmmLexer.RIGHT_PAREN, ")"),
+      new LexicalInfo(51, 26, "{", CmmLexer.LEFT_BRACE, "{"),
 
 			// int result;
 			new LexicalInfo(52, 1, "int", CmmLexer.INT, "int"),
@@ -380,7 +395,7 @@ public class LexerTest {
 			new LexicalInfo(67, 13, "{", CmmLexer.LEFT_BRACE, "{"),
 			new LexicalInfo(67, 14, "}", CmmLexer.RIGHT_BRACE, "}"),
 
-			// if (a || b) {}
+			// if (a || b) {} }
 			new LexicalInfo(68, 1, "if", CmmLexer.IF, "if"),
 			new LexicalInfo(68, 4, "(", CmmLexer.LEFT_PAREN, "("),
 			new LexicalInfo(68, 5, "a", CmmLexer.ID, "a"),
@@ -389,6 +404,14 @@ public class LexerTest {
 			new LexicalInfo(68, 11, ")", CmmLexer.RIGHT_PAREN, ")"),
 			new LexicalInfo(68, 13, "{", CmmLexer.LEFT_BRACE, "{"),
 			new LexicalInfo(68, 14, "}", CmmLexer.RIGHT_BRACE, "}"),
+      new LexicalInfo(68, 16, "}", CmmLexer.RIGHT_BRACE, "}"),
+
+      // void multipleTest() {
+      new LexicalInfo(70, 1, "void", CmmLexer.VOID, "void"),
+      new LexicalInfo(70, 6, "multipleTest", CmmLexer.ID, "multipleTest"),
+      new LexicalInfo(70, 18, "(", CmmLexer.LEFT_PAREN, "("),
+      new LexicalInfo(70, 19, ")", CmmLexer.RIGHT_PAREN, ")"),
+      new LexicalInfo(70, 21, "{", CmmLexer.LEFT_BRACE, "{"),
 
 			// int a, b, c;
 			new LexicalInfo(71, 1, "int", CmmLexer.INT, "int"),
@@ -423,7 +446,7 @@ public class LexerTest {
 			new LexicalInfo(75, 18, "]", CmmLexer.RIGHT_BRACKET, "]"),
 			new LexicalInfo(75, 19, ";", CmmLexer.SEMICOLON, ";"),
 
-			// read realNumber, w[6][t];
+			// read realNumber, w[6][t]; }
 			new LexicalInfo(76, 1, "read", CmmLexer.READ, "read"),
 			new LexicalInfo(76, 6, "realNumber", CmmLexer.ID, "realNumber"),
 			new LexicalInfo(76, 16, ",", CmmLexer.COMMA, ","),
@@ -435,6 +458,14 @@ public class LexerTest {
 			new LexicalInfo(76, 23, "t", CmmLexer.ID, "t"),
 			new LexicalInfo(76, 24, "]", CmmLexer.RIGHT_BRACKET, "]"),
 			new LexicalInfo(76, 25, ";", CmmLexer.SEMICOLON, ";"),
+      new LexicalInfo(76, 27, "}", CmmLexer.RIGHT_BRACE, "}"),
+
+      // void structWithinStruct() {
+      new LexicalInfo(78, 1, "void", CmmLexer.VOID, "void"),
+      new LexicalInfo(78, 6, "structWithinStruct", CmmLexer.ID, "structWithinStruct"),
+      new LexicalInfo(78, 24, "(", CmmLexer.LEFT_PAREN, "("),
+      new LexicalInfo(78, 25, ")", CmmLexer.RIGHT_PAREN, ")"),
+      new LexicalInfo(78, 27, "{", CmmLexer.LEFT_BRACE, "{"),
 
 			// struct {
 			new LexicalInfo(79, 1, "struct", CmmLexer.STRUCT, "struct"),
@@ -478,7 +509,7 @@ public class LexerTest {
 			new LexicalInfo(83, 8, "students", CmmLexer.ID, "students"),
 			new LexicalInfo(83, 16, ";", CmmLexer.SEMICOLON, ";"),
 
-			// students[0].dateOfBirth.day = 10;
+			// students[0].dateOfBirth.day = 10; }
 			new LexicalInfo(84, 1, "students", CmmLexer.ID, "students"),
 			new LexicalInfo(84, 9, "[", CmmLexer.LEFT_BRACKET, "["),
 			new LexicalInfo(84, 10, "0", CmmLexer.INT_CONSTANT, 0),
@@ -490,10 +521,16 @@ public class LexerTest {
 			new LexicalInfo(84, 29, "=", CmmLexer.ASSIGN, "="),
 			new LexicalInfo(84, 31, "10", CmmLexer.INT_CONSTANT, 10),
 			new LexicalInfo(84, 33, ";", CmmLexer.SEMICOLON, ";"),
+      new LexicalInfo(84, 35, "}", CmmLexer.RIGHT_BRACE, "}"),
 
-			// struct {
-			new LexicalInfo(86, 1, "struct", CmmLexer.STRUCT, "struct"),
-			new LexicalInfo(86, 8, "{", CmmLexer.LEFT_BRACE, "{"),
+			// void simpleStruct() { struct {
+      new LexicalInfo(86, 1, "void", CmmLexer.VOID, "void"),
+      new LexicalInfo(86, 6, "simpleStruct", CmmLexer.ID, "simpleStruct"),
+      new LexicalInfo(86, 18, "(", CmmLexer.LEFT_PAREN, "("),
+      new LexicalInfo(86, 19, ")", CmmLexer.RIGHT_PAREN, ")"),
+      new LexicalInfo(86, 21, "{", CmmLexer.LEFT_BRACE, "{"),
+			new LexicalInfo(86, 23, "struct", CmmLexer.STRUCT, "struct"),
+			new LexicalInfo(86, 30, "{", CmmLexer.LEFT_BRACE, "{"),
 
 			// int id;
 			new LexicalInfo(87, 1, "int", CmmLexer.INT, "int"),
@@ -518,13 +555,14 @@ public class LexerTest {
 			new LexicalInfo(90, 3, "product", CmmLexer.ID, "product"),
 			new LexicalInfo(90, 10, ";", CmmLexer.SEMICOLON, ";"),
 
-			// product.id = 1;
+			// product.id = 1; }
 			new LexicalInfo(91, 1, "product", CmmLexer.ID, "product"),
 			new LexicalInfo(91, 8, ".", CmmLexer.DOT, "."),
 			new LexicalInfo(91, 9, "id", CmmLexer.ID, "id"),
 			new LexicalInfo(91, 12, "=", CmmLexer.ASSIGN, "="),
 			new LexicalInfo(91, 14, "1", CmmLexer.INT_CONSTANT, 1),
 			new LexicalInfo(91, 15, ";", CmmLexer.SEMICOLON, ";"),
+      new LexicalInfo(91, 17, "}", CmmLexer.RIGHT_BRACE, "}"),
 
 			// void main() {
 			new LexicalInfo(94, 1, "void", CmmLexer.VOID, "void"),

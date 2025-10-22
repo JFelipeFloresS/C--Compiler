@@ -1,36 +1,33 @@
 package ast;
 
-import ast.statements.Statement;
+import ast.definitions.Definition;
+import visitor.Visitor;
 
 import java.util.List;
 
 public class Program implements ASTNode {
 
-    private final List<Statement> initialStatements;
-    private final List<Statement> mainBlockStatements;
+    private final List<Definition> definitions;
 
-    public Program(List<Statement> initialStatements, List<Statement> mainBlockStatements) {
-        this.initialStatements = initialStatements;
-        this.mainBlockStatements = mainBlockStatements;
+    public Program(List<Definition> definitions) {
+        this.definitions = definitions;
     }
 
-    public List<Statement> getInitialStatements() {
-        return initialStatements;
-    }
-
-    public List<Statement> getMainBlockStatements() {
-        return mainBlockStatements;
+    public List<Definition> getDefinitions() {
+        return definitions;
     }
 
     @Override
     public String toString() {
         return String.format(
-                "Program:%s" +
-                "initial statements: %d%s" +
-                "main block statements: %d",
-                "\n\t",
-                this.initialStatements.size(), "\n\t",
-                this.mainBlockStatements.size()
+                "Program: %n\t" +
+                "initial statements: %d",
+                this.definitions.size()
         );
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
     }
 }

@@ -9,6 +9,7 @@ import ast.statements.Assignment;
 import ast.statements.Read;
 import ast.statements.Statement;
 import ast.statements.Write;
+import ast.types.FunctionType;
 import ast.types.IntType;
 import ast.types.DoubleType;
 import ast.types.VoidType;
@@ -52,9 +53,10 @@ public class ASTTest {
 		// * Line 6
 		Write write = new Write(6, 3, List.of(new Id(6, 9, "b")));
 		// * We build and return the AST
-		List<Statement> mainBody = new ArrayList<Statement>(Arrays.asList(varDef1, varDef2, read, assignment, write));
-		FunctionDefinition functionDefinition = new FunctionDefinition(1, 1, new VoidType(1,1), "main", List.of(), mainBody);
-		return new Program(List.of(), new ArrayList<>(List.of(functionDefinition)));
+    List<VariableDefinition> localVars = new ArrayList<>(Arrays.asList(varDef1, varDef2));
+		List<Statement> stmtsBlock = new ArrayList<>(Arrays.asList(read, assignment, write));
+		FunctionDefinition functionDefinition = new FunctionDefinition(1, 1, new FunctionType(1,1,new VoidType(1,1), List.of()), "main", localVars, stmtsBlock);
+		return new Program(List.of(functionDefinition));
 	}
 
 	public static void main(String[] args) {

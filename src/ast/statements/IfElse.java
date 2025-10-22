@@ -1,6 +1,7 @@
 package ast.statements;
 
 import ast.expressions.Expression;
+import visitor.Visitor;
 
 import java.util.List;
 
@@ -73,5 +74,10 @@ public class IfElse extends AbstractStatement {
         result = 31 * result + thenStatements.hashCode();
         result = 31 * result + elseStatements.hashCode();
         return result;
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
     }
 }

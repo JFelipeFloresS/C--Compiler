@@ -20,4 +20,11 @@ public abstract class AbstractExpression extends AbstractLocatable implements Ex
     public void setType(Type type) {
         this.type = type;
     }
+
+    @Override
+    public abstract boolean equals(Object obj);
+
+    @Override
+    public abstract int hashCode();
+
 }

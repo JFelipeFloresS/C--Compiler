@@ -2,6 +2,9 @@ import ast.Program;
 import parser.*;
 
 import org.antlr.v4.runtime.*;
+import visitor.IdentificationVisitor;
+import visitor.TypeCheckingVisitor;
+import visitor.Visitor;
 
 public class Main {
 	
@@ -19,6 +22,9 @@ public class Main {
 		CommonTokenStream tokens = new CommonTokenStream(lexer); 
 		CmmParser parser = new CmmParser(tokens);	
 		Program ast = parser.program().ast;
+
+		ast.accept(new IdentificationVisitor(), null);
+		ast.accept(new TypeCheckingVisitor(), null);
 
 		System.out.println(ast);
 	}

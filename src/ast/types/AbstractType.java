@@ -2,7 +2,9 @@ package ast.types;
 
 import ast.expressions.Expression;
 import ast.locatable.AbstractLocatable;
+import visitor.Visitor;
 
+import javax.lang.model.type.TypeVisitor;
 import java.util.Objects;
 
 public abstract class AbstractType extends AbstractLocatable implements Type {
@@ -46,4 +48,7 @@ public abstract class AbstractType extends AbstractLocatable implements Type {
                 Integer.hashCode(getColumn()),
                 size.hashCode());
     }
+
+    @Override
+    public abstract <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param);
 }

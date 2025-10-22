@@ -1,5 +1,8 @@
 package ast.expressions;
 
+import ast.definitions.Definition;
+import visitor.Visitor;
+
 public class Id extends AbstractExpression {
 
     private final String name;
@@ -10,6 +13,15 @@ public class Id extends AbstractExpression {
     public Id(int line, int col, String name) {
         super(line, col);
         this.name = name;
+    }
+
+    private Definition definition;
+    public Definition getDefinition() {
+        return definition;
+    }
+
+    public void setDefinition(Definition definition) {
+        this.definition = definition;
     }
 
     @Override
@@ -37,5 +49,10 @@ public class Id extends AbstractExpression {
         result = 31 * result + this.getColumn();
         result = 31 * result + this.name.hashCode();
         return result;
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
     }
 }

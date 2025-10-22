@@ -1,5 +1,7 @@
 package ast.expressions;
 
+import visitor.Visitor;
+
 public class ArrayAccess extends AbstractExpression {
 
     private final Expression array;
@@ -49,4 +51,10 @@ public class ArrayAccess extends AbstractExpression {
         result = 31 * result + index.hashCode();
         return result;
     }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
+    }
+
 }

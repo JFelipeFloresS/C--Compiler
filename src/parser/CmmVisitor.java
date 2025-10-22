@@ -1,4 +1,4 @@
-// Generated from /Users/masters/Projects/lab05/src/parser/Cmm.g4 by ANTLR 4.13.2
+// Generated from /Users/masters/Projects/C--Compiler/src/parser/Cmm.g4 by ANTLR 4.13.2
 package parser;
 
 	import ast.*;
@@ -37,11 +37,23 @@ public interface CmmVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitProcedureInvocation(CmmParser.ProcedureInvocationContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link CmmParser#definition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDefinition(CmmParser.DefinitionContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link CmmParser#varDefinition}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitVarDefinition(CmmParser.VarDefinitionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link CmmParser#varDefList}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVarDefList(CmmParser.VarDefListContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link CmmParser#arrayIndex}.
 	 * @param ctx the parse tree
@@ -55,17 +67,29 @@ public interface CmmVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFunctionDefinition(CmmParser.FunctionDefinitionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link CmmParser#block}.
+	 * Visit a parse tree produced by {@link CmmParser#stmtBlock}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitBlock(CmmParser.BlockContext ctx);
+	T visitStmtBlock(CmmParser.StmtBlockContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link CmmParser#stmtList}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStmtList(CmmParser.StmtListContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link CmmParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitExpression(CmmParser.ExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link CmmParser#expressionList}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpressionList(CmmParser.ExpressionListContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link CmmParser#functionInvocation}.
 	 * @param ctx the parse tree

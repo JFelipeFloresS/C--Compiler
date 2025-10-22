@@ -1,5 +1,7 @@
 package ast.expressions;
 
+import visitor.Visitor;
+
 public class DoubleLiteral extends AbstractExpression {
 
     private final double value;
@@ -45,4 +47,10 @@ public class DoubleLiteral extends AbstractExpression {
         result = 31 * result + (this.getType() != null ? this.getType().hashCode() : 0);
         return result;
     }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
+    }
+
 }

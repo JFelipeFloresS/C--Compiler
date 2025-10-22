@@ -1,0 +1,8 @@
+
+void main() {
+  int i; 
+  double[10] v;
+
+  v[ (int)(v[i]) ] = 0.0;
+}
+ 

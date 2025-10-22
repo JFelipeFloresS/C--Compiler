@@ -1,6 +1,7 @@
 package ast.definitions;
 
 import ast.types.Type;
+import visitor.Visitor;
 
 import java.util.List;
 
@@ -20,13 +21,14 @@ public class StructDefinition extends VariableDefinition {
     public String toString() {
         String names = String.join(", ", this.getNames());
         return String.format(
-                "StructDefinition:%s" +
-                "variable definitions count: %d%s" +
-                "type: %s%s" +
+                "StructDefinition (%d, %d):%n\t" +
+                "variable definitions count: %d%n\t" +
+                "type: %s%n\t" +
                 "names: %s",
-                "\n\t",
-                this.getDefinitions().size(), "\n\t",
-                this.getType().toString(), "\n\t",
+                this.getLine(),
+                this.getColumn(),
+                this.getDefinitions().size(),
+                this.getType().toString(),
                 names
         );
     }
@@ -59,5 +61,10 @@ public class StructDefinition extends VariableDefinition {
         }
         return result;
     }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+          return visitor.visit(this, param);
+      }
 
 }
