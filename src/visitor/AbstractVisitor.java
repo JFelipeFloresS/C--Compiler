@@ -3,7 +3,6 @@ package visitor;
 import ast.Program;
 import ast.definitions.Definition;
 import ast.definitions.FunctionDefinition;
-import ast.definitions.StructDefinition;
 import ast.definitions.VariableDefinition;
 import ast.expressions.*;
 import ast.statements.*;
@@ -27,16 +26,6 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR> {
 
     funcDef.getType().accept(this, param);
 
-    return null;
-  }
-
-  @Override
-  public TR visit(StructDefinition structDef, TP param) {
-    for (VariableDefinition varDef : structDef.getDefinitions()) {
-      varDef.accept(this, param);
-    }
-
-    structDef.getType().accept(this, param);
     return null;
   }
 
@@ -130,14 +119,6 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR> {
   }
 
   @Override
-  public TR visit(ArrayIndex arrayIndex, TP param) {
-    arrayIndex.getIndex().accept(this, param);
-    if (arrayIndex.getNextIndex() != null)
-      arrayIndex.getNextIndex().accept(this, param);
-    return null;
-  }
-
-  @Override
   public TR visit(Cast cast, TP param) {
     cast.getExpression().accept(this, param);
     return null;
@@ -161,7 +142,8 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR> {
 
   @Override
   public TR visit(Id id, TP param) {
-    id.getDefinition().accept(this, param);
+    if ( id.getDefinition() != null )
+      id.getDefinition().accept(this, param);
     return null;
   }
 
@@ -246,6 +228,12 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR> {
 
   @Override
   public TR visit(ErrorType errorType, TP param) {
+    return null;
+  }
+
+  @Override
+  public TR visit(ArrayType arrayType, TP param) {
+    arrayType.getBuiltInType().accept(this, param);
     return null;
   }
 

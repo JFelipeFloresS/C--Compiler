@@ -5,7 +5,7 @@ import visitor.Visitor;
 
 public class VoidType extends AbstractType {
     public VoidType(int line, int column) {
-        super(line, column, null);
+        super(line, column);
     }
 
     @Override
@@ -46,5 +46,36 @@ public class VoidType extends AbstractType {
         if (that instanceof ErrorType)
             return that;
         return new ErrorType(String.format("Cannot perform logical operation between %s and %s", this, that), node);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("void (%d, %d)",
+            this.getLine(),
+            this.getColumn());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (!(o instanceof VoidType that)) {
+        return false;
+      }
+
+      if (this.getLine() != that.getLine()) {
+        System.out.println("VoidType line number differ: " + this.getLine() + " != " + that.getLine());
+        return false;
+      }
+
+      if (this.getColumn() != that.getColumn()) {
+        System.out.println("VoidType column number differ: " + this.getColumn() + " != " + that.getColumn());
+        return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 31 * getLine() + getColumn();
     }
 }

@@ -2,7 +2,6 @@ package test;
 
 import ast.Program;
 import ast.definitions.FunctionDefinition;
-import ast.definitions.StructDefinition;
 import ast.definitions.VariableDefinition;
 import ast.expressions.*;
 import ast.statements.*;
@@ -48,34 +47,34 @@ public class ParserTest {
 
         // variable definitions
         assertEquals(
-            new VariableDefinition(3, 1, new IntType(3, 1, null), List.of("a")),
+            new VariableDefinition(3, 1, new IntType(3, 1), List.of(new Id(3, 5, "a"))),
             ast.getDefinitions().get(0));
 
         assertEquals(
-            new VariableDefinition(4, 1, new IntType(4, 1, null), List.of("b")),
+            new VariableDefinition(4, 1, new IntType(4, 1), List.of(new Id(4, 5, "b"))),
             ast.getDefinitions().get(1));
 
         assertEquals(
-            new VariableDefinition(5, 1, new IntType(5, 1, null), List.of("c")),
+            new VariableDefinition(5, 1, new IntType(5, 1), List.of(new Id(5, 5, "c"))),
             ast.getDefinitions().get(2));
 
         assertEquals(
-            new VariableDefinition(6, 1, new DoubleType(6, 1, null), List.of("realNumber")),
+            new VariableDefinition(6, 1, new DoubleType(6, 1), List.of(new Id(6, 8, "realNumber"))),
             ast.getDefinitions().get(3));
 
         // function/procedure definitions
         assertEquals(
             new FunctionDefinition(9, 1,
                 new FunctionType(9, 1,
-                    new IntType(9, 1, null),
+                    new IntType(9, 1),
                     List.of(
-                        new VariableDefinition(9, 9, new IntType(9, 9, null), List.of("a")),
-                        new VariableDefinition(9, 16, new IntType(9, 16, null), List.of("b"))
+                        new VariableDefinition(9, 9, new IntType(9, 9), List.of(new Id(9, 13, "a"))),
+                        new VariableDefinition(9, 16, new IntType(9, 16), List.of(new Id(9, 20, "b")))
                     )
                 ),
-                "add",
+                new Id(9, 5, "add"),
                 List.of(
-                    new VariableDefinition(10, 1, new IntType(10, 1, null), List.of("temp"))
+                    new VariableDefinition(10, 1, new IntType(10, 1), List.of(new Id(10, 5, "temp")))
                 ),
                 List.of(
                     new Assignment(11, 1, new Id(11, 1, "temp"),
@@ -90,28 +89,26 @@ public class ParserTest {
 
         assertEquals(
             new VariableDefinition(16, 1,
-                new IntType(16, 1,
-                    new ArrayIndex(16, 4,
-                        new IntLiteral(16, 5, 10),
-                    null)
-                ),
-                List.of("v")
+                new ArrayType(16, 1,
+                new IntType(16, 1),
+                10),
+                List.of(new Id(16, 9, "v"))
             ),
             ast.getDefinitions().get(5));
 
         assertEquals(
             new VariableDefinition(17, 1,
-                new DoubleType(17, 1,
-                    new ArrayIndex(17, 7,
-                        new IntLiteral(17, 8, 5),
-                        new ArrayIndex(17, 10,
-                            new IntLiteral(17, 11, 10),
-                        null)
-                    )
+                new ArrayType(17, 1,
+                    new ArrayType(17, 1,
+                        new DoubleType(17, 1),
+                        5
+                    ),
+                    10
                 ),
-                List.of("w")
+                List.of(new Id(17, 15, "w"))
             ),
-            ast.getDefinitions().get(6));
+            ast.getDefinitions().get(6)
+        );
 
         assertEquals(
           new FunctionDefinition(19, 1,
@@ -119,28 +116,27 @@ public class ParserTest {
                   new VoidType(19, 1),
                   new ArrayList<>()
               ),
-              "readWriteIfElseWhileCast",
+              new Id(19, 6, "readWriteIfElseWhileCast"),
               new ArrayList<>(),
               List.of(
                   new Read(20, 1,
                       List.of(
                           new ArrayAccess(20, 6,
                               new Id(20, 6, "v"),
-                              new ArrayIndex(20, 7, new Id(20, 8, "i"), null)))
+                              new Id(20, 8, "i")))
                   ),
                   new Write(21, 1,
                       List.of(
                           new ArrayAccess(21, 7,
-                              new Id(21, 7, "w"),
-                              new ArrayIndex(21, 8,
-                                  new Id(21, 9, "i"),
-                                  new ArrayIndex(21, 11,
-                                      new Arithmetic(
-                                          21, 12,
-                                          new Id(21, 12, "a"),
-                                          "+",
-                                          new Id(21, 14, "b")
-                                      ), null))
+                              new ArrayAccess(21, 7,
+                                  new Id(21, 7, "w"),
+                                  new Id(21, 9, "i")),
+                              new Arithmetic(
+                                  21, 12,
+                                  new Id(21, 12, "a"),
+                                  "+",
+                                  new Id(21, 14, "b")
+                              )
                           )
                       )),
                   new IfElse(24, 1,
@@ -176,13 +172,14 @@ public class ParserTest {
                                   new IntLiteral(44, 13, 1)))
                       )
                   ),
-                  new Assignment(48, 1, new Id(48, 1, "a"),
+                  new Assignment(48, 1,
+                      new Id(48, 1, "a"),
                       new Cast(48, 5,
-                          new IntType(48, 6, null),
+                          new IntType(48, 6),
                           new Id(48, 10, "realNumber"))),
                   new Assignment(49, 1, new Id(49, 1, "realNumber"),
                       new Cast(49, 14,
-                          new DoubleType(49, 15, null),
+                          new DoubleType(49, 15),
                           new Id(49, 22, "a")))
               )
           ),
@@ -196,9 +193,9 @@ public class ParserTest {
                     new VoidType(51, 1),
                     new ArrayList<>()
                 ),
-                "invokeExpressions",
+                new Id(51, 6, "invokeExpressions"),
                 List.of(
-                    new VariableDefinition(52, 1, new IntType(52, 1, null), List.of("result"))
+                    new VariableDefinition(52, 1, new IntType(52, 1), List.of(new Id(52, 5, "result")))
                 ),
                 List.of(
                     new Assignment(53, 1, new Id(53, 1, "result"),
@@ -328,13 +325,23 @@ public class ParserTest {
                     new VoidType(70, 1),
                     new ArrayList<>()
                 ),
-                "multipleTest",
+                new Id(70, 6, "multipleTest"),
                 List.of(
-                    new VariableDefinition(71, 1, new IntType(71, 1, null), List.of("a", "b", "c")),
+                    new VariableDefinition(71, 1,
+                        new IntType(71, 1),
+                        List.of(
+                            new Id(71, 5, "a"),
+                            new Id(71, 8, "b"),
+                            new Id(71, 11, "c")
+                        )),
                     new VariableDefinition(72, 1,
-                        new DoubleType(72, 1,
-                            new ArrayIndex(72, 7, new IntLiteral(72, 8, 10), null)
-                        ), List.of("realVector", "anotherOne"))
+                        new ArrayType(72, 1,
+                            new DoubleType(72, 1),
+                            10
+                        ), List.of(
+                            new Id(72, 12, "realVector"),
+                            new Id(72, 24, "anotherOne"))
+                    )
                 ),
                 List.of(
                     new Write(75, 1,
@@ -346,13 +353,11 @@ public class ParserTest {
                             ),
                             new ArrayAccess(75, 12,
                                 new Id(75, 12, "v"),
-                                new ArrayIndex(75, 13,
-                                    new Arithmetic(75, 14,
+                                new Arithmetic(75, 14,
                                         new IntLiteral(75, 14, 45),
                                         "+",
                                         new Id(75, 17, "c")
-                                    ),null
-                                )
+                                    )
                             )
                         )
                     ),
@@ -360,14 +365,11 @@ public class ParserTest {
                         List.of(
                             new Id(76, 6, "realNumber"),
                             new ArrayAccess(76, 18,
-                                new Id(76, 18, "w"),
-                                new ArrayIndex(76, 19,
-                                    new IntLiteral(76, 20, 6),
-                                    new ArrayIndex(76, 22,
-                                        new Id(76, 23, "t"),
-                                        null
-                                    )
-                                )
+                                new ArrayAccess(76, 18,
+                                    new Id(76, 18, "w"),
+                                    new IntLiteral(76, 20, 6)
+                                ),
+                                new Id(76, 23, "t")
                             )
                         )
                     )
@@ -381,42 +383,43 @@ public class ParserTest {
                 new FunctionType(78, 1,
                     new VoidType(78, 1),
                     new ArrayList<>()),
-                "structWithinStruct",
+                new Id(78, 6, "structWithinStruct"),
                 List.of(
-                    new StructDefinition(79, 1,
-                        new StructType(79, 1,
-                            new ArrayIndex(83, 3, new IntLiteral(83, 4, 20), null),
-                            "students"
+                    new VariableDefinition(79, 1,
+                        new ArrayType(79, 1,
+                          new StructType(79, 1,
+                              List.of(
+                              new StructRecordField(80, 1,
+                                  new IntType(80, 1),
+                                  List.of(new Id(80, 5, "age"))
+                              ),
+                              new StructRecordField(81, 1,
+                                  new StructType(81, 1,
+                                  List.of(
+                                      new StructRecordField(81, 10,
+                                          new IntType(81, 10),
+                                          List.of(new Id(81, 14, "day"),
+                                              new Id(81, 19, "month"))
+                                      ),
+                                      new StructRecordField(81, 26,
+                                          new IntType(81, 26),
+                                          List.of(new Id(81, 30, "year"))
+                                      )
+                                  )
+                                  ),
+                                  List.of(new Id(81, 38, "dateOfBirth"))
+                              ),
+                              new StructRecordField(82, 1,
+                                  new ArrayType(82, 1,
+                                      new CharType(82, 1),
+                                      256),
+                                  List.of(new Id(82, 11, "name"), new Id(82, 17, "surname"))
+                                  )
+                              )
+                          ),
+                            20
                         ),
-                        List.of("students"),
-                        List.of(
-                            new VariableDefinition(80, 1,
-                                new IntType(80, 1, null),
-                                List.of("age")
-                            ),
-                            new StructDefinition(81, 1,
-                                new StructType(81, 1, null, "dateOfBirth"),
-                                List.of("dateOfBirth"),
-                                List.of(
-                                    new VariableDefinition(81, 10,
-                                        new IntType(81, 10, null),
-                                        List.of("day", "month")
-                                    ),
-                                    new VariableDefinition(81, 26,
-                                        new IntType(81, 26, null),
-                                        List.of("year")
-                                    )
-                                )
-                            ),
-                            new VariableDefinition(82, 1,
-                                new CharType(82, 1,
-                                    new ArrayIndex(82, 5, new IntLiteral(82, 6, 256),
-                                        null
-                                    )),
-                                List.of("name", "surname")
-                            )
-                        )
-                    )
+                    List.of(new Id(83, 8, "students")))
                 ),
                 List.of(
                     new Assignment(84, 1,
@@ -424,10 +427,7 @@ public class ParserTest {
                             new StructAccess(84, 1,
                                 new ArrayAccess(84, 1,
                                     new Id(84, 1, "students"),
-                                    new ArrayIndex(84, 9,
-                                        new IntLiteral(84, 10, 0),
-                                        null
-                                    )
+                                    new IntLiteral(84, 10, 0)
                                 ),
                                 "dateOfBirth"
                             ),
@@ -445,29 +445,28 @@ public class ParserTest {
                 new FunctionType(86, 1,
                     new VoidType(86, 1),
                     new ArrayList<>()),
-                "simpleStruct",
+                new Id(86, 6, "simpleStruct"),
                 List.of(
-                    new StructDefinition(86, 23,
-                        new StructType(86, 23, null, "product"),
-                        List.of("product"),
+                    new VariableDefinition(86, 23,
+                        new StructType(86, 23,
                         List.of(
-                            new VariableDefinition(87, 1,
-                                new IntType(87, 1,null),
-                                List.of("id")
+                            new StructRecordField(87, 1,
+                                new IntType(87, 1),
+                                List.of(new Id(87, 5, "id"))
                             ),
-                            new VariableDefinition(88, 1,
-                                new CharType(88, 1,
-                                    new ArrayIndex(88, 5,
-                                        new IntLiteral(88, 6, 30),
-                                        null)
+                            new StructRecordField(88, 1,
+                                new ArrayType(88, 1,
+                                    new CharType(88, 1),
+                                    30
                                 ),
-                                List.of("name")
+                                List.of(new Id(88, 10, "name"))
                             ),
-                            new VariableDefinition(89, 1,
-                                new DoubleType(89, 1, null),
-                                List.of("price")
+                            new StructRecordField(89, 1,
+                                new DoubleType(89, 1),
+                                List.of(new Id(89, 8, "price"))
                             )
-                        )
+                        )),
+                        List.of(new Id(90, 3, "product"))
                     )
                 ),
                 List.of(
@@ -489,11 +488,11 @@ public class ParserTest {
                     new VoidType(94, 1),
                     new ArrayList<>()
                 ),
-                "main",
+                new Id(94, 6, "main"),
                 List.of(
                     new VariableDefinition(95, 5,
-                        new IntType(95, 5, null),
-                        List.of("result")
+                        new IntType(95, 5),
+                        List.of(new Id(95, 9, "result"))
                     )
                 ),
                 List.of(

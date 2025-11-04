@@ -27,19 +27,33 @@ public class Id extends AbstractExpression {
     @Override
     public String toString() {
         return String.format(
-                "Id:%s" +
-                "value: %s",
-                "\n\t",
-                this.name
+                "Id: %s (%d, %d)",
+                this.getName(),
+                this.getLine(),
+                this.getColumn()
         );
     }
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Id that)) return false;
-        if (this.getLine() != that.getLine()) return false;
-        if (this.getColumn() != that.getColumn()) return false;
-        return this.name.equals(that.name);
+        if (!(o instanceof Id that)) {
+          System.out.println("Not Id instance type found " + o.getClass().getName());
+          return false;
+        }
+        if (this.getLine() != that.getLine()) {
+          System.out.println("Id line numbers differ: " + this.getLine() + " != " + that.getLine());
+          return false;
+        }
+        if (this.getColumn() != that.getColumn()) {
+          System.out.println("Id column numbers differ: " + this.getColumn() + " != " + that.getColumn());
+          return false;
+        }
+        if (!this.getName().equals(that.getName())) {
+          System.out.println("Id names differ: " + this.getName() + " != " + that.getName());
+          return false;
+        }
+
+        return true;
     }
 
     @Override
@@ -47,7 +61,7 @@ public class Id extends AbstractExpression {
         int result = 17;
         result = 31 * result + this.getLine();
         result = 31 * result + this.getColumn();
-        result = 31 * result + this.name.hashCode();
+        result = 31 * result + this.getName().hashCode();
         return result;
     }
 

@@ -14,12 +14,12 @@ grammar Cmm;
 // sequence of variable and function definitions
 // last and mandatory function is the "main" function, which returns void and receives no parameters
 program returns [Program ast]:
-    (defs+=definition)*? VOID MAIN LEFT_PAREN RIGHT_PAREN LEFT_BRACE varDefList? stmtList? RIGHT_BRACE EOF
+    (defs+=definition)*? VOID main=MAIN LEFT_PAREN RIGHT_PAREN LEFT_BRACE varDefList? stmtList? RIGHT_BRACE EOF
     {
         List<Definition> defs = new ArrayList<>();
         if ($defs != null) $defs.forEach(s -> {if (s != null) defs.add(s.ast); });
         Type mainFuncType = new FunctionType($VOID.getLine(), $VOID.getCharPositionInLine()+1, new VoidType($VOID.getLine(), $VOID.getCharPositionInLine()+1), new ArrayList<>());
-        FunctionDefinition mainFunction = new FunctionDefinition($VOID.getLine(), $VOID.getCharPositionInLine()+1, mainFuncType, "main", $varDefList.ctx != null ? $varDefList.ast : new ArrayList<VariableDefinition>(), $stmtList.ctx != null ? $stmtList.ast : new ArrayList<Statement>());
+        FunctionDefinition mainFunction = new FunctionDefinition($VOID.getLine(), $VOID.getCharPositionInLine()+1, mainFuncType, new Id($main.getLine(), $main.getCharPositionInLine()+1, $main.getText()), $varDefList.ctx != null ? $varDefList.ast : new ArrayList<VariableDefinition>(), $stmtList.ctx != null ? $stmtList.ast : new ArrayList<Statement>());
         defs.add(mainFunction);
         $ast = new Program(defs);
     }
@@ -28,9 +28,9 @@ program returns [Program ast]:
 // statement
 statement returns [Statement ast]:
     // 1: read
-    read=READ expressionList SEMICOLON // Write and read statements could specify a list of (at least one) expressions.
+    read=READ assignableExpressionList SEMICOLON // Write and read statements could specify a list of (at least one) expressions.
     {
-        $ast = new Read($read.getLine(), $read.getCharPositionInLine()+1, $expressionList.ast);
+        $ast = new Read($read.getLine(), $read.getCharPositionInLine()+1, $assignableExpressionList.ast);
     }
     // 2: write
     | write=WRITE expressionList SEMICOLON // write: allow for procedure invoke in write as well
@@ -41,7 +41,7 @@ statement returns [Statement ast]:
     | return=RETURN expression SEMICOLON // return: the expression after the return keyword is mandatory; i.e., return; is not a valid statement in this language
     { $ast = new Return($return.getLine(), $return.getCharPositionInLine()+1, $expression.ast); }
     // 4: assignment
-    | e1=expression ASSIGN e2=expression SEMICOLON // assignment
+    | e1=assignableExpression ASSIGN e2=expression SEMICOLON // assignment
     { $ast = new Assignment($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $e1.ast, $e2.ast); }
     // 5: if/else
     | if=IF LEFT_PAREN expression 
@@ -85,21 +85,11 @@ definition returns [Definition ast]:
 // The record (struct) type is provided by the language. Struct variables could be local and global. No typedef construction is provided.
 varDefinition returns [VariableDefinition ast]:
     // 1: simple variable definition
-    t=type ids+=ID (COMMA ids+=ID)*? SEMICOLON
+    t=arrayableType ids+=ID (COMMA ids+=ID)*? SEMICOLON
     {
-        List<String> ids = new ArrayList<>();
-        if ($ids != null) $ids.forEach(id -> {if (id != null) ids.add(id.getText()); });
+        List<Id> ids = new ArrayList<>();
+        if ($ids != null) $ids.forEach(id -> {if (id != null) ids.add(new Id(id.getLine(), id.getCharPositionInLine()+1, id.getText())); });
         $ast = new VariableDefinition($t.start.getLine(), $t.start.getCharPositionInLine()+1, $t.ast, ids);
-    }
-    // 2: struct variable definition
-    | struct=STRUCT LEFT_BRACE varDefList RIGHT_BRACE arrayIndex? id=ID SEMICOLON
-    {
-        int line = _localctx.getStart().getLine();
-        int col = _localctx.getStart().getCharPositionInLine()+1;
-        Type type;
-        if ($arrayIndex.ctx != null) type = new StructType(line, col, $arrayIndex.ast, $id.text);
-        else type = new StructType(line, col, null, $id.text);
-        $ast = new StructDefinition(line, col, type, List.of($id.text), $varDefList.ast);
     }
     ;
 
@@ -112,27 +102,52 @@ varDefList returns [List<VariableDefinition> ast]:
     }
     ;
 
-arrayIndex returns [Expression ast]:
-    lb=LEFT_BRACKET expression RIGHT_BRACKET ai=arrayIndex?
-    { $ast = new ArrayIndex($lb.getLine(), $lb.getCharPositionInLine()+1, $expression.ast, ($ai.ctx != null) ? $ai.ast : null); }
-    ;
-
 // allow for no parameters or multiple parameters
 // defined by specifying the return type, the function identifier, and a list of comma-separated parameters between ( and ). The return type and parameter types must be built-in
 // (i.e., no arrays). The function body goes between { and }. The bodies of functions are sequences of local variable definitions, followed by sequences of statements.
 // Both must end with the ";" character
 functionDefinition returns [FunctionDefinition ast]:
-    returnType=type id=ID LEFT_PAREN ((paramType+=type) paramId+=ID (COMMA (paramType+=type) paramId+=ID)+)? RIGHT_PAREN
+    returnType=voidableType id=ID LEFT_PAREN paramsList? RIGHT_PAREN
     LEFT_BRACE varDefList? stmtList?  RIGHT_BRACE
     {
-        List<VariableDefinition> paramType = new ArrayList<>();
-        if ($paramType != null) {
-            for (int i = 0; i < $paramType.size(); i++) {
-                paramType.add(new VariableDefinition($paramType.get(i).start.getLine(), $paramType.get(i).start.getCharPositionInLine()+1, $paramType.get(i).ast, List.of($paramId.get(i).getText())));
-            }
-        }
-        FunctionType returnType = new FunctionType($returnType.start.getLine(), $returnType.start.getCharPositionInLine()+1, $returnType.ast, paramType);
-        $ast = new FunctionDefinition($returnType.start.getLine(), $returnType.start.getCharPositionInLine()+1, returnType, $id.text, $varDefList.ctx != null ? $varDefList.ast : new ArrayList<>(), $stmtList.ctx != null ? $stmtList.ast : new ArrayList<>());
+        FunctionType returnType = new FunctionType($returnType.start.getLine(), $returnType.start.getCharPositionInLine()+1, $returnType.ast, $paramsList.ctx != null ? $paramsList.ast : new ArrayList<>());
+        $ast = new FunctionDefinition($returnType.start.getLine(), $returnType.start.getCharPositionInLine()+1, returnType, new Id($id.getLine(), $id.getCharPositionInLine()+1, $id.text), $varDefList.ctx != null ? $varDefList.ast : new ArrayList<>(), $stmtList.ctx != null ? $stmtList.ast : new ArrayList<>());
+    }
+    ;
+
+paramsList returns [List<VariableDefinition> ast]:
+    params+=paramDef (COMMA params+=paramDef)*?
+    {
+        List<VariableDefinition> params = new ArrayList<>();
+        if ($params != null) $params.forEach(p -> {if (p != null) params.add(p.ast); });
+        $ast = params;
+    }
+    ;
+
+paramDef returns [VariableDefinition ast]:
+    t=arrayableType id=ID
+    {
+        List<Id> ids = new ArrayList<>();
+        ids.add(new Id($id.getLine(), $id.getCharPositionInLine()+1, $id.getText()));
+        $ast = new VariableDefinition($t.start.getLine(), $t.start.getCharPositionInLine()+1, $t.ast, ids);
+    }
+    ;
+
+recordFieldList returns [List<StructRecordField> ast]:
+    field+=recordField SEMICOLON (field+=recordField SEMICOLON)*?
+    {
+        List<StructRecordField> fields = new ArrayList<>();
+        if ($field != null) $field.forEach(f -> {if (f != null) fields.add(f.ast); });
+        $ast = fields;
+    }
+    ;
+
+recordField returns [StructRecordField ast]:
+    type=arrayableType id+=ID (COMMA id+=ID)*?
+    {
+        List<Id> ids = new ArrayList<>();
+        if ($id != null) $id.forEach(i -> {if (i != null) ids.add(new Id(i.getLine(), i.getCharPositionInLine()+1, i.getText())); });
+        $ast = new StructRecordField($type.ast.getLine(), $type.ast.getColumn(), $type.ast, ids);
     }
     ;
 
@@ -162,11 +177,11 @@ stmtList returns [List<Statement> ast]:
 // expression
 expression returns [Expression ast]:
     // 1: cast
-    lp=LEFT_PAREN castType=type RIGHT_PAREN e=expression
+    lp=LEFT_PAREN castType=builtInType RIGHT_PAREN e=expression
     { $ast = new Cast($lp.getLine(), $lp.getCharPositionInLine()+1, $castType.ast, $e.ast); }
-    // 2: array access
-    | e=expression ai=arrayIndex
-    { $ast = new ArrayAccess($e.start.getLine(), $e.start.getCharPositionInLine()+1, $e.ast, $ai.ast); }
+    // 2: assignable expression
+    | assignableExpression
+    { $ast = $assignableExpression.ast; }
     // 3: unary minus
     | min=MINUS expression
     { $ast = new UnaryMinus($min.getLine(), $min.getCharPositionInLine()+1, $expression.ast); }
@@ -197,25 +212,40 @@ expression returns [Expression ast]:
     // 12: parentheses
     | lp=LEFT_PAREN expression RIGHT_PAREN
     { $ast = new Parenthesis($lp.getLine(), $lp.getCharPositionInLine()+1, $expression.ast); }
-    // 13: struct access
-    | e=expression DOT ID // Fields in structs can be obtained with the “.” operator.
-    { $ast = new StructAccess($e.start.getLine(), $e.start.getCharPositionInLine()+1, $e.ast, $ID.text); }
-    // 14: identifier
-    | ID
-    { $ast = new Id($ID.getLine(), $ID.getCharPositionInLine()+1, $ID.text); }
-    // 15: int literal
+    // 13: int literal
     | INT_CONSTANT
     { $ast = new IntLiteral($INT_CONSTANT.getLine(), $INT_CONSTANT.getCharPositionInLine()+1, LexerHelper.lexemeToInt($INT_CONSTANT.text)); }
-    // 16: double literal
+    // 14: double literal
     | DOUBLE_CONSTANT
     { $ast = new DoubleLiteral($DOUBLE_CONSTANT.getLine(), $DOUBLE_CONSTANT.getCharPositionInLine()+1, LexerHelper.lexemeToDouble($DOUBLE_CONSTANT.text)); }
-    // 17: char literal
+    // 15: char literal
     | CHAR_CONSTANT
     { $ast = new CharLiteral($CHAR_CONSTANT.getLine(), $CHAR_CONSTANT.getCharPositionInLine()+1, LexerHelper.lexemeToChar($CHAR_CONSTANT.text)); }
     ;
 
+assignableExpression returns [Expression ast]:
+    // 1: array access
+    | e=assignableExpression lb=LEFT_BRACKET ai=expression rb=RIGHT_BRACKET
+    { $ast = new ArrayAccess($e.start.getLine(), $e.start.getCharPositionInLine()+1, $e.ast, $ai.ast); }
+    // 2: struct access
+    | e=assignableExpression DOT ID // Fields in structs can be obtained with the “.” operator.
+    { $ast = new StructAccess($e.start.getLine(), $e.start.getCharPositionInLine()+1, $e.ast, $ID.text); }
+    // 3: identifier
+    | ID
+    { $ast = new Id($ID.getLine(), $ID.getCharPositionInLine()+1, $ID.text); }
+    ;
+
 expressionList returns [List<Expression> ast]:
     exp+=expression (COMMA exp+=expression)*
+    {
+        List<Expression> exp = new ArrayList<>();
+        if ($exp != null) $exp.forEach(e -> {if (e != null) exp.add(e.ast); });
+        $ast = exp;
+    }
+    ;
+
+assignableExpressionList returns [List<Expression> ast]:
+    exp+=assignableExpression (COMMA exp+=assignableExpression)*
     {
         List<Expression> exp = new ArrayList<>();
         if ($exp != null) $exp.forEach(e -> {if (e != null) exp.add(e.ast); });
@@ -233,19 +263,44 @@ functionInvocation returns [Expression ast]:
 
 // types
 
-type returns [Type ast]:
-    // 1: int array
-    int=INT arrayIndex?
-    { $ast = new IntType($int.getLine(), $int.getCharPositionInLine()+1, $arrayIndex.ctx != null ? $arrayIndex.ast : null); }
-    // 2: double array
-    | double=DOUBLE arrayIndex?
-    { $ast = new DoubleType($double.getLine(), $double.getCharPositionInLine()+1, $arrayIndex.ctx != null ? $arrayIndex.ast : null); }
-    // 3: char array
-    | char=CHAR arrayIndex?
-    { $ast = new CharType($char.getLine(), $char.getCharPositionInLine()+1, $arrayIndex.ctx != null ? $arrayIndex.ast : null); }
-    // 4: void type (only for function return types)
+voidableType returns [Type ast]:
+    // 1: built in types (int, double, char)
+    baseType=builtInType
+    { $ast = $baseType.ast; }
+    // 2: void type
     | void=VOID
     { $ast = new VoidType($void.getLine(), $void.getCharPositionInLine()+1); }
+    ;
+
+arrayableType returns [Type ast]:
+    // 1: built in types (int, double, char)
+    baseType=builtInType
+    { $ast = $baseType.ast; }
+    // 2: struct variable definition
+    | struct=STRUCT LEFT_BRACE recordFieldList RIGHT_BRACE
+    {
+        int line = _localctx.getStart().getLine();
+        int col = _localctx.getStart().getCharPositionInLine()+1;
+        $ast = new StructType(line, col, $recordFieldList.ast);
+    }
+    // 3: array type
+    | type=arrayableType '[' INT_CONSTANT ']'
+    {
+        int size = LexerHelper.lexemeToInt($INT_CONSTANT.text);
+        $ast = new ArrayType($type.ast.getLine(), $type.ast.getColumn(), $type.ast, size);
+    }
+    ;
+
+builtInType returns [Type ast]:
+    // 1: int type
+    int=INT
+    { $ast = new IntType($int.getLine(), $int.getCharPositionInLine()+1); }
+    // 2: double type
+    | double=DOUBLE
+    { $ast = new DoubleType($double.getLine(), $double.getCharPositionInLine()+1); }
+    // 3: char type
+    | char=CHAR
+    { $ast = new CharType($char.getLine(), $char.getCharPositionInLine()+1); }
     ;
 
 
@@ -282,7 +337,7 @@ EXPONENT_CONSTANT:
 // special escaped characters: \', \", \\
 fragment
 ESCAPED_SPECIALS:
-    '\\' ["'\\]
+    '\\' ["'\\nrt]
     ;
 
 
@@ -379,7 +434,7 @@ CHAR_CONSTANT:
         (
             ESCAPED_SPECIALS
             | ASCII_CODE
-            | ~[']
+            | ~['\r\n\t]
         )
     '\''
     ;

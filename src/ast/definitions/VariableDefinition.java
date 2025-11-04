@@ -1,5 +1,6 @@
 package ast.definitions;
 
+import ast.expressions.Id;
 import ast.types.Type;
 import visitor.Visitor;
 
@@ -8,24 +9,22 @@ import java.util.Objects;
 
 public class VariableDefinition extends AbstractDefinition {
 
-    private final List<String> names;
+    private final List<Id> names;
 
-    public VariableDefinition(int line, int col, Type type, List<String> names) {
+    public VariableDefinition(int line, int col, Type type, List<Id> names) {
         super(line, col, type);
         this.names = names;
     }
 
-    public List<String> getNames() {
+    public List<Id> getNames() {
         return this.names;
     }
 
     @Override
     public String toString() {
-        String namesStr = String.join(", ", this.getNames());
+        String namesStr = String.join(", ", this.getNames().stream().map(Id::toString).toArray(String[]::new));
         return String.format(
-                "VariableDefinition (%d, %d):%n\t" +
-                "type: %s%n\t" +
-                "names: %s",
+                "VariableDefinition (%d, %d): %s \"%s\"",
                 this.getLine(),
                 this.getColumn(),
                 this.getType().toString(),
@@ -49,8 +48,8 @@ public class VariableDefinition extends AbstractDefinition {
 
         if (!Objects.deepEquals(this.names, that.names)) {
           System.out.println("VariableDefinition names differ: " +
-              String.join(", ", this.names) + " != " +
-              String.join(", ", that.names));
+              String.join(", ", this.names.stream().map(Id::toString).toArray(String[]::new)) + " != " +
+              String.join(", ", that.names.stream().map(Id::toString).toArray(String[]::new)));
           return false;
         }
 

@@ -2,6 +2,8 @@ package ast.expressions;
 
 import visitor.Visitor;
 
+import java.util.Objects;
+
 public class ArrayAccess extends AbstractExpression {
 
     private final Expression array;
@@ -23,33 +25,55 @@ public class ArrayAccess extends AbstractExpression {
 
     @Override
     public String toString() {
+      String indexStr = (index != null) ? index.toString() : "null";
         return String.format(
                 "ArrayAccess:%s" +
                 "array: %s%s" +
                 "index: %s",
                 "\n\t",
                 array.getClass().getSimpleName(), "\n\t",
-                index.getClass().getSimpleName()
+                indexStr
         );
     }
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof ArrayAccess that)) return false;
+        if (!(o instanceof ArrayAccess that)) {
+          System.out.println("Not ArrayAccess instance compare: " + o.getClass().getSimpleName());
+          return false;
+        }
 
-        return getLine() == that.getLine() &&
-            getColumn() == that.getColumn() &&
-            array.equals(that.array) &&
-            index.equals(that.index);
+        if (this.getLine() != that.getLine()) {
+          System.out.println("ArrayAccess Line numbers differ: " + this.getLine() + " != " + that.getLine());
+          return false;
+        }
+
+        if (this.getColumn() != that.getColumn()) {
+          System.out.println("ArrayAccess Column numbers differ: " + this.getColumn() + " != " + that.getColumn());
+          return false;
+        }
+
+        if (!Objects.deepEquals(this.getArray(), that.getArray())) {
+          System.out.println("ArrayAccess Arrays differ: " + this.getArray() + " != " + that.getArray());
+          return false;
+        }
+
+        if ((this.getIndex() == null && that.getIndex() != null) || (this.getIndex() != null && that.getIndex() == null)) {
+          System.out.println("ArrayAccess Index differs: " + this.getIndex() + " != " + that.getIndex());
+          return false;
+        }
+
+        if (this.getIndex() != null && that.getIndex() != null && !Objects.deepEquals(this.getIndex(), that.getIndex())) {
+          System.out.println("ArrayAccess Indexes differ: " + this.getIndex() + " != " + that.getIndex());
+          return false;
+        }
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        int result = Integer.hashCode(getLine());
-        result = 31 * result + Integer.hashCode(getColumn());
-        result = 31 * result + array.hashCode();
-        result = 31 * result + index.hashCode();
-        return result;
+        return Objects.hash(array, index);
     }
 
     @Override

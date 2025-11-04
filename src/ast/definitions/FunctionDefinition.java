@@ -1,5 +1,6 @@
 package ast.definitions;
 
+import ast.expressions.Id;
 import ast.statements.Statement;
 import ast.types.Type;
 import visitor.Visitor;
@@ -9,18 +10,18 @@ import java.util.Objects;
 
 public class FunctionDefinition extends AbstractDefinition implements Definition {
 
-    private final String name;
+    private final Id name;
     private final List<VariableDefinition> localVars;
     private final List<Statement> stmtsBlock;
 
-    public FunctionDefinition(int line, int col, Type type, String name, List<VariableDefinition> localVars, List<Statement> stmtsBlock) {
+    public FunctionDefinition(int line, int col, Type type, Id name, List<VariableDefinition> localVars, List<Statement> stmtsBlock) {
         super(line, col, type);
         this.name = name;
         this.localVars = localVars;
         this.stmtsBlock = stmtsBlock;
     }
 
-    public String getName() {
+    public Id getName() {
         return this.name;
     }
 
@@ -35,9 +36,7 @@ public class FunctionDefinition extends AbstractDefinition implements Definition
     @Override
     public String toString() {
         return String.format(
-                "FunctionDefinition (%d, %d):%n\t" +
-                "functionType: %s%n\t" +
-                "name: %s%n\t" +
+                "FunctionDefinition (%d, %d): %s \"%s\"%n\t" +
                 "local variables count: %d%n\t" +
                 "body stmts count: %d",
                 this.getLine(),
@@ -51,7 +50,10 @@ public class FunctionDefinition extends AbstractDefinition implements Definition
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof FunctionDefinition that)) return false;
+        if (!(o instanceof FunctionDefinition that)) {
+          System.out.println("Object is not a FunctionDefinition " + o);
+          return false;
+        }
 
         if (this.getLine() != that.getLine()) {
           System.out.println("FunctionDefinition line numbers differ: " + this.getLine() + " != " + that.getLine());

@@ -31,21 +31,43 @@ public class Read extends AbstractStatement {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Read that)) return false;
+        if (!(o instanceof Read that)) {
+          System.out.println("Not Read instance");
+          return false;
+        }
 
-        if (this.getLine() != that.getLine()) return false;
-        if (this.getColumn() != that.getColumn()) return false;
+        if (this.getLine() != that.getLine()) {
+          System.out.println("Read Line numbers differ: " + this.getLine() + " != " + that.getLine());
+          return false;
+        }
 
-        if (this.expressions.size() != that.expressions.size()) return false;
+        if (this.getColumn() != that.getColumn()) {
+          System.out.println("Read Column numbers differ: " + this.getColumn() + " != " + that.getColumn());
+          return false;
+        }
+
+        if (this.expressions.size() != that.expressions.size()) {
+          System.out.println("Read expressions size differ: " + this.expressions.size() + " != " + that.expressions.size());
+          return false;
+        }
+
         for (int i = 0; i < this.expressions.size(); i++) {
-            if (!this.expressions.get(i).equals(that.expressions.get(i))) return false;
+            if (!this.expressions.get(i).equals(that.expressions.get(i))) {
+                System.out.println("Read expressions at index " + i + " differ: " + this.expressions.get(i) + " != " + that.expressions.get(i));
+              return false;
+            }
         }
         return true;
     }
 
     @Override
     public int hashCode() {
-        return expressions.hashCode();
+        int result = Integer.hashCode(getLine());
+        result = 31 * result + Integer.hashCode(getColumn());
+        for (Expression expr : expressions) {
+            result = 31 * result + expr.hashCode();
+        }
+        return result;
     }
 
     @Override

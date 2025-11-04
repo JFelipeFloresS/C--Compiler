@@ -31,12 +31,32 @@ public class Cast extends AbstractExpression {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Cast that)) return false;
-        return
-            this.getLine() == that.getLine() &&
-            this.getColumn() == that.getColumn() &&
-            this.getType().equals(that.getType()) &&
-            this.expression.equals(that.expression);
+        if (!(o instanceof Cast that)) {
+          System.out.println("Not Cast instance");
+          return false;
+        }
+
+        if (this.getLine() != that.getLine()) {
+          System.out.println("Cast Line numbers mismatch: " + this.getLine() + " != " + that.getLine());
+          return false;
+        }
+
+        if (this.getColumn() != that.getColumn()) {
+          System.out.println("Cast Column numbers mismatch: " + this.getColumn() + " != " + that.getColumn());
+          return false;
+        }
+
+        if (!this.getType().equals(that.getType())) {
+          System.out.println("Cast Types mismatch: " + this.getType() + " != " + that.getType());
+          return false;
+        }
+
+        if (!this.expression.equals(that.expression)) {
+          System.out.println("Cast Expressions mismatch: " + this.expression + " != " + that.expression);
+          return false;
+        }
+
+        return true;
     }
 
     @Override

@@ -1,54 +1,46 @@
 package ast.types;
 
-import ast.expressions.Expression;
 import ast.locatable.AbstractLocatable;
-import visitor.Visitor;
 
-import javax.lang.model.type.TypeVisitor;
 import java.util.Objects;
 
 public abstract class AbstractType extends AbstractLocatable implements Type {
 
-    private final Expression size;
-
-    protected AbstractType(int line, int column, Expression size) {
+    protected AbstractType(int line, int column) {
         super(line, column);
-        this.size = size;
-    }
-
-    public Expression getSize() {
-        return size;
     }
 
     @Override
     public String toString() {
-        return String.format(
-            "%s%s",
+        return String.format("%s(%d, %d)",
             this.getClass().getSimpleName(),
-            size != null
-            ? String.format(
-                " arraySize(%s)",
-                size.getClass().getSimpleName()
-            )
-            : ""
-        );
+            this.getLine(),
+            this.getColumn());
     }
 
     @Override
     public boolean equals(Object o) {
-        if (! (o instanceof AbstractType that)) return false;
-        return this.getLine() == that.getLine()
-            && this.getColumn() == that.getColumn()
-            && Objects.equals(this.size, that.size);
+        if (! (o instanceof AbstractType that)) {
+          System.out.println(this.getClass().getSimpleName() + " compared with different class: " + o.getClass().getSimpleName());
+          return false;
+        }
+
+        if (this.getLine() != that.getLine()) {
+          System.out.println(this.getClass().getSimpleName() + " line numbers differ: " + this.getLine() + " != " + that.getLine());
+          return false;
+        }
+
+        if (this.getColumn() != that.getColumn()) {
+          System.out.println(this.getClass().getSimpleName() + " column numbers differ: " + this.getColumn() + " != " + that.getColumn());
+          return false;
+        }
+
+        return true;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(Integer.hashCode(getLine()),
-                Integer.hashCode(getColumn()),
-                size.hashCode());
+                Integer.hashCode(getColumn()));
     }
-
-    @Override
-    public abstract <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param);
 }

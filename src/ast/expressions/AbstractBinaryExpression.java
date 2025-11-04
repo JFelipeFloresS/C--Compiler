@@ -43,18 +43,47 @@ public abstract class AbstractBinaryExpression extends AbstractExpression implem
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof AbstractBinaryExpression that)) return false;
+        if (!(o instanceof AbstractBinaryExpression that)) {
+          System.out.println("Not an AbstractBinaryExpression instance");
+          return false;
+        }
 
-        return
-            this.getLine() == that.getLine() &&
-            this.getColumn() == that.getColumn() &&
-            (
-                (this.getType() != null && this.getType().equals(that.getType())) ||
-                (this.getType() == null && that.getType() == null)
-            ) &&
-            this.getLeft().equals(that.getLeft()) &&
-            this.getRight().equals(that.getRight()) &&
-            this.getOperator().equals(that.getOperator());
+        if (this.getLine() != that.getLine()) {
+          System.out.println("AbstractBinaryExpression Line numbers differ: " + this.getLine() + " != " + that.getLine());
+          return false;
+        }
+
+        if (this.getColumn() != that.getColumn()) {
+          System.out.println("AbstractBinaryExpression Column numbers differ: " + this.getColumn() + " != " + that.getColumn());
+          return false;
+        }
+
+        if ( (this.getType() != null && that.getType() == null) || (this.getType() == null && that.getType() != null) ) {
+          System.out.println("AbstractBinaryExpression Types differ: " + this.getType() + " != " + that.getType());
+          return false;
+        }
+
+        if (this.getType() != null && !this.getType().equals(that.getType())) {
+          System.out.println("AbstractBinaryExpression Types differ: " + this.getType() + " != " + that.getType());
+          return false;
+        }
+
+        if (!this.getLeft().equals(that.getLeft())) {
+          System.out.println("AbstractBinaryExpression Left expressions differ: " + this.getLeft() + " != " + that.getLeft());
+          return false;
+        }
+
+        if (!this.getRight().equals(that.getRight())) {
+          System.out.println("AbstractBinaryExpression Right expressions differ: " + this.getRight() + " != " + that.getRight());
+          return false;
+        }
+
+        if (!this.getOperator().equals(that.getOperator())) {
+          System.out.println("AbstractBinaryExpression Operators differ: " + this.getOperator() + " != " + that.getOperator());
+          return false;
+        }
+
+        return true;
     }
 
     @Override
@@ -68,7 +97,4 @@ public abstract class AbstractBinaryExpression extends AbstractExpression implem
         result = 31 * result + operator.hashCode();
         return result;
     }
-
-    @Override
-    public abstract <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param);
 }

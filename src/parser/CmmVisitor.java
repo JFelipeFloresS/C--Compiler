@@ -55,17 +55,35 @@ public interface CmmVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVarDefList(CmmParser.VarDefListContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link CmmParser#arrayIndex}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitArrayIndex(CmmParser.ArrayIndexContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link CmmParser#functionDefinition}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitFunctionDefinition(CmmParser.FunctionDefinitionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link CmmParser#paramsList}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParamsList(CmmParser.ParamsListContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link CmmParser#paramDef}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParamDef(CmmParser.ParamDefContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link CmmParser#recordFieldList}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRecordFieldList(CmmParser.RecordFieldListContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link CmmParser#recordField}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRecordField(CmmParser.RecordFieldContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link CmmParser#stmtBlock}.
 	 * @param ctx the parse tree
@@ -85,11 +103,23 @@ public interface CmmVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExpression(CmmParser.ExpressionContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link CmmParser#assignableExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAssignableExpression(CmmParser.AssignableExpressionContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link CmmParser#expressionList}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitExpressionList(CmmParser.ExpressionListContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link CmmParser#assignableExpressionList}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAssignableExpressionList(CmmParser.AssignableExpressionListContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link CmmParser#functionInvocation}.
 	 * @param ctx the parse tree
@@ -97,9 +127,21 @@ public interface CmmVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFunctionInvocation(CmmParser.FunctionInvocationContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link CmmParser#type}.
+	 * Visit a parse tree produced by {@link CmmParser#voidableType}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitType(CmmParser.TypeContext ctx);
+	T visitVoidableType(CmmParser.VoidableTypeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link CmmParser#arrayableType}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArrayableType(CmmParser.ArrayableTypeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link CmmParser#builtInType}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBuiltInType(CmmParser.BuiltInTypeContext ctx);
 }

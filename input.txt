@@ -1,7 +1,7 @@
 int[8][3] fibonacci;
 
 void p() {}
-
+ 
 char global;
 
 int f(double r, int e) {
@@ -33,11 +33,6 @@ void initialize() {
   }
 }
 
-int add(int a, int b) {
-int temp;
-temp = a + b;
-return temp;
-}
 
 void main(){
   int i;
@@ -69,58 +64,5 @@ void main(){
     i = i + 1;
   }
 
-  // minimum set of features
-  int a; // example variable definition
-  double realNumber; // another variable definition
-
-  // arrays
-  int[10] v; // v is an array of 10 ints
-  double[5][10] w; // w is a 2-dimensional array of doubles
-
-  //read/write
-  read v[i];
-  write w[i][a+b];
-
-  // function/procedure invocation expression vs statement
-  int result;
-  result = add(1, 2); // invocation as an expression
-  add(result, 1); // invocation as a statement
-
-  // expressions
-  a = 1 + 2 * 3 - 4 / 5;
-  a = (1 + 2) * (3 - 4) % 5;
-  a = -a;
-  a = !a;
-  if (a < b) {}
-  if (a <= b) {}
-  if (a > b) {}
-  if (a >= b) {}
-  if (a == b) {}
-  if (a != b) {}
-  if (a && b) {}
-  if (a || b) {}
-
-  // multiple definition of variables
-  int a, b, c;
-  double[10] realVector, anotherOne;
-
-  // multiple write/read
-  write a+b, v[45+c];
-  read realNumber, w[6][t];
-
-  // structs
-  struct {
-  int age;
-  struct { int day, month; int year; } dateOfBirth;
-  char[256] name, surname;
-  } [20] students; // 'students' is an array of 20 structs
-  students[0].dateOfBirth.day = 10;
-
-  struct {
-    int id;
-    char[30] name;
-    double price;
-  } product;
-  product.id = 1;
 }
 

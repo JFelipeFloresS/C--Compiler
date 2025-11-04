@@ -1,6 +1,7 @@
 package visitor;
 
 import ast.definitions.Definition;
+import ast.definitions.FunctionDefinition;
 import ast.definitions.VariableDefinition;
 import ast.expressions.Id;
 
@@ -8,15 +9,26 @@ import java.util.HashMap;
 
 public class IdentificationVisitor extends AbstractVisitor<Void, Void> {
 
-  HashMap<String, VariableDefinition> stmts = new HashMap<>();
+  HashMap<String, Definition> stmts = new HashMap<>();
 
   @Override
   public Void visit(VariableDefinition varDef, Void param) {
-    String existing = varDef.getNames().stream().filter(name -> stmts.containsKey(name)).findFirst().orElse(null);
-    if (existing != null) {
-      System.out.println("Error: Variable " + existing + " already defined.");
+    Id newId = varDef.getNames().stream().filter(name -> stmts.containsKey(name.getName())).findFirst().orElse(null);
+    if (newId != null) {
+      System.out.println("Error: Variable " + newId.toString() + " already defined.");
     } else {
-      varDef.getNames().forEach(name -> stmts.put(name, varDef));
+      varDef.getNames().forEach(name -> stmts.put(name.getName(), varDef));
+    }
+    return null;
+  }
+
+  @Override
+  public Void visit(FunctionDefinition funcDef, Void param) {
+    Id newId = funcDef.getName();
+    if (stmts.containsKey(newId.getName())) {
+      System.out.println("Error: Function " + newId.toString() + " already defined.");
+    } else {
+      stmts.put(newId.getName(), funcDef);
     }
     return null;
   }

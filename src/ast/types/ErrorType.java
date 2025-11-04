@@ -1,6 +1,7 @@
 package ast.types;
 
 import ast.locatable.Locatable;
+import error_handler.ErrorHandler;
 import visitor.Visitor;
 
 public class ErrorType extends AbstractType{
@@ -8,13 +9,14 @@ public class ErrorType extends AbstractType{
   private final String message;
 
   public ErrorType(String message, Locatable node) {
-    super(node.getLine(), node.getColumn(), null);
+    super(node.getLine(), node.getColumn());
     this.message = message;
+    ErrorHandler.getErrorHandler().addError(this);
   }
 
   @Override
   public String toString() {
-    return String.format("Error at %d:%d: %s", getLine(), getColumn(), message);
+    return String.format("Error (%d, %d): %s", getLine(), getColumn(), message);
   }
 
   @Override

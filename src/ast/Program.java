@@ -19,10 +19,16 @@ public class Program implements ASTNode {
 
     @Override
     public String toString() {
+      StringBuilder sb = new StringBuilder();
+      for (Definition def : definitions) {
+          sb.append(def.toString()).append("\n");
+      }
         return String.format(
                 "Program: %n\t" +
-                "initial statements: %d",
-                this.definitions.size()
+                "statements: %d%n\t" +
+                "%s",
+                this.definitions.size(),
+                sb
         );
     }
 

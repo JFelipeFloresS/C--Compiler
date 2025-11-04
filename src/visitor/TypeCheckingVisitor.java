@@ -2,6 +2,7 @@ package visitor;
 
 import ast.expressions.*;
 import ast.statements.*;
+import ast.types.ArrayType;
 
 public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 
@@ -41,15 +42,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
     arrayAccess.getArray().accept(this, null);
     arrayAccess.getIndex().accept(this, null);
     arrayAccess.setType(arrayAccess.getArray().getType());
-    return null;
-  }
-
-  @Override
-  public Void visit(ArrayIndex arrayIndex, Void param) {
-    arrayIndex.getIndex().accept(this, null);
-    if (arrayIndex.getNextIndex() != null)
-      arrayIndex.getNextIndex().accept(this, null);
-    arrayIndex.setType(arrayIndex.getIndex().getType());
     return null;
   }
 
@@ -104,6 +96,12 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
   public Void visit(UnaryMinus unaryMinus, Void param) {
     unaryMinus.getExpression().accept(this, null);
     unaryMinus.setType(unaryMinus.getExpression().getType());
+    return null;
+  }
+
+  @Override
+  public Void visit(ArrayType arrayType, Void param) {
+    arrayType.getBuiltInType().accept(this, null);
     return null;
   }
 

@@ -31,12 +31,27 @@ public class Write extends AbstractStatement {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Write that)) return false;
-        if (this.getLine() != that.getLine()) return false;
-        if (this.getColumn() != that.getColumn()) return false;
-        if (this.expressions.size() != that.expressions.size()) return false;
+        if (!(o instanceof Write that)) {
+          System.out.println("Not a Write instance");
+          return false;
+        }
+        if (this.getLine() != that.getLine()) {
+          System.out.println("Write line numbers differ: " + this.getLine() + " != " + that.getLine());
+          return false;
+        }
+        if (this.getColumn() != that.getColumn()) {
+          System.out.println("Write column numbers differ: " + this.getColumn() + " != " + that.getColumn());
+          return false;
+        }
+        if (this.expressions.size() != that.expressions.size()) {
+          System.out.println("Write expressions list sizes differ: " + this.expressions.size() + " != " + that.expressions.size());
+          return false;
+        }
         for (int i = 0; i < this.expressions.size(); i++) {
-            if (!this.expressions.get(i).equals(that.expressions.get(i))) return false;
+            if (!this.expressions.get(i).equals(that.expressions.get(i))) {
+              System.out.println("Write expressions at index " + i + " differ: " + this.expressions.get(i) + " != " + that.expressions.get(i));
+              return false;
+            }
         }
         return true;
     }

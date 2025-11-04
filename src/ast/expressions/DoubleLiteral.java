@@ -26,25 +26,40 @@ public class DoubleLiteral extends AbstractExpression {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof DoubleLiteral that)) return false;
+        if (!(o instanceof DoubleLiteral that)) {
+          System.out.println("Not a DoubleLiteral instance");
+          return false;
+        }
 
-        return
-            this.getLine() == that.getLine() &&
-            this.getColumn() == that.getColumn() &&
-            (
-                (this.getType() != null && this.getType().equals(that.getType())) ||
-                (this.getType() == null && that.getType() == null)
-            ) &&
-            this.getValue() == that.getValue();
+        if (this.getLine() != that.getLine()) {
+          System.out.println("DoubleLiteral Line numbers differ: " + this.getLine() + " != " + that.getLine());
+          return false;
+        }
+
+        if (this.getColumn() != that.getColumn()) {
+          System.out.println("DoubleLiteral Column numbers differ: " + this.getColumn() + " != " + that.getColumn());
+          return false;
+        }
+
+        if (this.getValue() != that.getValue()) {
+          System.out.println("DoubleLiteral Values differ: " + this.getValue() + " != " + that.getValue());
+          return false;
+        }
+
+        if (!(this.getType() != null ? this.getType().equals(that.getType()) : that.getType() == null)) {
+          System.out.println("DoubleLiteral Types differ: " + this.getType() + " != " + that.getType());
+          return false;
+        }
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        int result = 17;
-      result = 31 * result + Double.hashCode(this.getValue());
-        result = 31 * result + this.getLine();
-        result = 31 * result + this.getColumn();
-        result = 31 * result + (this.getType() != null ? this.getType().hashCode() : 0);
+        int result = Integer.hashCode(getLine());
+        result = 31 * result + Integer.hashCode(getColumn());
+      result = 31 * result + Double.hashCode(value);
+        result = 31 * result + (getType() != null ? getType().hashCode() : 0);
         return result;
     }
 

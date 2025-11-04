@@ -14,7 +14,4 @@ public interface Type extends Locatable {
     Type relational(Type that, Locatable node);
 
     Type logical(Type that, Locatable node);
-
-    // array handling
-    Expression getSize();
 }

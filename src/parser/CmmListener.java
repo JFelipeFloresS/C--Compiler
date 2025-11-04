@@ -76,16 +76,6 @@ public interface CmmListener extends ParseTreeListener {
 	 */
 	void exitVarDefList(CmmParser.VarDefListContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link CmmParser#arrayIndex}.
-	 * @param ctx the parse tree
-	 */
-	void enterArrayIndex(CmmParser.ArrayIndexContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CmmParser#arrayIndex}.
-	 * @param ctx the parse tree
-	 */
-	void exitArrayIndex(CmmParser.ArrayIndexContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link CmmParser#functionDefinition}.
 	 * @param ctx the parse tree
 	 */
@@ -95,6 +85,46 @@ public interface CmmListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitFunctionDefinition(CmmParser.FunctionDefinitionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CmmParser#paramsList}.
+	 * @param ctx the parse tree
+	 */
+	void enterParamsList(CmmParser.ParamsListContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CmmParser#paramsList}.
+	 * @param ctx the parse tree
+	 */
+	void exitParamsList(CmmParser.ParamsListContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CmmParser#paramDef}.
+	 * @param ctx the parse tree
+	 */
+	void enterParamDef(CmmParser.ParamDefContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CmmParser#paramDef}.
+	 * @param ctx the parse tree
+	 */
+	void exitParamDef(CmmParser.ParamDefContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CmmParser#recordFieldList}.
+	 * @param ctx the parse tree
+	 */
+	void enterRecordFieldList(CmmParser.RecordFieldListContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CmmParser#recordFieldList}.
+	 * @param ctx the parse tree
+	 */
+	void exitRecordFieldList(CmmParser.RecordFieldListContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CmmParser#recordField}.
+	 * @param ctx the parse tree
+	 */
+	void enterRecordField(CmmParser.RecordFieldContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CmmParser#recordField}.
+	 * @param ctx the parse tree
+	 */
+	void exitRecordField(CmmParser.RecordFieldContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CmmParser#stmtBlock}.
 	 * @param ctx the parse tree
@@ -126,6 +156,16 @@ public interface CmmListener extends ParseTreeListener {
 	 */
 	void exitExpression(CmmParser.ExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link CmmParser#assignableExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssignableExpression(CmmParser.AssignableExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CmmParser#assignableExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssignableExpression(CmmParser.AssignableExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link CmmParser#expressionList}.
 	 * @param ctx the parse tree
 	 */
@@ -135,6 +175,16 @@ public interface CmmListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitExpressionList(CmmParser.ExpressionListContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CmmParser#assignableExpressionList}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssignableExpressionList(CmmParser.AssignableExpressionListContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CmmParser#assignableExpressionList}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssignableExpressionList(CmmParser.AssignableExpressionListContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CmmParser#functionInvocation}.
 	 * @param ctx the parse tree
@@ -146,13 +196,33 @@ public interface CmmListener extends ParseTreeListener {
 	 */
 	void exitFunctionInvocation(CmmParser.FunctionInvocationContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link CmmParser#type}.
+	 * Enter a parse tree produced by {@link CmmParser#voidableType}.
 	 * @param ctx the parse tree
 	 */
-	void enterType(CmmParser.TypeContext ctx);
+	void enterVoidableType(CmmParser.VoidableTypeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link CmmParser#type}.
+	 * Exit a parse tree produced by {@link CmmParser#voidableType}.
 	 * @param ctx the parse tree
 	 */
-	void exitType(CmmParser.TypeContext ctx);
+	void exitVoidableType(CmmParser.VoidableTypeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CmmParser#arrayableType}.
+	 * @param ctx the parse tree
+	 */
+	void enterArrayableType(CmmParser.ArrayableTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CmmParser#arrayableType}.
+	 * @param ctx the parse tree
+	 */
+	void exitArrayableType(CmmParser.ArrayableTypeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CmmParser#builtInType}.
+	 * @param ctx the parse tree
+	 */
+	void enterBuiltInType(CmmParser.BuiltInTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CmmParser#builtInType}.
+	 * @param ctx the parse tree
+	 */
+	void exitBuiltInType(CmmParser.BuiltInTypeContext ctx);
 }

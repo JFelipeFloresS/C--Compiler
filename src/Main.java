@@ -1,10 +1,10 @@
 import ast.Program;
+import error_handler.ErrorHandler;
 import parser.*;
 
 import org.antlr.v4.runtime.*;
 import visitor.IdentificationVisitor;
 import visitor.TypeCheckingVisitor;
-import visitor.Visitor;
 
 public class Main {
 	
@@ -23,8 +23,27 @@ public class Main {
 		CmmParser parser = new CmmParser(tokens);	
 		Program ast = parser.program().ast;
 
+    if (parser.getNumberOfSyntaxErrors() > 0) {
+      System.err.println("Program with syntax errors. No code was generated.");
+
+      // print parser errors
+      parser.getErrorListeners().forEach(listener -> {
+        if (listener instanceof BaseErrorListener) {
+          listener.syntaxError(parser, null, -1, -1, "See above", null);
+        }
+      });
+
+      System.exit(1);
+    }
+
 		ast.accept(new IdentificationVisitor(), null);
 		ast.accept(new TypeCheckingVisitor(), null);
+
+    if (ErrorHandler.getErrorHandler().anyError()) {
+      ErrorHandler.getErrorHandler().showErrors(System.err);
+      System.err.println("Program with semantic errors. No code was generated.");
+      System.exit(1);
+    }
 
 		System.out.println(ast);
 	}

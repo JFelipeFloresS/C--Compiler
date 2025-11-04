@@ -2,7 +2,6 @@ package visitor;
 
 import ast.Program;
 import ast.definitions.FunctionDefinition;
-import ast.definitions.StructDefinition;
 import ast.definitions.VariableDefinition;
 import ast.expressions.*;
 import ast.statements.*;
@@ -13,7 +12,6 @@ public interface Visitor<TP, TR> {
   // STATEMENTS
 
   public TR visit (FunctionDefinition funcDef, TP param);
-  public TR visit (StructDefinition structDef, TP param);
   public TR visit (VariableDefinition varDef, TP param);
   public TR visit (Assignment assignment, TP param);
   public TR visit (IfElse ifElse, TP param);
@@ -27,7 +25,6 @@ public interface Visitor<TP, TR> {
 
   public TR visit (Arithmetic arithmetic, TP param);
   public TR visit (ArrayAccess arrayAccess, TP param);
-  public TR visit (ArrayIndex arrayIndex, TP param);
   public TR visit (Cast cast, TP param);
   public TR visit (CharLiteral charLiteral, TP param);
   public TR visit (DoubleLiteral doubleLiteral, TP param);
@@ -46,6 +43,7 @@ public interface Visitor<TP, TR> {
   public TR visit (CharType charType, TP param);
   public TR visit (DoubleType doubleType, TP param);
   public TR visit (IntType intType, TP param);
+  public TR visit (ArrayType arrayType, TP param);
   public TR visit (StructType structType, TP param);
   public TR visit (VoidType voidType, TP param);
   public TR visit (FunctionType functionType, TP param);

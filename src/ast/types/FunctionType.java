@@ -20,7 +20,7 @@ public class FunctionType extends AbstractType {
   }
 
   public FunctionType(int line, int column, Type returnType, List<VariableDefinition> params) {
-    super(line, column, null);
+    super(line, column);
     this.params = params;
     this.returnType = returnType;
   }
@@ -75,9 +75,7 @@ public class FunctionType extends AbstractType {
       }
     }
     return String.format(
-        "FunctionType (%d, %d):%n\t" +
-        "returnType(%s)%n\t" +
-        "params(%s)",
+        "FunctionType (%d, %d): (%s) params(%s)",
         this.getLine(),
         this.getColumn(),
         returnType.toString(),
@@ -88,7 +86,11 @@ public class FunctionType extends AbstractType {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (!(o instanceof FunctionType that)) return false;
+
+    if (!(o instanceof FunctionType that)) {
+      System.out.println("Object is not a FunctionType " + o);
+      return false;
+    }
     if (this.getLine() != that.getLine()) {
       System.out.println("FunctionType line numbers differ: " + this.getLine() + " != " + that.getLine());
       return false;
@@ -117,5 +119,15 @@ public class FunctionType extends AbstractType {
     }
 
     return true;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(
+        Integer.hashCode(getLine()),
+        Integer.hashCode(getColumn()),
+        returnType.hashCode(),
+        params.hashCode()
+    );
   }
 }
