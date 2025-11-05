@@ -25,47 +25,47 @@ public class ArrayAccess extends AbstractExpression {
 
     @Override
     public String toString() {
-      String indexStr = (index != null) ? index.toString() : "null";
+        String indexStr = (index != null) ? index.toString() : "null";
         return String.format(
-                "ArrayAccess:%s" +
+            "ArrayAccess:%s" +
                 "array: %s%s" +
                 "index: %s",
-                "\n\t",
-                array.getClass().getSimpleName(), "\n\t",
-                indexStr
+            "\n\t",
+            array.getClass().getSimpleName(), "\n\t",
+            indexStr
         );
     }
 
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof ArrayAccess that)) {
-          System.out.println("Not ArrayAccess instance compare: " + o.getClass().getSimpleName());
-          return false;
+            System.out.println("Not ArrayAccess instance compare: " + o.getClass().getSimpleName());
+            return false;
         }
 
         if (this.getLine() != that.getLine()) {
-          System.out.println("ArrayAccess Line numbers differ: " + this.getLine() + " != " + that.getLine());
-          return false;
+            System.out.println("ArrayAccess Line numbers differ: " + this.getLine() + " != " + that.getLine());
+            return false;
         }
 
         if (this.getColumn() != that.getColumn()) {
-          System.out.println("ArrayAccess Column numbers differ: " + this.getColumn() + " != " + that.getColumn());
-          return false;
+            System.out.println("ArrayAccess Column numbers differ: " + this.getColumn() + " != " + that.getColumn());
+            return false;
         }
 
         if (!Objects.deepEquals(this.getArray(), that.getArray())) {
-          System.out.println("ArrayAccess Arrays differ: " + this.getArray() + " != " + that.getArray());
-          return false;
+            System.out.println("ArrayAccess Arrays differ: " + this.getArray() + " != " + that.getArray());
+            return false;
         }
 
         if ((this.getIndex() == null && that.getIndex() != null) || (this.getIndex() != null && that.getIndex() == null)) {
-          System.out.println("ArrayAccess Index differs: " + this.getIndex() + " != " + that.getIndex());
-          return false;
+            System.out.println("ArrayAccess Index differs: " + this.getIndex() + " != " + that.getIndex());
+            return false;
         }
 
         if (this.getIndex() != null && that.getIndex() != null && !Objects.deepEquals(this.getIndex(), that.getIndex())) {
-          System.out.println("ArrayAccess Indexes differ: " + this.getIndex() + " != " + that.getIndex());
-          return false;
+            System.out.println("ArrayAccess Indexes differ: " + this.getIndex() + " != " + that.getIndex());
+            return false;
         }
 
         return true;

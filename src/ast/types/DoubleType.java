@@ -42,11 +42,23 @@ public class DoubleType extends AbstractType {
 
     @Override
     public Type relational(Type that, Locatable node) {
+        if (that instanceof ErrorType)
+            return that;
+
+        if (that instanceof DoubleType || that instanceof IntType || that instanceof CharType)
+            return new IntType(this.getLine(), this.getColumn());
+
         return new ErrorType(String.format("Cannot perform relational operation between %s and %s", this, that), node);
     }
 
     @Override
     public Type logical(Type that, Locatable node) {
+        if (that instanceof ErrorType)
+            return that;
+
+        if (that instanceof DoubleType || that instanceof IntType || that instanceof CharType)
+            return new IntType(this.getLine(), this.getColumn());
+
         return new ErrorType(String.format("Cannot perform logical operation between %s and %s", this, that), node);
     }
 }

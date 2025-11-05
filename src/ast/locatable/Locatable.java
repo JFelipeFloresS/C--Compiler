@@ -4,8 +4,8 @@ import ast.ASTNode;
 
 public interface Locatable extends ASTNode {
 
-    public int getLine();
+    int getLine();
 
-    public int getColumn();
+    int getColumn();
 
 }

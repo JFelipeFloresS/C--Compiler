@@ -27,12 +27,12 @@ public class FunctionInvocation extends AbstractExpression {
     public String toString() {
         String params = String.join(", ", parameters.stream().map(expression -> expression.getClass().getSimpleName()).toArray(String[]::new));
         return String.format(
-                "FunctionInvocation:%s" +
+            "FunctionInvocation:%s" +
                 "functionId: %s%s" +
                 "params: %s",
-                "\n\t",
+            "\n\t",
             functionId, "\n\t",
-                params
+            params
         );
     }
 

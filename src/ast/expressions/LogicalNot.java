@@ -5,33 +5,33 @@ import visitor.Visitor;
 public class LogicalNot extends AbstractExpression {
 
     private final Expression expression;
-    public Expression getExpression() {
-        return expression;
-    }
 
     public LogicalNot(int line, int column, Expression expression) {
         super(line, column);
         this.expression = expression;
     }
 
+    public Expression getExpression() {
+        return expression;
+    }
+
     @Override
     public String toString() {
         return String.format(
-                "LogicalNot:%s" +
+            "LogicalNot:%s" +
                 "expression: %s",
-                "\n\t",
-                expression.getClass().getSimpleName()
+            "\n\t",
+            expression.getClass().getSimpleName()
         );
     }
 
     @Override
     public boolean equals(Object o) {
-        if (! (o instanceof LogicalNot that)) return false;
+        if (!(o instanceof LogicalNot that)) return false;
 
         if (this.getLine() != that.getLine()) return false;
         if (this.getColumn() != that.getColumn()) return false;
-        if (! this.expression.equals(that.expression)) return false;
-        return true;
+        return this.expression.equals(that.expression);
     }
 
     @Override

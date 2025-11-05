@@ -9,26 +9,19 @@ import java.util.Objects;
 
 public class VariableDefinition extends AbstractDefinition {
 
-    private final List<Id> names;
-
     public VariableDefinition(int line, int col, Type type, List<Id> names) {
-        super(line, col, type);
-        this.names = names;
-    }
-
-    public List<Id> getNames() {
-        return this.names;
+        super(line, col, type, names);
     }
 
     @Override
     public String toString() {
         String namesStr = String.join(", ", this.getNames().stream().map(Id::toString).toArray(String[]::new));
         return String.format(
-                "VariableDefinition (%d, %d): %s \"%s\"",
-                this.getLine(),
-                this.getColumn(),
-                this.getType().toString(),
-                namesStr
+            "VariableDefinition (%d, %d): %s \"%s\"",
+            this.getLine(),
+            this.getColumn(),
+            this.getType().toString(),
+            namesStr
         );
     }
 
@@ -37,28 +30,28 @@ public class VariableDefinition extends AbstractDefinition {
         if (!(o instanceof VariableDefinition that)) return false;
 
         if (this.getLine() != that.getLine()) {
-          System.out.println("VariableDefinition line numbers differ: " + this.getLine() + " != " + that.getLine());
-          return false;
+            System.out.println("VariableDefinition line numbers differ: " + this.getLine() + " != " + that.getLine());
+            return false;
         }
 
         if (this.getColumn() != that.getColumn()) {
-          System.out.println("VariableDefinition column numbers differ: " + this.getColumn() + " != " + that.getColumn());
-          return false;
+            System.out.println("VariableDefinition column numbers differ: " + this.getColumn() + " != " + that.getColumn());
+            return false;
         }
 
         if (!Objects.deepEquals(this.names, that.names)) {
-          System.out.println("VariableDefinition names differ: " +
-              String.join(", ", this.names.stream().map(Id::toString).toArray(String[]::new)) + " != " +
-              String.join(", ", that.names.stream().map(Id::toString).toArray(String[]::new)));
-          return false;
+            System.out.println("VariableDefinition names differ: " +
+                String.join(", ", this.names.stream().map(Id::toString).toArray(String[]::new)) + " != " +
+                String.join(", ", that.names.stream().map(Id::toString).toArray(String[]::new)));
+            return false;
         }
 
         if (!this.getType().equals(that.getType())) {
-          System.out.println("VariableDefinition types differ: " + this.getType() + " != " + that.getType());
-          return false;
+            System.out.println("VariableDefinition types differ: " + this.getType() + " != " + that.getType());
+            return false;
         }
 
-        return  true;
+        return true;
     }
 
     @Override

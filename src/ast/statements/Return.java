@@ -19,10 +19,10 @@ public class Return extends AbstractStatement {
     @Override
     public String toString() {
         return String.format(
-                "Return:%s" +
+            "Return:%s" +
                 "expression: %s",
-                "\n\t",
-                expression.getClass().getSimpleName()
+            "\n\t",
+            expression.getClass().getSimpleName()
         );
     }
 
@@ -32,9 +32,9 @@ public class Return extends AbstractStatement {
             return false;
         }
         return this.getLine() == other.getLine()
-                && this.getColumn() == other.getColumn()
-                && ((this.expression == null && other.expression == null)
-                || (this.expression != null && this.expression.equals(other.expression)));
+            && this.getColumn() == other.getColumn()
+            && ((this.expression == null && other.expression == null)
+            || (this.expression != null && this.expression.equals(other.expression)));
     }
 
     @Override

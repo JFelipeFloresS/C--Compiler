@@ -17,9 +17,19 @@ public class CharType extends AbstractType {
     public Type arithmetic(Type that, Locatable node) {
         if (that instanceof ErrorType)
             return that;
-        if (that instanceof CharType || that instanceof IntType || that instanceof DoubleType) {
+
+        if (that instanceof DoubleType) {
             return that;
         }
+
+        if (that instanceof IntType) {
+            return that;
+        }
+
+        if (that instanceof CharType) {
+            return new IntType(this.getLine(), this.getColumn());
+        }
+
         return new ErrorType(String.format("Cannot perform arithmetic operation between %s and %s", this, that), node);
     }
 
@@ -45,11 +55,25 @@ public class CharType extends AbstractType {
 
     @Override
     public Type relational(Type that, Locatable node) {
+        if (that instanceof ErrorType)
+            return that;
+
+        if (that instanceof CharType || that instanceof IntType || that instanceof DoubleType) {
+            return new IntType(this.getLine(), this.getColumn());
+        }
+
         return new ErrorType(String.format("Cannot perform relational operation between %s and %s", this, that), node);
     }
 
     @Override
     public Type logical(Type that, Locatable node) {
+        if (that instanceof ErrorType)
+            return that;
+
+        if (that instanceof CharType || that instanceof IntType || that instanceof DoubleType) {
+            return new IntType(this.getLine(), this.getColumn());
+        }
+
         return new ErrorType(String.format("Cannot perform logical operation between %s and %s", this, that), node);
     }
 }

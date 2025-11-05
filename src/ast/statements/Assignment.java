@@ -25,40 +25,40 @@ public class Assignment extends AbstractStatement {
     @Override
     public String toString() {
         return String.format(
-                "Assignment:%s" +
+            "Assignment:%s" +
                 "target: %s%s" +
                 "value: %s",
-                "\n\t",
-                target.getClass().getSimpleName(), "\n\t",
-                value.getClass().getSimpleName()
+            "\n\t",
+            target.getClass().getSimpleName(), "\n\t",
+            value.getClass().getSimpleName()
         );
     }
 
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Assignment that)) {
-          System.out.println("Not an Assignment instance");
-          return false;
+            System.out.println("Not an Assignment instance");
+            return false;
         }
 
         if (this.getLine() != that.getLine()) {
-          System.out.println("Assignment Line numbers differ: " + this.getLine() + " != " + that.getLine());
-          return false;
+            System.out.println("Assignment Line numbers differ: " + this.getLine() + " != " + that.getLine());
+            return false;
         }
 
         if (this.getColumn() != that.getColumn()) {
-          System.out.println("Assignment Column numbers differ: " + this.getColumn() + " != " + that.getColumn());
-          return false;
+            System.out.println("Assignment Column numbers differ: " + this.getColumn() + " != " + that.getColumn());
+            return false;
         }
 
         if (!this.target.equals(that.target)) {
-          System.out.println("Assignment targets differ");
-          return false;
+            System.out.println("Assignment targets differ");
+            return false;
         }
 
         if (!this.value.equals(that.value)) {
-          System.out.println("Assignment values differ");
-          return false;
+            System.out.println("Assignment values differ");
+            return false;
         }
 
         return true;

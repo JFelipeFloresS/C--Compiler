@@ -5,11 +5,11 @@ import ast.types.Type;
 
 public abstract class AbstractExpression extends AbstractLocatable implements Expression {
 
+    private Type type;
+
     protected AbstractExpression(int line, int column) {
         super(line, column);
     }
-
-    private Type type;
 
     @Override
     public Type getType() {

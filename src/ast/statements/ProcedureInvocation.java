@@ -29,12 +29,12 @@ public class ProcedureInvocation extends AbstractStatement {
     public String toString() {
         String paramString = String.join(", ", parameters.stream().map(p -> p.getClass().getSimpleName()).toArray(String[]::new));
         return String.format(
-                "ProcedureInvocation:%s" +
+            "ProcedureInvocation:%s" +
                 "procedureId: %s%s" +
                 "parameters: %s",
-                "\n\t",
+            "\n\t",
             procedureId, "\n\t",
-                paramString
+            paramString
         );
     }
 

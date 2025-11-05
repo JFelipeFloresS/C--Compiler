@@ -24,12 +24,12 @@ public class StructAccess extends AbstractExpression {
     @Override
     public String toString() {
         return String.format(
-                "StructAccess:%s" +
+            "StructAccess:%s" +
                 "struct: %s%s" +
                 "fieldName: %s",
-                "\n\t",
-                structExpression.getClass().getSimpleName(), "\n\t",
-                fieldName
+            "\n\t",
+            structExpression.getClass().getSimpleName(), "\n\t",
+            fieldName
         );
     }
 

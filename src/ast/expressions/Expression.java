@@ -5,8 +5,8 @@ import ast.types.Type;
 
 public interface Expression extends Locatable {
 
-    public Type getType();
+    Type getType();
 
-    public void setType(Type type);
+    void setType(Type type);
 
 }

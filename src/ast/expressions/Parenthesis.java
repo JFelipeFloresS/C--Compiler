@@ -18,10 +18,10 @@ public class Parenthesis extends AbstractExpression {
     @Override
     public String toString() {
         return String.format(
-                "Parenthesis:%s" +
+            "Parenthesis:%s" +
                 "expression: %s",
-                "\n\t",
-                expression.getClass().getSimpleName()
+            "\n\t",
+            expression.getClass().getSimpleName()
         );
     }
 
@@ -30,7 +30,7 @@ public class Parenthesis extends AbstractExpression {
         if (!(o instanceof Parenthesis that)) return false;
         if (this.getLine() != that.getLine()) return false;
         if (this.getColumn() != that.getColumn()) return false;
-      return this.expression.equals(that.expression);
+        return this.expression.equals(that.expression);
     }
 
     @Override

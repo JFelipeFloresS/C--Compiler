@@ -1,6 +1,5 @@
 package ast.types;
 
-import ast.expressions.Expression;
 import ast.locatable.Locatable;
 
 public interface Type extends Locatable {
@@ -14,4 +13,6 @@ public interface Type extends Locatable {
     Type relational(Type that, Locatable node);
 
     Type logical(Type that, Locatable node);
+
+    Type squareBrackets(Type type);
 }

@@ -5,30 +5,20 @@ import visitor.Visitor;
 
 import java.util.List;
 
-public class Program implements ASTNode {
-
-    private final List<Definition> definitions;
-
-    public Program(List<Definition> definitions) {
-        this.definitions = definitions;
-    }
-
-    public List<Definition> getDefinitions() {
-        return definitions;
-    }
+public record Program(List<Definition> definitions) implements ASTNode {
 
     @Override
     public String toString() {
-      StringBuilder sb = new StringBuilder();
-      for (Definition def : definitions) {
-          sb.append(def.toString()).append("\n");
-      }
+        StringBuilder sb = new StringBuilder();
+        for (Definition def : definitions) {
+            sb.append(def.toString()).append("\n");
+        }
         return String.format(
-                "Program: %n\t" +
+            "Program: %n\t" +
                 "statements: %d%n\t" +
                 "%s",
-                this.definitions.size(),
-                sb
+            this.definitions.size(),
+            sb
         );
     }
 

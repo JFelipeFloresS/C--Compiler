@@ -22,39 +22,39 @@ public class Read extends AbstractStatement {
     public String toString() {
         String exprString = String.join(", ", expressions.stream().map(e -> e.getClass().getSimpleName()).toArray(String[]::new));
         return String.format(
-                "Read:%s" +
+            "Read:%s" +
                 "expressions: %s",
-                "\n\t",
-                exprString
+            "\n\t",
+            exprString
         );
     }
 
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Read that)) {
-          System.out.println("Not Read instance");
-          return false;
+            System.out.println("Not Read instance");
+            return false;
         }
 
         if (this.getLine() != that.getLine()) {
-          System.out.println("Read Line numbers differ: " + this.getLine() + " != " + that.getLine());
-          return false;
+            System.out.println("Read Line numbers differ: " + this.getLine() + " != " + that.getLine());
+            return false;
         }
 
         if (this.getColumn() != that.getColumn()) {
-          System.out.println("Read Column numbers differ: " + this.getColumn() + " != " + that.getColumn());
-          return false;
+            System.out.println("Read Column numbers differ: " + this.getColumn() + " != " + that.getColumn());
+            return false;
         }
 
         if (this.expressions.size() != that.expressions.size()) {
-          System.out.println("Read expressions size differ: " + this.expressions.size() + " != " + that.expressions.size());
-          return false;
+            System.out.println("Read expressions size differ: " + this.expressions.size() + " != " + that.expressions.size());
+            return false;
         }
 
         for (int i = 0; i < this.expressions.size(); i++) {
             if (!this.expressions.get(i).equals(that.expressions.get(i))) {
                 System.out.println("Read expressions at index " + i + " differ: " + this.expressions.get(i) + " != " + that.expressions.get(i));
-              return false;
+                return false;
             }
         }
         return true;

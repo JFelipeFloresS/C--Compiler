@@ -1,0 +1,13 @@
+double a; 
+int b; 
+
+double f(double b) { 
+  return a + b;   // a is global, b is local (parameter)
+}
+
+void main() {
+  int a;
+  int c;
+  write a + b + c; // a and c are local, b is global
+  write f(3.8)   ; // f is global
+}

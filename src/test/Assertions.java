@@ -4,7 +4,7 @@ import ast.locatable.Locatable;
 
 public class Assertions {
 
-    private Assertions () {
+    private Assertions() {
         // Prevent instantiation
     }
 
@@ -36,8 +36,8 @@ public class Assertions {
         System.out.println("Expected: " + expected + "\nActual: " + actual + "\n");
         if (!expected.equals(actual)) {
             throw new AssertionError("\nExpected: " + expected + ".\nActual: " + actual + ".\n"
-            + "Expected position: (" + expected.getLine() + ", " + expected.getColumn() + ")\nActual position: ("
-            + actual.getLine() + ", " + actual.getColumn() + ")");
+                + "Expected position: (" + expected.getLine() + ", " + expected.getColumn() + ")\nActual position: ("
+                + actual.getLine() + ", " + actual.getColumn() + ")");
         }
     }
 

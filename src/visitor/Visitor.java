@@ -9,47 +9,75 @@ import ast.types.*;
 
 public interface Visitor<TP, TR> {
 
-  // STATEMENTS
+    // STATEMENTS
 
-  public TR visit (FunctionDefinition funcDef, TP param);
-  public TR visit (VariableDefinition varDef, TP param);
-  public TR visit (Assignment assignment, TP param);
-  public TR visit (IfElse ifElse, TP param);
-  public TR visit (ProcedureInvocation invocation, TP param);
-  public TR visit (Read read, TP param);
-  public TR visit (Return _return, TP param);
-  public TR visit (While write, TP param);
-  public TR visit (Write write, TP param);
+    TR visit(FunctionDefinition funcDef, TP param);
 
-  // EXPRESSIONS
+    TR visit(VariableDefinition varDef, TP param);
 
-  public TR visit (Arithmetic arithmetic, TP param);
-  public TR visit (ArrayAccess arrayAccess, TP param);
-  public TR visit (Cast cast, TP param);
-  public TR visit (CharLiteral charLiteral, TP param);
-  public TR visit (DoubleLiteral doubleLiteral, TP param);
-  public TR visit (FunctionInvocation functionInvocation, TP param);
-  public TR visit (Id id, TP param);
-  public TR visit (IntLiteral intLiteral, TP param);
-  public TR visit (Logical logical, TP param);
-  public TR visit (LogicalNot logicalNot, TP param);
-  public TR visit (Parenthesis parenthesis, TP param);
-  public TR visit (Relational relational, TP param);
-  public TR visit (StructAccess structAccess, TP param);
-  public TR visit (UnaryMinus unaryMinus, TP param);
+    TR visit(Assignment assignment, TP param);
 
-  // TYPES
+    TR visit(IfElse ifElse, TP param);
 
-  public TR visit (CharType charType, TP param);
-  public TR visit (DoubleType doubleType, TP param);
-  public TR visit (IntType intType, TP param);
-  public TR visit (ArrayType arrayType, TP param);
-  public TR visit (StructType structType, TP param);
-  public TR visit (VoidType voidType, TP param);
-  public TR visit (FunctionType functionType, TP param);
-  public TR visit (ErrorType errorType, TP param);
+    TR visit(ProcedureInvocation invocation, TP param);
 
-  // PROGRAM
+    TR visit(Read read, TP param);
 
-  public TR visit (Program program, TP param);
+    TR visit(Return _return, TP param);
+
+    TR visit(While write, TP param);
+
+    TR visit(Write write, TP param);
+
+    // EXPRESSIONS
+
+    TR visit(Arithmetic arithmetic, TP param);
+
+    TR visit(ArrayAccess arrayAccess, TP param);
+
+    TR visit(Cast cast, TP param);
+
+    TR visit(CharLiteral charLiteral, TP param);
+
+    TR visit(DoubleLiteral doubleLiteral, TP param);
+
+    TR visit(FunctionInvocation functionInvocation, TP param);
+
+    TR visit(Id id, TP param);
+
+    TR visit(IntLiteral intLiteral, TP param);
+
+    TR visit(Logical logical, TP param);
+
+    TR visit(LogicalNot logicalNot, TP param);
+
+    TR visit(Parenthesis parenthesis, TP param);
+
+    TR visit(Relational relational, TP param);
+
+    TR visit(StructAccess structAccess, TP param);
+
+    TR visit(UnaryMinus unaryMinus, TP param);
+
+    // TYPES
+
+    TR visit(CharType charType, TP param);
+
+    TR visit(DoubleType doubleType, TP param);
+
+    TR visit(IntType intType, TP param);
+
+    TR visit(ArrayType arrayType, TP param);
+
+    TR visit(StructType structType, TP param);
+
+    TR visit(VoidType voidType, TP param);
+
+    TR visit(FunctionType functionType, TP param);
+
+    TR visit(ErrorType errorType, TP param);
+
+    // PROGRAM
+
+    TR visit(Program program, TP param);
 }

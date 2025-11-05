@@ -16,12 +16,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static test.Assertions.*;
+import static test.Assertions.assertEquals;
 
 public class ParserTest {
 
     public static void main(String[] args)
-            throws IOException {
+        throws IOException {
 
         CharStream input = CharStreams.fromFileName("./src/test/test.txt");
         CmmLexer lexer = new CmmLexer(input);
@@ -43,24 +43,24 @@ public class ParserTest {
     }
 
     private static void assertDefinitions(Program ast) {
-        assertEquals(13, ast.getDefinitions().size());
+        assertEquals(13, ast.definitions().size());
 
         // variable definitions
         assertEquals(
             new VariableDefinition(3, 1, new IntType(3, 1), List.of(new Id(3, 5, "a"))),
-            ast.getDefinitions().get(0));
+            ast.definitions().get(0));
 
         assertEquals(
             new VariableDefinition(4, 1, new IntType(4, 1), List.of(new Id(4, 5, "b"))),
-            ast.getDefinitions().get(1));
+            ast.definitions().get(1));
 
         assertEquals(
             new VariableDefinition(5, 1, new IntType(5, 1), List.of(new Id(5, 5, "c"))),
-            ast.getDefinitions().get(2));
+            ast.definitions().get(2));
 
         assertEquals(
             new VariableDefinition(6, 1, new DoubleType(6, 1), List.of(new Id(6, 8, "realNumber"))),
-            ast.getDefinitions().get(3));
+            ast.definitions().get(3));
 
         // function/procedure definitions
         assertEquals(
@@ -84,17 +84,17 @@ public class ParserTest {
                     new Return(12, 1, new Id(12, 8, "temp"))
                 )
             ),
-        ast.getDefinitions().get(4)
+            ast.definitions().get(4)
         );
 
         assertEquals(
             new VariableDefinition(16, 1,
                 new ArrayType(16, 1,
-                new IntType(16, 1),
-                10),
+                    new IntType(16, 1),
+                    10),
                 List.of(new Id(16, 9, "v"))
             ),
-            ast.getDefinitions().get(5));
+            ast.definitions().get(5));
 
         assertEquals(
             new VariableDefinition(17, 1,
@@ -107,84 +107,83 @@ public class ParserTest {
                 ),
                 List.of(new Id(17, 15, "w"))
             ),
-            ast.getDefinitions().get(6)
+            ast.definitions().get(6)
         );
 
         assertEquals(
-          new FunctionDefinition(19, 1,
-              new FunctionType(19, 1,
-                  new VoidType(19, 1),
-                  new ArrayList<>()
-              ),
-              new Id(19, 6, "readWriteIfElseWhileCast"),
-              new ArrayList<>(),
-              List.of(
-                  new Read(20, 1,
-                      List.of(
-                          new ArrayAccess(20, 6,
-                              new Id(20, 6, "v"),
-                              new Id(20, 8, "i")))
-                  ),
-                  new Write(21, 1,
-                      List.of(
-                          new ArrayAccess(21, 7,
-                              new ArrayAccess(21, 7,
-                                  new Id(21, 7, "w"),
-                                  new Id(21, 9, "i")),
-                              new Arithmetic(
-                                  21, 12,
-                                  new Id(21, 12, "a"),
-                                  "+",
-                                  new Id(21, 14, "b")
-                              )
-                          )
-                      )),
-                  new IfElse(24, 1,
-                      new Relational(24, 5,
-                          new Id(24, 5, "a"),
-                          "<",
-                          new Id(24, 9, "b")),
-                      List.of(new Write(25, 5, List.of(new Id(25, 11, "a")))),
-                      List.of(new Write(27, 5, List.of(new Id(27, 11, "b"))))),
-                  new IfElse(30, 1,
-                      new Id(30, 5, "a"),
-                      List.of(new Write(31, 5, List.of(new Id(31, 11, "a")))),
-                      List.of(new Write(33, 5, List.of(new Id(33, 11, "b"))))),
-                  new IfElse(35, 1,
-                      new Id(35, 5, "b"),
-                      List.of(new Write(36, 5, List.of(new Id(36, 11, "b")))),
-                      List.of()),
-                  new IfElse(38, 1,
-                      new Id(38, 5, "c"),
-                      List.of(new Write(39, 5, List.of(new Id(39, 11, "c")))),
-                      List.of()),
-                  new While(43, 1,
-                      new Relational(43, 8,
-                          new Id(43, 8, "a"),
-                          "<",
-                          new IntLiteral(43, 12, 10)),
-                      List.of(
-                          new Assignment(44, 5,
-                              new Id(44, 5, "a"),
-                              new Arithmetic(44, 9,
-                                  new Id(44, 9, "a"),
-                                  "+",
-                                  new IntLiteral(44, 13, 1)))
-                      )
-                  ),
-                  new Assignment(48, 1,
-                      new Id(48, 1, "a"),
-                      new Cast(48, 5,
-                          new IntType(48, 6),
-                          new Id(48, 10, "realNumber"))),
-                  new Assignment(49, 1, new Id(49, 1, "realNumber"),
-                      new Cast(49, 14,
-                          new DoubleType(49, 15),
-                          new Id(49, 22, "a")))
-              )
-          ),
-            ast.getDefinitions().get(7));
-
+            new FunctionDefinition(19, 1,
+                new FunctionType(19, 1,
+                    new VoidType(19, 1),
+                    new ArrayList<>()
+                ),
+                new Id(19, 6, "readWriteIfElseWhileCast"),
+                new ArrayList<>(),
+                List.of(
+                    new Read(20, 1,
+                        List.of(
+                            new ArrayAccess(20, 6,
+                                new Id(20, 6, "v"),
+                                new Id(20, 8, "i")))
+                    ),
+                    new Write(21, 1,
+                        List.of(
+                            new ArrayAccess(21, 7,
+                                new ArrayAccess(21, 7,
+                                    new Id(21, 7, "w"),
+                                    new Id(21, 9, "i")),
+                                new Arithmetic(
+                                    21, 12,
+                                    new Id(21, 12, "a"),
+                                    "+",
+                                    new Id(21, 14, "b")
+                                )
+                            )
+                        )),
+                    new IfElse(24, 1,
+                        new Relational(24, 5,
+                            new Id(24, 5, "a"),
+                            "<",
+                            new Id(24, 9, "b")),
+                        List.of(new Write(25, 5, List.of(new Id(25, 11, "a")))),
+                        List.of(new Write(27, 5, List.of(new Id(27, 11, "b"))))),
+                    new IfElse(30, 1,
+                        new Id(30, 5, "a"),
+                        List.of(new Write(31, 5, List.of(new Id(31, 11, "a")))),
+                        List.of(new Write(33, 5, List.of(new Id(33, 11, "b"))))),
+                    new IfElse(35, 1,
+                        new Id(35, 5, "b"),
+                        List.of(new Write(36, 5, List.of(new Id(36, 11, "b")))),
+                        List.of()),
+                    new IfElse(38, 1,
+                        new Id(38, 5, "c"),
+                        List.of(new Write(39, 5, List.of(new Id(39, 11, "c")))),
+                        List.of()),
+                    new While(43, 1,
+                        new Relational(43, 8,
+                            new Id(43, 8, "a"),
+                            "<",
+                            new IntLiteral(43, 12, 10)),
+                        List.of(
+                            new Assignment(44, 5,
+                                new Id(44, 5, "a"),
+                                new Arithmetic(44, 9,
+                                    new Id(44, 9, "a"),
+                                    "+",
+                                    new IntLiteral(44, 13, 1)))
+                        )
+                    ),
+                    new Assignment(48, 1,
+                        new Id(48, 1, "a"),
+                        new Cast(48, 5,
+                            new IntType(48, 6),
+                            new Id(48, 10, "realNumber"))),
+                    new Assignment(49, 1, new Id(49, 1, "realNumber"),
+                        new Cast(49, 14,
+                            new DoubleType(49, 15),
+                            new Id(49, 22, "a")))
+                )
+            ),
+            ast.definitions().get(7));
 
 
         assertEquals(
@@ -316,7 +315,7 @@ public class ParserTest {
                         List.of())
                 )
             ),
-            ast.getDefinitions().get(8)
+            ast.definitions().get(8)
         );
 
         assertEquals(
@@ -339,8 +338,8 @@ public class ParserTest {
                             new DoubleType(72, 1),
                             10
                         ), List.of(
-                            new Id(72, 12, "realVector"),
-                            new Id(72, 24, "anotherOne"))
+                        new Id(72, 12, "realVector"),
+                        new Id(72, 24, "anotherOne"))
                     )
                 ),
                 List.of(
@@ -354,10 +353,10 @@ public class ParserTest {
                             new ArrayAccess(75, 12,
                                 new Id(75, 12, "v"),
                                 new Arithmetic(75, 14,
-                                        new IntLiteral(75, 14, 45),
-                                        "+",
-                                        new Id(75, 17, "c")
-                                    )
+                                    new IntLiteral(75, 14, 45),
+                                    "+",
+                                    new Id(75, 17, "c")
+                                )
                             )
                         )
                     ),
@@ -375,7 +374,7 @@ public class ParserTest {
                     )
                 )
             ),
-            ast.getDefinitions().get(9)
+            ast.definitions().get(9)
         );
 
         assertEquals(
@@ -387,39 +386,39 @@ public class ParserTest {
                 List.of(
                     new VariableDefinition(79, 1,
                         new ArrayType(79, 1,
-                          new StructType(79, 1,
-                              List.of(
-                              new StructRecordField(80, 1,
-                                  new IntType(80, 1),
-                                  List.of(new Id(80, 5, "age"))
-                              ),
-                              new StructRecordField(81, 1,
-                                  new StructType(81, 1,
-                                  List.of(
-                                      new StructRecordField(81, 10,
-                                          new IntType(81, 10),
-                                          List.of(new Id(81, 14, "day"),
-                                              new Id(81, 19, "month"))
-                                      ),
-                                      new StructRecordField(81, 26,
-                                          new IntType(81, 26),
-                                          List.of(new Id(81, 30, "year"))
-                                      )
-                                  )
-                                  ),
-                                  List.of(new Id(81, 38, "dateOfBirth"))
-                              ),
-                              new StructRecordField(82, 1,
-                                  new ArrayType(82, 1,
-                                      new CharType(82, 1),
-                                      256),
-                                  List.of(new Id(82, 11, "name"), new Id(82, 17, "surname"))
-                                  )
-                              )
-                          ),
+                            new StructType(79, 1,
+                                List.of(
+                                    new StructRecordField(80, 1,
+                                        new IntType(80, 1),
+                                        List.of(new Id(80, 5, "age"))
+                                    ),
+                                    new StructRecordField(81, 1,
+                                        new StructType(81, 1,
+                                            List.of(
+                                                new StructRecordField(81, 10,
+                                                    new IntType(81, 10),
+                                                    List.of(new Id(81, 14, "day"),
+                                                        new Id(81, 19, "month"))
+                                                ),
+                                                new StructRecordField(81, 26,
+                                                    new IntType(81, 26),
+                                                    List.of(new Id(81, 30, "year"))
+                                                )
+                                            )
+                                        ),
+                                        List.of(new Id(81, 38, "dateOfBirth"))
+                                    ),
+                                    new StructRecordField(82, 1,
+                                        new ArrayType(82, 1,
+                                            new CharType(82, 1),
+                                            256),
+                                        List.of(new Id(82, 11, "name"), new Id(82, 17, "surname"))
+                                    )
+                                )
+                            ),
                             20
                         ),
-                    List.of(new Id(83, 8, "students")))
+                        List.of(new Id(83, 8, "students")))
                 ),
                 List.of(
                     new Assignment(84, 1,
@@ -437,7 +436,7 @@ public class ParserTest {
                     )
                 )
             ),
-            ast.getDefinitions().get(10)
+            ast.definitions().get(10)
         );
 
         assertEquals(
@@ -449,23 +448,23 @@ public class ParserTest {
                 List.of(
                     new VariableDefinition(86, 23,
                         new StructType(86, 23,
-                        List.of(
-                            new StructRecordField(87, 1,
-                                new IntType(87, 1),
-                                List.of(new Id(87, 5, "id"))
-                            ),
-                            new StructRecordField(88, 1,
-                                new ArrayType(88, 1,
-                                    new CharType(88, 1),
-                                    30
+                            List.of(
+                                new StructRecordField(87, 1,
+                                    new IntType(87, 1),
+                                    List.of(new Id(87, 5, "id"))
                                 ),
-                                List.of(new Id(88, 10, "name"))
-                            ),
-                            new StructRecordField(89, 1,
-                                new DoubleType(89, 1),
-                                List.of(new Id(89, 8, "price"))
-                            )
-                        )),
+                                new StructRecordField(88, 1,
+                                    new ArrayType(88, 1,
+                                        new CharType(88, 1),
+                                        30
+                                    ),
+                                    List.of(new Id(88, 10, "name"))
+                                ),
+                                new StructRecordField(89, 1,
+                                    new DoubleType(89, 1),
+                                    List.of(new Id(89, 8, "price"))
+                                )
+                            )),
                         List.of(new Id(90, 3, "product"))
                     )
                 ),
@@ -479,7 +478,7 @@ public class ParserTest {
                     )
                 )
             ),
-            ast.getDefinitions().get(11)
+            ast.definitions().get(11)
         );
 
         assertEquals(
@@ -517,7 +516,7 @@ public class ParserTest {
                     )
                 )
             ),
-            ast.getDefinitions().get(12)
+            ast.definitions().get(12)
         );
 
     }
