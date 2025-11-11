@@ -10,7 +10,7 @@ public abstract class AbstractDefinition extends AbstractLocatable implements De
 
     protected final Type type;
     protected final List<Id> names;
-    protected int scope;
+    protected int scope = -1;
 
     protected AbstractDefinition(int line, int column, Type type, List<Id> names) {
         super(line, column);

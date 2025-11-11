@@ -25,11 +25,10 @@ public class Assignment extends AbstractStatement {
     @Override
     public String toString() {
         return String.format(
-            "Assignment:%s" +
-                "target: %s%s" +
+            "Assignment:%n\t" +
+                "target: %s%n\t" +
                 "value: %s",
-            "\n\t",
-            target.getClass().getSimpleName(), "\n\t",
+            target.getClass().getSimpleName(),
             value.getClass().getSimpleName()
         );
     }

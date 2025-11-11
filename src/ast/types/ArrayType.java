@@ -1,5 +1,6 @@
 package ast.types;
 
+import ast.locatable.Locatable;
 import visitor.Visitor;
 
 public class ArrayType extends AbstractType {
@@ -19,6 +20,67 @@ public class ArrayType extends AbstractType {
 
     public int getSize() {
         return size;
+    }
+
+    @Override
+    public Type assignment(Type that, Locatable node) {
+        if (that instanceof ErrorType)
+            return that;
+
+        // convert array to its element type for assignment compatibility
+        if (that instanceof ArrayType arrayType) {
+            that = arrayType.getType();
+        }
+
+        if (this.getType() instanceof IntType) {
+            if (that instanceof IntType) {
+                return that;
+            } else if (that instanceof CharType) {
+                return new IntType(this.getLine(), this.getColumn());
+            }
+        } else if (this.getType() instanceof CharType) {
+            if (that instanceof CharType) {
+                return that;
+            }
+        } else if (this.getType() instanceof DoubleType) {
+            if (that instanceof DoubleType) {
+                return that;
+            } else if (that instanceof IntType || that instanceof CharType) {
+                return new DoubleType(this.getLine(), this.getColumn());
+            }
+        }
+        return new ErrorType(String.format("Cannot perform assignment operation between %s and %s", this, that), node);
+    }
+
+    @Override
+    public Type arithmetic(Type that, Locatable node) {
+        if (that instanceof ErrorType)
+            return that;
+
+        Type thisType = this.getType();
+        Type thatType = that.getType();
+
+        if (thisType instanceof IntType) {
+            if (thatType instanceof IntType) {
+                return that;
+            } else if (thatType instanceof CharType) {
+                return new IntType(this.getLine(), this.getColumn());
+            }
+        } else if (thisType instanceof CharType) {
+            if (thatType instanceof CharType) {
+                return new IntType(this.getLine(), this.getColumn());
+            } else if (thatType instanceof IntType) {
+                return that;
+            }
+        } else if (thisType instanceof DoubleType) {
+            if (thatType instanceof DoubleType) {
+                return that;
+            } else if (thatType instanceof IntType || thatType instanceof CharType) {
+                return new DoubleType(this.getLine(), this.getColumn());
+            }
+        }
+
+        return new ErrorType(String.format("No arithmetic operation defined between %s and %s", this, that), node);
     }
 
     @Override

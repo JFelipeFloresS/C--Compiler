@@ -51,6 +51,8 @@ public interface Visitor<TP, TR> {
 
     TR visit(LogicalNot logicalNot, TP param);
 
+    TR visit(Modulus modulus, TP param);
+
     TR visit(Parenthesis parenthesis, TP param);
 
     TR visit(Relational relational, TP param);

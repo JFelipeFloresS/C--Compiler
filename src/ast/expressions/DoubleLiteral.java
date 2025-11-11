@@ -18,9 +18,10 @@ public class DoubleLiteral extends AbstractExpression {
     @Override
     public String toString() {
         return String.format(
-            "DoubleLiteral:%s" +
+            "DoubleLiteral (%d, %d):%n\t" +
                 "value: %f",
-            "\n\t",
+            this.getLine(),
+            this.getColumn(),
             value
         );
     }

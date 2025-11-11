@@ -6,6 +6,7 @@ import ast.types.Type;
 public abstract class AbstractStatement extends AbstractLocatable implements Statement {
 
     protected Type type;
+    protected int scope;
 
     protected AbstractStatement(int line, int column) {
         super(line, column);
@@ -23,5 +24,13 @@ public abstract class AbstractStatement extends AbstractLocatable implements Sta
 
     public void setType(Type type) {
         this.type = type;
+    }
+
+    public int getScope() {
+        return scope;
+    }
+
+    public void setScope(int scope) {
+        this.scope = scope;
     }
 }

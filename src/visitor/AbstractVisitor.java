@@ -14,18 +14,13 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR> {
 
     @Override
     public TR visit(FunctionDefinition funcDef, TP param) {
-        funcDef.getType().accept(this, param);
-
-        for (VariableDefinition varDef : funcDef.getLocalVars()) {
+        funcDef.getType().accept(this, param); // visits params
+        for (var varDef : funcDef.getLocalVars()) {
             varDef.accept(this, param);
         }
-
-        for (Statement stmt : funcDef.getStmtsBlock()) {
+        for (var stmt : funcDef.getStmtsBlock()) {
             stmt.accept(this, param);
         }
-
-        funcDef.getType().accept(this, param);
-
         return null;
     }
 
@@ -39,18 +34,6 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR> {
     public TR visit(Assignment assignment, TP param) {
         assignment.getTarget().accept(this, param);
         assignment.getValue().accept(this, param);
-
-        // First check if target type exists
-        Type targetType = assignment.getTarget().getType();
-        if (targetType == null) {
-            // Handle the case where target type is null
-            // You might want to create an ErrorType or take other appropriate action
-            assignment.setType(new ErrorType("Target has no type", assignment));
-            return null;
-        }
-
-        // Now safely use the target type for assignment checking
-        assignment.setType(targetType.assignment(assignment.getValue().getType(), assignment));
         return null;
     }
 
@@ -228,6 +211,13 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR> {
 
     @Override
     public TR visit(ErrorType errorType, TP param) {
+        return null;
+    }
+
+    @Override
+    public TR visit(Modulus modulus, TP param) {
+        modulus.getLeft().accept(this, null);
+        modulus.getRight().accept(this, null);
         return null;
     }
 

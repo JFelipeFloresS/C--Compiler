@@ -1,6 +1,7 @@
 package symboltable;
 
 import ast.definitions.Definition;
+import ast.definitions.FunctionDefinition;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,13 +18,13 @@ public class SymbolTable {
         this.table.add(new HashMap<>()); // Global scope
     }
 
+    public int getCurrentScope() {
+        return scope;
+    }
+
     public void set() {
-        scope++;
-        if (table.size() <= scope) {
-            table.add(new HashMap<>());
-        } else {
-            table.get(scope).clear();
-        }
+        scope = table.size();
+        table.add(new HashMap<>());
     }
 
     public void reset() {
@@ -38,15 +39,15 @@ public class SymbolTable {
         if (definition == null) {
             return false;
         }
+        definition.setScope(scope);
         for (var name : definition.getNames()) {
+            name.setScope(scope);
             String id = name.getName();
             if (table.get(scope).containsKey(id)) {
                 return false; // Definition already exists in the current scope
             }
             table.get(scope).put(id, definition);
         }
-        definition.getNames().forEach(name -> name.setScope(scope));
-        definition.setScope(scope);
         return true;
     }
 
@@ -59,4 +60,22 @@ public class SymbolTable {
         return null;
     }
 
+    public String getScopeName(int scope) {
+        if (scope == 0) {
+            return "global scope";
+        }
+
+        // return the name of the function that defines this scope
+        int funcCount = 0;
+        for (var def : table.getFirst().values()) {
+            if (def instanceof FunctionDefinition) {
+                funcCount++;
+                if (funcCount == scope) {
+                    return "function " + def.getNames().getFirst().getName();
+                }
+            }
+        }
+
+        return "unknown";
+    }
 }

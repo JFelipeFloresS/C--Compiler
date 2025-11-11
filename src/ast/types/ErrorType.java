@@ -1,7 +1,6 @@
 package ast.types;
 
 import ast.locatable.Locatable;
-import error_handler.ErrorHandler;
 import visitor.Visitor;
 
 public class ErrorType extends AbstractType {
@@ -11,7 +10,6 @@ public class ErrorType extends AbstractType {
     public ErrorType(String message, Locatable node) {
         super(node.getLine(), node.getColumn());
         this.message = message;
-        ErrorHandler.getErrorHandler().addError(this);
     }
 
     @Override

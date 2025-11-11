@@ -36,13 +36,13 @@ public class SymbolTableTest {
 
     public void testFind() {
         SymbolTable st = new SymbolTable();
-        VariableDefinition VariableDefinition = new VariableDefinition(0, 0, null, List.of(new Id(0, 0, "a")));
-        assert st.insert(VariableDefinition);
+        VariableDefinition variableDefinition = new VariableDefinition(0, 0, null, List.of(new Id(0, 0, "a")));
+        assert st.insert(variableDefinition);
         assert st.find("a") != null;
         assert st.find("b") == null;
         st.set();
-        VariableDefinition VariableDefinition2 = new VariableDefinition(0, 0, null, List.of(new Id(0, 0, "b")));
-        assert st.insert(VariableDefinition2);
+        VariableDefinition variableDefinition2 = new VariableDefinition(0, 0, null, List.of(new Id(0, 0, "b")));
+        assert st.insert(variableDefinition2);
         assert st.find("b") != null;
         assert st.find("a") != null;
         assert st.find("c") == null;

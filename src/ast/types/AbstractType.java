@@ -7,6 +7,16 @@ import java.util.Objects;
 
 public abstract class AbstractType extends AbstractLocatable implements Type {
 
+    protected Type type;
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
     protected AbstractType(int line, int column) {
         super(line, column);
     }

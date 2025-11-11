@@ -4,6 +4,10 @@ import ast.locatable.Locatable;
 
 public interface Type extends Locatable {
 
+    Type getType();
+
+    void setType(Type type);
+
     Type arithmetic(Type that, Locatable node);
 
     Type assignment(Type that, Locatable node);
