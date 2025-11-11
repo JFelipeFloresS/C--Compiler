@@ -1,0 +1,16 @@
+
+int i;
+
+int f(int a) {
+  return a;
+}
+
+void g(int a, double b) {
+}
+
+void main() {
+  f();       // * Error: wrong number of params
+  g(3.2);    // * Error: wrong number of params
+  g(3, 3);   // * Error: the type of the second parameter is wrong
+  i=g(3, 0.0);  // * Error: void cannot be assigned to int
+}

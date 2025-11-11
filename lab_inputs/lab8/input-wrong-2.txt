@@ -1,0 +1,16 @@
+int i;
+double f;
+
+int g(int n) { return n; } 
+
+void main() {
+  char ch;
+  write i && f;  // * Error: f is not int
+  write a >= 3;  // * Error: a is not declared
+  write f > 3;   // * Error: f and 3 do not have the same type
+  write f * '2'; // * Error: f and 2 do not have the same type
+  while (f)      // * Error: f is not int
+  if (ch)        // * Error: ch is not int
+    write !g;    // * Error: g is not int
+  i = 'a' + ch;  // Correct! (arithmetic ops with chars return int)
+}

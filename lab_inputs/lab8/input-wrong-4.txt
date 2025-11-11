@@ -1,0 +1,15 @@
+
+int[10] v;
+int[10][10] w;
+
+void main() {
+  int i;
+  
+  write i[0];    // * Error: i is not an array
+  v[3] = 3.4;    // * Error: double cannot be assigned to int
+  v[1] = 'a';    // * Error: char is not converted into int
+  write v[1][2]; // * Error: v[1] is not an array
+  w[10] = 3;     // * Error: an int cannot be assigned to int[]
+  w[10] = v;     // * Error: arrays cannot be assigned
+  write v['a'];  // * Error: index must be int
+} 

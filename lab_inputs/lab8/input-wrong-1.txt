@@ -1,0 +1,19 @@
+int integer;
+char character;
+double real;
+
+double f(int n) {
+  return n;        // * Error: no implicit conversion int->double 
+}
+
+void main() {
+  read integer; 
+  f('a');           // * Error: no implict conversion char->int
+  f(8.3);           // * Error: double cannot be passed as int
+
+  real = 3;         // * Error: no implicit conversion int->double 
+  character = 8.5;  // * Error: double cannot be assigned to char
+  
+  3 = integer;      // * Error: lvalue required
+  read integer+2;   // * Error: lvalue required
+} 
