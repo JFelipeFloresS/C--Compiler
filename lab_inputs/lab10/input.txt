@@ -1,0 +1,33 @@
+// * Global variables 
+int gi;
+double gd;
+char gc;
+
+// * Functions
+int f(int pi, double pd, char pc) {
+  double ld;
+  int li;
+  char lc;
+  
+  li = pi;
+  ld = pd;
+  lc = pc;
+  
+  return pi;
+}
+
+// * Main program
+void main() {
+  double ld;
+  int li;
+  char lc;
+
+  ld = 0.0;
+  li = 0;
+  lc = '0';
+
+  gi = 3 + li;
+  gc = lc;
+  gd = ld * 3.8;
+  f(gi, gd, gc);
+}

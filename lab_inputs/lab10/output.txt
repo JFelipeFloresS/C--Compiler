@@ -1,0 +1,116 @@
+
+#source	"input.txt"
+
+
+' Invocation to the main function
+call main
+halt
+
+
+#line	7
+
+ f:
+	enter	7
+
+#line	12
+	push	bp
+	pushi	-6
+	addi
+	push	bp
+	pushi	9
+	addi
+	loadi
+	storei
+
+#line	13
+	push	bp
+	pushi	-4
+	addi
+	push	bp
+	pushi	5
+	addi
+	loadf
+	storef
+
+#line	14
+	push	bp
+	pushi	-7
+	addi
+	push	bp
+	pushi	4
+	addi
+	loadb
+	storeb
+
+#line	16
+	' * Return
+	push	bp
+	pushi	9
+	addi
+	loadi
+	ret	2, 7, 7
+
+#line	20
+
+ main:
+	enter	7
+
+#line	25
+	push	bp
+	pushi	-4
+	addi
+	pushf	0.0
+	storef
+
+#line	26
+	push	bp
+	pushi	-6
+	addi
+	pushi	0
+	storei
+
+#line	27
+	push	bp
+	pushi	-7
+	addi
+	pushb	48
+	storeb
+
+#line	29
+	pusha	0
+	pushi	3
+	push	bp
+	pushi	-6
+	addi
+	loadi
+	addi
+	storei
+
+#line	30
+	pusha	6
+	push	bp
+	pushi	-7
+	addi
+	loadb
+	storeb
+
+#line	31
+	pusha	2
+	push	bp
+	pushi	-4
+	addi
+	loadf
+	pushf	3.8
+	mulf
+	storef
+
+#line	32
+	pusha	0
+	loadi
+	pusha	2
+	loadf
+	pusha	6
+	loadb
+	call	f
+	popi
+	ret	0, 7, 0
