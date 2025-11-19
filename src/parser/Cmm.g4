@@ -28,9 +28,9 @@ program returns [Program ast]:
 // statement
 statement returns [Statement ast]:
     // 1: read
-    read=READ assignableExpressionList SEMICOLON // Write and read statements could specify a list of (at least one) expressions.
+    read=READ expressionList SEMICOLON // Write and read statements could specify a list of (at least one) expressions.
     {
-        $ast = new Read($read.getLine(), $read.getCharPositionInLine()+1, $assignableExpressionList.ast);
+        $ast = new Read($read.getLine(), $read.getCharPositionInLine()+1, $expressionList.ast);
     }
     // 2: write
     | write=WRITE expressionList SEMICOLON // write: allow for procedure invoke in write as well
@@ -41,7 +41,7 @@ statement returns [Statement ast]:
     | return=RETURN expression SEMICOLON // return: the expression after the return keyword is mandatory; i.e., return; is not a valid statement in this language
     { $ast = new Return($return.getLine(), $return.getCharPositionInLine()+1, $expression.ast); }
     // 4: assignment
-    | e1=assignableExpression ASSIGN e2=expression SEMICOLON // assignment
+    | e1=expression ASSIGN e2=expression SEMICOLON // assignment
     { $ast = new Assignment($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $e1.ast, $e2.ast); }
     // 5: if/else
     | if=IF LEFT_PAREN expression 
@@ -242,8 +242,20 @@ unaryExpression returns [Expression ast]:
     | logNot=LOGICAL_NOT e=unaryExpression
     { $ast = new LogicalNot($logNot.getLine(), $logNot.getCharPositionInLine()+1, $e.ast); }
     // 4: primary expression
-    | primaryExpression
-    { $ast = $primaryExpression.ast; }
+    | accessExpression
+    { $ast = $accessExpression.ast; }
+    ;
+
+accessExpression returns [Expression ast]:
+    e1=primaryExpression { $ast = $e1.ast; }
+    (
+        // array access
+        lb=LEFT_BRACKET ai=expression rb=RIGHT_BRACKET
+        { $ast = new ArrayAccess($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $ast, $ai.ast); }
+        // struct access
+        | DOT ID
+        { $ast = new StructAccess($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $ast, $ID.text); }
+    )*
     ;
 
 primaryExpression returns [Expression ast]:
@@ -262,34 +274,13 @@ primaryExpression returns [Expression ast]:
     // 5: function invocation
     | functionInvocation
     { $ast = $functionInvocation.ast; }
-    // 6: assignable expression
-    | assignableExpression
-    { $ast = $assignableExpression.ast; }
-    ;
-
-assignableExpression returns [Expression ast]:
-    // 1: array access
-    | e=assignableExpression lb=LEFT_BRACKET ai=expression rb=RIGHT_BRACKET
-    { $ast = new ArrayAccess($e.start.getLine(), $e.start.getCharPositionInLine()+1, $e.ast, $ai.ast); }
-    // 2: struct access
-    | e=assignableExpression DOT ID // Fields in structs can be obtained with the “.” operator.
-    { $ast = new StructAccess($e.start.getLine(), $e.start.getCharPositionInLine()+1, $e.ast, $ID.text); }
-    // 3: identifier
+    // 6: identifier
     | ID
     { $ast = new Id($ID.getLine(), $ID.getCharPositionInLine()+1, $ID.text); }
     ;
 
 expressionList returns [List<Expression> ast]:
     exp+=expression (COMMA exp+=expression)*
-    {
-        List<Expression> exp = new ArrayList<>();
-        if ($exp != null) $exp.forEach(e -> {if (e.ast != null) exp.add(e.ast); });
-        $ast = exp;
-    }
-    ;
-
-assignableExpressionList returns [List<Expression> ast]:
-    exp+=assignableExpression (COMMA exp+=assignableExpression)*
     {
         List<Expression> exp = new ArrayList<>();
         if ($exp != null) $exp.forEach(e -> {if (e.ast != null) exp.add(e.ast); });

@@ -8,12 +8,12 @@ import java.util.List;
 
 public interface Definition extends Locatable {
 
-    Type getType();
+	Type getType();
 
-    List<Id> getNames();
+	List<Id> getNames();
 
-    int getScope();
+	int getScope();
 
-    void setScope(int scope);
+	void setScope(int scope);
 
 }

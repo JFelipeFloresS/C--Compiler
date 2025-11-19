@@ -2,13 +2,13 @@ import static utils.FileUtils.getInputAndOutputFilePathFromFileChooser;
 
 public class TestRigGUI {
 
-    public static void main(String... args) throws Exception {
-        if (args.length < 1) {
-            args = getInputAndOutputFilePathFromFileChooser();
-        }
+	public static void main(String... args) throws Exception {
+		if (args.length < 1) {
+			args = getInputAndOutputFilePathFromFileChooser();
+		}
 
-        org.antlr.v4.gui.TestRig.main(new String[]{"parser.Cmm", "program", "-gui", args[0]});
-    }
+		org.antlr.v4.gui.TestRig.main(new String[]{"parser.Cmm", "program", "-gui", args[0]});
+	}
 
 
 }

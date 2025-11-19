@@ -75,6 +75,30 @@ void params_test() {
     i=j(3, 0.0);    // * Error: void cannot be assigned to int
 }
 
+void struct_type_test() {
+    struct {
+        int a;
+        double b;
+        struct {
+            char c;
+            int d;
+        } nested;
+    } s;
+
+    s.a = 3.5;                  // * Error: double cannot be assigned to int
+    s.nested.c = 100;           // * Error: int cannot be assigned to char
+    s.nested.e = 5;             // * Error: e is not a field of nested
+    s.c = 'a';                  // * Error: c is not a field of s struct
+    s = 3;                      // * Error: int cannot be assigned to struct
+    s = s.nested;               // * Error: struct types do not match
+    s.a = s.b;                  // * Error: types of a and b do not match
+    s.nested.c = s.nested.d;    // * Error: types of c and d do not match
+    s.nested = s;               // * Error: struct types do not match
+    s.nested =  s.nested.c;     // * Error: struct cannot be assigned to char
+    s.a = s.nested.d;           // Correct!
+    s.nested.c = (char) s.a;    // Correct!
+}
+
 // test array type mismatches
 void main() {
     write i[0];     // * Error: i is not an array

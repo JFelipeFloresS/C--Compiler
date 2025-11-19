@@ -4,8 +4,8 @@ import ast.locatable.Locatable;
 
 public interface Statement extends Locatable {
 
-    public int getScope();
+	public int getScope();
 
-    public void setScope(int scope);
+	public void setScope(int scope);
 
 }
