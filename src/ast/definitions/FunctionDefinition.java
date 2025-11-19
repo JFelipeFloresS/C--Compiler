@@ -6,7 +6,6 @@ import ast.types.Type;
 import visitor.Visitor;
 
 import java.util.List;
-import java.util.Objects;
 
 public class FunctionDefinition extends AbstractDefinition implements Definition {
 
@@ -72,18 +71,30 @@ public class FunctionDefinition extends AbstractDefinition implements Definition
             return false;
         }
 
-        if (!Objects.deepEquals(this.localVars, that.localVars)) {
-            System.out.println("FunctionDefinition localVars differ: " +
-                String.join(", ", this.localVars.stream().map(VariableDefinition::toString).toArray(String[]::new)) + " != " +
-                String.join(", ", that.localVars.stream().map(VariableDefinition::toString).toArray(String[]::new)));
+        if (this.localVars.size() != that.localVars.size()) {
+            System.out.println("FunctionDefinition localVars differ in size: " + this.localVars.size() + " != " + that.localVars.size());
             return false;
         }
 
-        if (!Objects.deepEquals(this.stmtsBlock, that.stmtsBlock)) {
-            System.out.println("FunctionDefinition stmtsBlock differ: " +
-                String.join(", ", this.stmtsBlock.stream().map(Statement::toString).toArray(String[]::new)) + " != " +
-                String.join(", ", that.stmtsBlock.stream().map(Statement::toString).toArray(String[]::new)));
+        for (int i = 0; i < this.localVars.size(); i++) {
+            if (!this.localVars.get(i).equals(that.localVars.get(i))) {
+                System.out.println("FunctionDefinition localVars differ at index " + i + ": " +
+                    this.localVars.get(i) + " != " + that.localVars.get(i));
+                return false;
+            }
+        }
+
+        if (this.stmtsBlock.size() != that.stmtsBlock.size()) {
+            System.out.println("FunctionDefinition stmtsBlock differ in size: " + this.stmtsBlock.size() + " != " + that.stmtsBlock.size());
             return false;
+        }
+
+        for (int i = 0; i < this.stmtsBlock.size(); i++) {
+            if (!this.stmtsBlock.get(i).equals(that.stmtsBlock.get(i))) {
+                System.out.println("FunctionDefinition stmtsBlock differ at index " + i + ": " +
+                    this.stmtsBlock.get(i) + " != " + that.stmtsBlock.get(i));
+                return false;
+            }
         }
 
         return true;

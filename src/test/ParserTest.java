@@ -23,7 +23,7 @@ public class ParserTest {
     public static void main(String[] args)
         throws IOException {
 
-        CharStream input = CharStreams.fromFileName("./src/test/test.txt");
+        CharStream input = CharStreams.fromFileName("./src/test/assets/parser-lexer-test.txt");
         CmmLexer lexer = new CmmLexer(input);
 
         // create a parser that feeds off the tokens buffer
@@ -227,7 +227,7 @@ public class ParserTest {
                             new IntLiteral(57, 21, 5)
                         )),
                     new Assignment(58, 1, new Id(58, 1, "a"),
-                        new Arithmetic(58, 5,
+                        new Modulus(58, 5,
                             new Arithmetic(58, 5,
                                 new Parenthesis(58, 5,
                                     new Arithmetic(58, 6,
@@ -245,7 +245,6 @@ public class ParserTest {
                                     )
                                 )
                             ),
-                            "%",
                             new IntLiteral(58, 25, 5)
                         )
                     ),
@@ -286,14 +285,14 @@ public class ParserTest {
                         List.of(),
                         List.of()),
                     new IfElse(65, 1,
-                        new Logical(65, 5,
+                        new Relational(65, 5,
                             new Id(65, 5, "a"),
                             "==",
                             new Id(65, 10, "b")),
                         List.of(),
                         List.of()),
                     new IfElse(66, 1,
-                        new Logical(66, 5,
+                        new Relational(66, 5,
                             new Id(66, 5, "a"),
                             "!=",
                             new Id(66, 10, "b")),

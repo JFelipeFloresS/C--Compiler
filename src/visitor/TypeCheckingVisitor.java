@@ -1,11 +1,14 @@
 package visitor;
 
+import ast.definitions.AbstractDefinition;
+import ast.definitions.VariableDefinition;
 import ast.expressions.*;
-import ast.statements.Assignment;
-import ast.types.ArrayType;
-import ast.types.CharType;
-import ast.types.DoubleType;
-import ast.types.IntType;
+import ast.statements.*;
+import ast.types.*;
+
+import java.util.List;
+
+import static utils.TypeMismatchUtils.*;
 
 public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 
@@ -16,12 +19,164 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
         assignment.getTarget().accept(this, null);
         assignment.getValue().accept(this, null);
 
-        if (assignment.getTarget().getType() != null && assignment.getValue().getType() != null) {
-            // Store the result of the assignment method as the assignment's type
-            assignment.setType(
-                assignment.getTarget().getType().assignment(assignment.getValue().getType(), assignment)
-            );
+        Type targetType = assignment.getTarget().getType();
+        Type valueType = assignment.getValue().getType();
+
+        if (targetType instanceof ErrorType) {
+            assignment.setType(targetType);
+            return null;
         }
+
+        if (valueType instanceof ErrorType) {
+            assignment.setType(valueType);
+            return null;
+        }
+
+        if (targetType instanceof ArrayType && !(valueType instanceof ArrayType)) {
+            assignment.setType(new ErrorType(
+                "Error: Cannot assign non-array type " + getPrettyTypeName(valueType) + " to array type " + getPrettyTypeName(targetType) + " in assignment",
+                assignment
+            ));
+            return null;
+        }
+
+        if (targetType instanceof ArrayType arrayType) {
+            targetType = arrayType.getElementType();
+        }
+
+        assignment.setType(targetType);
+
+        if (targetType.getClass() != valueType.getClass()) {
+            ErrorType typeError = getTypeMismatchError(targetType, valueType, assignment);
+            assignment.setType(typeError);
+        }
+
+        return null;
+    }
+
+    @Override
+    public Void visit(Return _return, Void param) {
+        _return.getExpression().accept(this, null);
+
+        _return.setType(_return.getExpression().getType());
+
+        if (_return.getFuncDef() == null) {
+            ErrorType newError = new ErrorType("Error: Return statement not within a function", _return);
+            _return.setType(newError);
+            return null;
+        }
+
+        Type expectedType = ((FunctionType) _return.getFuncDef().getType()).getReturnType();
+        Type returnType = _return.getType();
+
+        if (expectedType instanceof ErrorType) {
+            _return.setType(expectedType);
+            return null;
+        }
+
+        if (returnType instanceof ErrorType) {
+            _return.setType(returnType);
+            return null;
+        }
+
+        if (expectedType.getClass() != returnType.getClass()) {
+            ErrorType typeError = getTypeMismatchError(expectedType, returnType, _return);
+            _return.setType(typeError);
+        }
+
+        return null;
+    }
+
+    @Override
+    public Void visit(Read read, Void param) {
+        Type currentType = null;
+        for (Expression expr : read.getExpressions()) {
+            expr.accept(this, null);
+            if (currentType == null)
+                currentType = expr.getType();
+
+            // If one of the types is an error, propagate it
+            if (currentType instanceof ErrorType) {
+                expr.setType(currentType);
+                continue;
+            }
+
+            // If types are incompatible, report an error
+            if (currentType != expr.getType()) {
+                ErrorType typeError = new ErrorType("Error: Incompatible types in read statement", read);
+                expr.setType(typeError);
+                read.setType(typeError);
+                currentType = typeError;
+            }
+        }
+
+        read.setType(currentType);
+        return null;
+    }
+
+    @Override
+    public Void visit(Write write, Void param) {
+        Type currentType = null;
+        for (Expression expr : write.getExpressions()) {
+            expr.accept(this, null);
+            if (currentType == null)
+                currentType = expr.getType();
+
+            // If one of the types is an error, propagate it
+            if (currentType instanceof ErrorType) {
+                expr.setType(currentType);
+                continue;
+            }
+
+            // If types are incompatible, report an error
+            if (currentType != expr.getType()) {
+                ErrorType typeError = new ErrorType("Error: Incompatible types in write statement", write);
+                expr.setType(typeError);
+                write.setType(typeError);
+                currentType = typeError;
+            }
+        }
+
+        write.setType(currentType);
+        return null;
+    }
+
+    @Override
+    public Void visit(While _while, Void param) {
+        _while.getCondition().accept(this, null);
+        _while.getThenStatements().forEach(t -> t.accept(this, null));
+
+        if (_while.getCondition().getType() instanceof ErrorType) {
+            _while.setType(_while.getCondition().getType());
+            return null;
+        }
+
+        if (!(_while.getCondition().getType() instanceof IntType)) {
+            ErrorType typeError = getConditionTypeError(_while.getCondition().getType(), _while.getCondition());
+            _while.getCondition().setType(typeError);
+        }
+
+        _while.setType(_while.getCondition().getType());
+        return null;
+    }
+
+    @Override
+    public Void visit(IfElse _ifElse, Void param) {
+        _ifElse.getCondition().accept(this, null);
+        _ifElse.getThenStatements().forEach(t -> t.accept(this, null));
+        _ifElse.getElseStatements().forEach(e -> e.accept(this, null));
+
+        if (_ifElse.getCondition().getType() instanceof ErrorType) {
+            _ifElse.setType(_ifElse.getCondition().getType());
+            return null;
+        }
+
+        if (!(_ifElse.getCondition().getType() instanceof IntType)) {
+            ErrorType typeError = getConditionTypeError(_ifElse.getCondition().getType(), _ifElse.getCondition());
+            _ifElse.getCondition().setType(typeError);
+        }
+
+        _ifElse.setType(_ifElse.getCondition().getType());
         return null;
     }
 
@@ -44,7 +199,23 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
     public Void visit(ArrayAccess arrayAccess, Void param) {
         arrayAccess.getArray().accept(this, null);
         arrayAccess.getIndex().accept(this, null);
-        arrayAccess.setType(arrayAccess.getArray().getType());
+
+        Type arrayType = arrayAccess.getArray().getType();
+
+        if (!(arrayType instanceof ArrayType)) {
+            ErrorType typeError = getNonArrayTypeError(arrayType, arrayAccess);
+            arrayAccess.setType(typeError);
+            return null;
+        }
+
+        if (!(arrayAccess.getIndex().getType() instanceof IntType)) {
+            ErrorType typeError = getIndexTypeError(arrayAccess.getIndex().getType(), arrayAccess);
+            arrayAccess.getIndex().setType(typeError);
+            return null;
+        }
+
+        arrayAccess.setType(((ArrayType) arrayType).getElementType());
+
         return null;
     }
 
@@ -67,6 +238,17 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
     @Override
     public Void visit(LogicalNot logicalNot, Void param) {
         logicalNot.getExpression().accept(this, null);
+
+        if (logicalNot.getExpression().getType() instanceof ErrorType) {
+            logicalNot.setType(logicalNot.getExpression().getType());
+            return null;
+        }
+
+        if (!(logicalNot.getExpression().getType() instanceof IntType)) {
+            ErrorType typeError = getTypeMismatchError(new IntType(logicalNot.getLine(), logicalNot.getColumn()), logicalNot.getExpression().getType(), logicalNot);
+            logicalNot.getExpression().setType(typeError);
+        }
+
         logicalNot.setType(logicalNot.getExpression().getType());
         return null;
     }
@@ -121,9 +303,130 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
     }
 
     @Override
-    public Void visit(FunctionInvocation functionInvocation, Void param) {
-        functionInvocation.getFunctionId().accept(this, null);
-        functionInvocation.setType(functionInvocation.getFunctionId().getType());
+    public Void visit(FunctionInvocation funcInvocation, Void param) {
+        funcInvocation.getFunctionId().accept(this, null);
+        for (Expression arg : funcInvocation.getParameters()) {
+            arg.accept(this, null);
+        }
+
+        Type funcType = funcInvocation.getFunctionId().getType();
+
+        if (funcType instanceof ErrorType) {
+            funcInvocation.setType(funcType);
+            return null;
+        }
+
+        if (!(funcType instanceof FunctionType)) {
+            funcInvocation.setType(new ErrorType("Error: " + funcInvocation.getFunctionId().getName() + " is not a function.", funcInvocation));
+            return null;
+        }
+
+        FunctionType functionType = (FunctionType) funcType;
+        funcInvocation.setType(functionType.getReturnType());
+
+        List<VariableDefinition> expectedParams = functionType.getParams();
+        List<Expression> actualArgs = funcInvocation.getParameters();
+
+        if (expectedParams.size() != actualArgs.size()) {
+            String errorMessage = "Error: Incorrect number of arguments in function call: expected " +
+                expectedParams.size() + " but got " + actualArgs.size() + ".";
+            funcInvocation.setType(new ErrorType(errorMessage, funcInvocation));
+            return null;
+        }
+
+        for (int i = 0; i < expectedParams.size(); i++) {
+            Type expectedType = expectedParams.get(i).getType();
+            Type actualType = actualArgs.get(i).getType();
+
+            if (expectedType instanceof ErrorType) {
+                funcInvocation.setType(expectedType);
+                return null;
+            }
+
+            if (actualType instanceof ErrorType) {
+                funcInvocation.setType(actualType);
+                return null;
+            }
+
+            if (expectedType.getClass() != actualType.getClass()) {
+                ErrorType typeError = getTypeMismatchError(expectedType, actualType, funcInvocation);
+                funcInvocation.setType(typeError);
+                return null;
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public Void visit(ProcedureInvocation procedureInvocation, Void param) {
+        procedureInvocation.getProcedureId().accept(this, null);
+        if (procedureInvocation.getParameters() != null) {
+            procedureInvocation.getParameters().forEach(p -> p.accept(this, null));
+        }
+        procedureInvocation.setType(procedureInvocation.getProcedureId().getType());
+
+        Type procType = procedureInvocation.getProcedureId().getType();
+        if (!(procType instanceof FunctionType)) {
+            procedureInvocation.setType(new ErrorType(
+                "Error: " + procedureInvocation.getProcedureId().getName() + " is not a procedure.",
+                procedureInvocation
+            ));
+            return null;
+        }
+
+        List<Type> expectedTypes = ((FunctionType) procType).getParams() != null
+            ? ((FunctionType) procType).getParams().stream().map(AbstractDefinition::getType).toList()
+            : List.of();
+        List<Type> actualTypes;
+        if (procedureInvocation.getParameters() == null)
+            actualTypes = List.of();
+        else
+            actualTypes = procedureInvocation.getParameters().stream().map(Expression::getType).toList();
+
+        if (expectedTypes.size() != actualTypes.size()) {
+            String errorMessage = "Error: Incorrect number of arguments in procedure invocation: expected " +
+                expectedTypes.size() + " but got " + actualTypes.size() + ".";
+            ErrorType typeError = new ErrorType(errorMessage, procedureInvocation);
+            procedureInvocation.setType(typeError);
+            return null;
+        }
+
+        for (int i = 0; i < expectedTypes.size(); i++) {
+            Type expectedType = expectedTypes.get(i);
+            Type actualType = actualTypes.get(i);
+
+            if (expectedType instanceof ErrorType) {
+                procedureInvocation.setType(expectedType);
+                return null;
+            }
+
+            if (actualType instanceof ErrorType) {
+                procedureInvocation.setType(actualType);
+                return null;
+            }
+
+            if (expectedType.getClass() != actualType.getClass()) {
+                ErrorType typeError = getTypeMismatchError(expectedType, actualType, procedureInvocation);
+                procedureInvocation.setType(typeError);
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public Void visit(Id id, Void param) {
+        if (id.getType() instanceof ErrorType) {
+            return null;
+        }
+
+        if (id.getDefinition() == null) {
+            ErrorType newError = new ErrorType("Error: Identifier \"" + id.getName() + "\" not defined", id);
+            id.setType(newError);
+            return null;
+        }
+        id.setType(id.getDefinition().getType());
         return null;
     }
 

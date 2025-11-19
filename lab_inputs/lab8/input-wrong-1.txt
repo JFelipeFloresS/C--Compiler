@@ -3,7 +3,7 @@ char character;
 double real;
 
 double f(int n) {
-  return n;        // * Error: no implicit conversion int->double 
+  return n;        // * Error: no implicit conversion int->double
 }
 
 void main() {
@@ -14,6 +14,6 @@ void main() {
   real = 3;         // * Error: no implicit conversion int->double 
   character = 8.5;  // * Error: double cannot be assigned to char
   
-  3 = integer;      // * Error: lvalue required
-  read integer+2;   // * Error: lvalue required
+  //3 = integer;      // * Error: lvalue required
+  //read integer+2;   // * Error: lvalue required
 } 

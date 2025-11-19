@@ -9,16 +9,16 @@ public abstract class AbstractType extends AbstractLocatable implements Type {
 
     protected Type type;
 
+    protected AbstractType(int line, int column) {
+        super(line, column);
+    }
+
     public Type getType() {
         return type;
     }
 
     public void setType(Type type) {
         this.type = type;
-    }
-
-    protected AbstractType(int line, int column) {
-        super(line, column);
     }
 
     @Override
@@ -49,6 +49,10 @@ public abstract class AbstractType extends AbstractLocatable implements Type {
     @Override
     public Type squareBrackets(Type type) {
         return new ErrorType("Type " + this + " is not subscriptable", this);
+    }
+
+    public boolean isBuiltInType() {
+        return false;
     }
 
     @Override

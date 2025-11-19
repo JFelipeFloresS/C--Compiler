@@ -39,11 +39,16 @@ public class VariableDefinition extends AbstractDefinition {
             return false;
         }
 
-        if (!Objects.deepEquals(this.names, that.names)) {
-            System.out.println("VariableDefinition names differ: " +
-                String.join(", ", this.names.stream().map(Id::toString).toArray(String[]::new)) + " != " +
-                String.join(", ", that.names.stream().map(Id::toString).toArray(String[]::new)));
+        if (this.names.size() != that.names.size()) {
+            System.out.println("VariableDefinition names differ in size " + this.names.size() + " != " + that.names.size());
             return false;
+        }
+
+        for (int i = 0; i < this.names.size(); i++) {
+            if (!Objects.deepEquals(this.names.get(i), that.names.get(i))) {
+                System.out.println("VariableDefinition names differ at index " + i + ": " + this.names.get(i) + " != " + that.names.get(i));
+                return false;
+            }
         }
 
         if (!this.getType().equals(that.getType())) {

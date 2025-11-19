@@ -3,10 +3,10 @@ package parser;
 
 	import ast.*;
 	import ast.definitions.*;
-	import ast.expressions.*;
-	import ast.locatable.*;
-	import ast.statements.*;
-	import ast.types.*;
+    import ast.expressions.*;
+    import ast.locatable.*;
+    import ast.statements.*;
+    import ast.types.*;
 
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 

@@ -19,4 +19,6 @@ public interface Type extends Locatable {
     Type logical(Type that, Locatable node);
 
     Type squareBrackets(Type type);
+
+    boolean isBuiltInType();
 }

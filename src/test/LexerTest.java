@@ -579,7 +579,7 @@ public class LexerTest {
     public static void main(String... args) throws Exception {
 
         // creates a lexer that feeds off of input CharStream
-        CharStream input = CharStreams.fromFileName("./src/test/test.txt");
+        CharStream input = CharStreams.fromFileName("./src/test/assets/parser-lexer-test.txt");
 
         // creates a buffer of tokens pulled from the lexer
         CmmLexer lexer = new CmmLexer(input);

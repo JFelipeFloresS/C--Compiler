@@ -9,7 +9,7 @@ import parser.CmmParser;
 import visitor.IdentificationVisitor;
 import visitor.TypeCheckingVisitor;
 
-import static file_utils.FileUtils.getInputAndOutputFilePathFromFileChooser;
+import static utils.FileUtils.getInputAndOutputFilePathFromFileChooser;
 
 public class Main {
 

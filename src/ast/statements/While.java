@@ -28,11 +28,12 @@ public class While extends AbstractStatement {
     public String toString() {
         String thenClasses = thenStatements != null ? String.join(", ", thenStatements.stream().map(stmt -> stmt.getClass().getSimpleName()).toArray(String[]::new)) : "null";
         return String.format(
-            "While:%s" +
-                "condition: %s%s" +
+            "While (%d, %d):%n\t" +
+                "condition: %s%n\t" +
                 "thenStatements: %s",
-            "\n\t",
-            condition.getClass().getSimpleName(), "\n\t",
+            getLine(),
+            getColumn(),
+            condition.getClass().getSimpleName(),
             thenClasses
         );
     }

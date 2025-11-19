@@ -33,12 +33,12 @@ public class Assertions {
     }
 
     public static void assertEquals(Locatable expected, Locatable actual) {
-        System.out.println("Expected: " + expected + "\nActual: " + actual + "\n");
         if (!expected.equals(actual)) {
-            throw new AssertionError("\nExpected: " + expected + ".\nActual: " + actual + ".\n"
+            throw new AssertionError("\nExpected: " + expected + "\nActual: " + actual + "\n"
                 + "Expected position: (" + expected.getLine() + ", " + expected.getColumn() + ")\nActual position: ("
                 + actual.getLine() + ", " + actual.getColumn() + ")");
         }
+        System.out.println("Asserted expected: " + expected);
     }
 
     public static void assertEquals(int expected, int actual) {

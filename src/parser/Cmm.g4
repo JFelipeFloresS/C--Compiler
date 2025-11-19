@@ -3,10 +3,10 @@ grammar Cmm;
 @header {
 	import ast.*;
 	import ast.definitions.*;
-	import ast.expressions.*;
-	import ast.locatable.*;
-	import ast.statements.*;
-	import ast.types.*;
+    import ast.expressions.*;
+    import ast.locatable.*;
+    import ast.statements.*;
+    import ast.types.*;
 }
 
 /************************** Parser rules **************************/
@@ -62,9 +62,14 @@ statement returns [Statement ast]:
 
 // allow for no parameters or multiple parameters
 procedureInvocation returns [Statement ast]:
-    ID LEFT_PAREN expressionList? RIGHT_PAREN
+    ID LEFT_PAREN RIGHT_PAREN
     {
-        $ast = new ProcedureInvocation($ID.getLine(), $ID.getCharPositionInLine()+1, new Id($ID.getLine(), $ID.getCharPositionInLine()+1, $ID.text), $expressionList.ctx != null ? $expressionList.ast : new ArrayList<>());
+        $ast = new ProcedureInvocation($ID.getLine(), $ID.getCharPositionInLine()+1, new Id($ID.getLine(), $ID.getCharPositionInLine()+1, $ID.text), new ArrayList<>());
+    }
+    |
+    ID LEFT_PAREN expressionList RIGHT_PAREN
+    {
+        $ast = new ProcedureInvocation($ID.getLine(), $ID.getCharPositionInLine()+1, new Id($ID.getLine(), $ID.getCharPositionInLine()+1, $ID.text), $expressionList.ast);
     }
     ;
 
@@ -239,7 +244,7 @@ expressionList returns [List<Expression> ast]:
     exp+=expression (COMMA exp+=expression)*
     {
         List<Expression> exp = new ArrayList<>();
-        if ($exp != null) $exp.forEach(e -> {if (e != null) exp.add(e.ast); });
+        if ($exp != null) $exp.forEach(e -> {if (e.ast != null) exp.add(e.ast); });
         $ast = exp;
     }
     ;
@@ -248,16 +253,21 @@ assignableExpressionList returns [List<Expression> ast]:
     exp+=assignableExpression (COMMA exp+=assignableExpression)*
     {
         List<Expression> exp = new ArrayList<>();
-        if ($exp != null) $exp.forEach(e -> {if (e != null) exp.add(e.ast); });
+        if ($exp != null) $exp.forEach(e -> {if (e.ast != null) exp.add(e.ast); });
         $ast = exp;
     }
     ;
 
 // allow for no parameters or multiple parameters
 functionInvocation returns [Expression ast]:
-    ID LEFT_PAREN expressionList? RIGHT_PAREN
+    ID LEFT_PAREN RIGHT_PAREN
     {
-        $ast = new FunctionInvocation($ID.getLine(), $ID.getCharPositionInLine()+1, new Id($ID.getLine(), $ID.getCharPositionInLine()+1, $ID.text), $expressionList.ctx != null ? $expressionList.ast : new ArrayList<>());
+        $ast = new FunctionInvocation($ID.getLine(), $ID.getCharPositionInLine()+1, new Id($ID.getLine(), $ID.getCharPositionInLine()+1, $ID.text), new ArrayList<>());
+    }
+    |
+    ID LEFT_PAREN expressionList RIGHT_PAREN
+    {
+        $ast = new FunctionInvocation($ID.getLine(), $ID.getCharPositionInLine()+1, new Id($ID.getLine(), $ID.getCharPositionInLine()+1, $ID.text), $expressionList.ast);
     }
     ;
 

@@ -22,9 +22,10 @@ public class Write extends AbstractStatement {
     public String toString() {
         String exprString = String.join(", ", expressions.stream().map(e -> e.getClass().getSimpleName()).toArray(String[]::new));
         return String.format(
-            "Write:%s" +
+            "Write (%d, %d):%n\t" +
                 "expressions: %s",
-            "\n\t",
+            getLine(),
+            getColumn(),
             exprString
         );
     }

@@ -3,6 +3,8 @@ package ast.types;
 import ast.locatable.Locatable;
 import visitor.Visitor;
 
+import static utils.TypeMismatchUtils.getTypeMismatchError;
+
 public class CharType extends AbstractType {
     public CharType(int line, int column) {
         super(line, column);
@@ -18,16 +20,12 @@ public class CharType extends AbstractType {
         if (that instanceof ErrorType)
             return that;
 
-        if (that instanceof DoubleType) {
-            return that;
-        }
-
-        if (that instanceof IntType) {
-            return that;
-        }
-
         if (that instanceof CharType) {
             return new IntType(this.getLine(), this.getColumn());
+        }
+
+        if (that.isBuiltInType()) {
+            return getTypeMismatchError(this, that, node, true);
         }
 
         return new ErrorType(String.format("Cannot perform arithmetic operation between %s and %s", this, that), node);
@@ -40,6 +38,11 @@ public class CharType extends AbstractType {
         if (that instanceof CharType) {
             return that;
         }
+
+        if (that.isBuiltInType()) {
+            return getTypeMismatchError(this, that, node);
+        }
+
         return new ErrorType(String.format("Cannot perform assignment operation between %s and %s", this, that), node);
     }
 
@@ -58,8 +61,12 @@ public class CharType extends AbstractType {
         if (that instanceof ErrorType)
             return that;
 
-        if (that instanceof CharType || that instanceof IntType || that instanceof DoubleType) {
+        if (that instanceof CharType) {
             return new IntType(this.getLine(), this.getColumn());
+        }
+
+        if (that.isBuiltInType()) {
+            return getTypeMismatchError(this, that, node, true);
         }
 
         return new ErrorType(String.format("Cannot perform relational operation between %s and %s", this, that), node);
@@ -70,10 +77,19 @@ public class CharType extends AbstractType {
         if (that instanceof ErrorType)
             return that;
 
-        if (that instanceof CharType || that instanceof IntType || that instanceof DoubleType) {
+        if (that instanceof CharType) {
             return new IntType(this.getLine(), this.getColumn());
         }
 
+        if (that.isBuiltInType()) {
+            return getTypeMismatchError(this, that, node, true);
+        }
+
         return new ErrorType(String.format("Cannot perform logical operation between %s and %s", this, that), node);
+    }
+
+    @Override
+    public boolean isBuiltInType() {
+        return true;
     }
 }

@@ -31,4 +31,8 @@ public class ErrorHandler {
             out.println(error);
         }
     }
+
+    public List<ErrorType> getErrors() {
+        return errors;
+    }
 }

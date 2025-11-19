@@ -1,4 +1,4 @@
-import static file_utils.FileUtils.getInputAndOutputFilePathFromFileChooser;
+import static utils.FileUtils.getInputAndOutputFilePathFromFileChooser;
 
 public class TestRigTrace {
 

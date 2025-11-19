@@ -22,9 +22,10 @@ public class Read extends AbstractStatement {
     public String toString() {
         String exprString = String.join(", ", expressions.stream().map(e -> e.getClass().getSimpleName()).toArray(String[]::new));
         return String.format(
-            "Read:%s" +
+            "Read (%d, %d):%n\t" +
                 "expressions: %s",
-            "\n\t",
+            this.getLine(),
+            this.getColumn(),
             exprString
         );
     }

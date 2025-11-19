@@ -39,6 +39,7 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR> {
 
     @Override
     public TR visit(IfElse ifElse, TP param) {
+        ifElse.getCondition().accept(this, param);
         for (Statement stmt : ifElse.getThenStatements()) {
             stmt.accept(this, param);
         }
@@ -51,6 +52,7 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR> {
     @Override
     public TR visit(ProcedureInvocation invocation, TP param) {
         invocation.getProcedureId().accept(this, param);
+        invocation.getParameters().forEach(p -> p.accept(this, param));
         return null;
     }
 
@@ -69,8 +71,9 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR> {
     }
 
     @Override
-    public TR visit(While write, TP param) {
-        for (Statement stmt : write.getThenStatements()) {
+    public TR visit(While _while, TP param) {
+        _while.getCondition().accept(this, param);
+        for (Statement stmt : _while.getThenStatements()) {
             stmt.accept(this, param);
         }
         return null;
@@ -120,13 +123,13 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR> {
     @Override
     public TR visit(FunctionInvocation functionInvocation, TP param) {
         functionInvocation.getFunctionId().accept(this, param);
+        functionInvocation.getParameters().forEach(p -> p.accept(this, param));
         return null;
     }
 
     @Override
     public TR visit(Id id, TP param) {
-        if (id.getDefinition() != null)
-            id.getDefinition().accept(this, param);
+        id.getDefinition().accept(this, param);
         return null;
     }
 

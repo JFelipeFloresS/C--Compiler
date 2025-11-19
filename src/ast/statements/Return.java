@@ -1,11 +1,13 @@
 package ast.statements;
 
+import ast.definitions.FunctionDefinition;
 import ast.expressions.Expression;
 import visitor.Visitor;
 
 public class Return extends AbstractStatement {
 
     private final Expression expression;
+    private FunctionDefinition funcDef;
 
     public Return(int line, int column, Expression expression) {
         super(line, column);
@@ -19,9 +21,10 @@ public class Return extends AbstractStatement {
     @Override
     public String toString() {
         return String.format(
-            "Return:%s" +
+            "Return (%d, %d):%n\t" +
                 "expression: %s",
-            "\n\t",
+            this.getLine(),
+            this.getColumn(),
             expression.getClass().getSimpleName()
         );
     }
@@ -47,4 +50,11 @@ public class Return extends AbstractStatement {
         return visitor.visit(this, param);
     }
 
+    public FunctionDefinition getFuncDef() {
+        return funcDef;
+    }
+
+    public void setFuncDef(FunctionDefinition funcDef) {
+        this.funcDef = funcDef;
+    }
 }

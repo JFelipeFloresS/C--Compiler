@@ -1,0 +1,87 @@
+int integer;
+int i;
+char character;
+double real;
+int[10] v;
+int[10][10] w;
+
+double f(int n) {
+    return n;           // * Error: no implicit conversion int->double
+}
+
+void implicit_conversion_test() {
+    int a;
+    double b;
+    char c;
+
+    b = a;              // * Error: no implicit conversion int->double
+    c = b;              // * Error: no implicit conversion double->char
+    a = c;              // * Error: no implicit conversion char->int
+    read integer;
+    f('a');             // * Error: no implicit conversion char->int
+    f(8.3);             // * Error: double cannot be passed as int
+
+    real = 3;           // * Error: no implicit conversion int->double
+    character = 8.5;    // * Error: double cannot be assigned to char
+}
+
+int g(int n) { return n; }
+
+void logical_relation_arithmetic_test() {
+    int a;
+    double b;
+    char c;
+    double f;
+    char ch;
+
+    a = b + 3;          // * Error: double cannot be assigned to int
+    a = c - 2;          // * Error: char is not converted into int
+    if (b > 3) {}       // * Error: b is not int
+    if (a <= c) {}      // * Error: a and c do not have the same type
+    while (b) {}        // * Error: b is not int
+    while (c) {}        // * Error: c is not int
+    a = !b;             // * Error: b is not int
+    a = a && c;         // * Error: c is not int
+
+    write i && f;       // * Error: f is not int
+    write absent >= 3;  // * Error: absent is not declared
+    write f > 3;        // * Error: f and 3 do not have the same type
+    write f * '2';      // * Error: f and 2 do not have the same type
+    while (f)           // * Error: f is not int
+    if (ch)             // * Error: ch is not int
+        write !g;       // * Error: g is not int
+    i = 'a' + ch;       // Correct! (arithmetic ops with chars return int)
+}
+
+int h(int a) {
+  return a;
+}
+
+void j(int a, double b) {
+}
+
+void params_test() {
+    int a;
+    double b;
+
+    f(a);           // Correct!
+    f(b);           // * Error: double cannot be passed as int
+    f(3.5);         // * Error: double cannot be passed as int
+    f('c');         // * Error: char is not converted into int
+
+    h();            // * Error: wrong number of params
+    j(3.2);         // * Error: wrong number of params
+    j(3, 3);        // * Error: the type of the second parameter is wrong
+    i=j(3, 0.0);    // * Error: void cannot be assigned to int
+}
+
+// test array type mismatches
+void main() {
+    write i[0];     // * Error: i is not an array
+    v[3] = 3.4;     // * Error: double cannot be assigned to int
+    v[1] = 'a';     // * Error: char is not converted into int
+    write v[1][2];  // * Error: v[1] is not an array
+    w[10] = 3;      // * Error: an int cannot be assigned to int[]
+    w[10] = v;      // * Error: arrays cannot be assigned
+    write v['a'];   // * Error: index must be int
+}

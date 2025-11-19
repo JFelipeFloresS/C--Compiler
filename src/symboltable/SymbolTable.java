@@ -2,6 +2,7 @@ package symboltable;
 
 import ast.definitions.Definition;
 import ast.definitions.FunctionDefinition;
+import ast.types.ErrorType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,6 +12,7 @@ import java.util.Map;
 public class SymbolTable {
 
     private final List<Map<String, Definition>> table;
+    private final Map<Integer, FunctionDefinition> scopeFunction = new HashMap<>();
     private int scope = 0;
 
     public SymbolTable() {
@@ -22,40 +24,47 @@ public class SymbolTable {
         return scope;
     }
 
+    public void set(FunctionDefinition funcDef) {
+        scope = table.size();
+        table.add(new HashMap<>());
+        scopeFunction.put(scope, funcDef);
+    }
+
     public void set() {
         scope = table.size();
         table.add(new HashMap<>());
     }
 
     public void reset() {
-        if (scope > 0) {
-            table.get(scope).clear();
-            scope--;
-        }
+        scope = 0;
     }
 
     public boolean insert(Definition definition) {
         // returns whether the definition could be inserted or not (i.e., there was another definition for that variable)
-        if (definition == null) {
-            return false;
+        int insertScope = scope;
+        // Ensure function definitions are always inserted in global scope
+        if (definition instanceof FunctionDefinition) {
+            insertScope = 0;
         }
-        definition.setScope(scope);
+        definition.setScope(insertScope);
         for (var name : definition.getNames()) {
-            name.setScope(scope);
+            name.setScope(insertScope);
             String id = name.getName();
-            if (table.get(scope).containsKey(id)) {
+            if (table.get(insertScope).containsKey(id)) {
+                name.setType(new ErrorType("Error: Variable \"" + id + "\" already defined in " + getScopeName(insertScope), name));
                 return false; // Definition already exists in the current scope
             }
-            table.get(scope).put(id, definition);
+            table.get(insertScope).put(id, definition);
+            name.setDefinition(definition);
         }
         return true;
     }
 
     public Definition find(String id) {
-        for (int i = scope; i >= 0; i--) {
-            if (table.get(i).containsKey(id)) {
-                return table.get(i).get(id);
-            }
+        if (table.get(scope).containsKey(id)) {
+            return table.get(scope).get(id);
+        } else if (scope != 0 && table.getFirst().containsKey(id)) {
+            return table.getFirst().get(id);
         }
         return null;
     }
@@ -66,16 +75,14 @@ public class SymbolTable {
         }
 
         // return the name of the function that defines this scope
-        int funcCount = 0;
-        for (var def : table.getFirst().values()) {
-            if (def instanceof FunctionDefinition) {
-                funcCount++;
-                if (funcCount == scope) {
-                    return "function " + def.getNames().getFirst().getName();
-                }
-            }
-        }
+        FunctionDefinition def = getFunctionDefinitionByScope(scope);
+        if (def != null)
+            return "function " + def.getNames().getFirst().getName();
 
         return "unknown";
+    }
+
+    public FunctionDefinition getFunctionDefinitionByScope(int scope) {
+        return scopeFunction.get(scope);
     }
 }

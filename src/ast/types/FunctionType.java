@@ -125,11 +125,12 @@ public class FunctionType extends AbstractType {
             return false;
         }
 
-        if (!Objects.deepEquals(this.params, that.params)) {
-            System.out.println("FunctionType parameter lists differ: " +
-                String.join(", ", this.params.stream().map(VariableDefinition::toString).toArray(String[]::new)) + " != " +
-                String.join(", ", that.params.stream().map(VariableDefinition::toString).toArray(String[]::new)));
-            return false;
+        for (int i = 0; i < this.params.size(); i++) {
+            if (!this.params.get(i).equals(that.params.get(i))) {
+                System.out.println("FunctionType parameters differ at index " + i + ": " +
+                    this.params.get(i) + " != " + that.params.get(i));
+                return false;
+            }
         }
 
         return true;

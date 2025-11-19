@@ -14,7 +14,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import parser.CmmLexer;
 import parser.CmmParser;
 
-import static file_utils.FileUtils.getInputAndOutputFilePathFromFileChooser;
+import static utils.FileUtils.getInputAndOutputFilePathFromFileChooser;
 
 
 public class MainIntrospector {

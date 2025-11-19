@@ -35,13 +35,14 @@ public class IfElse extends AbstractStatement {
         String thenClasses = thenStatements != null ? String.join(", ", thenStatements.stream().map(stmt -> stmt.getClass().getSimpleName()).toArray(String[]::new)) : "null";
         String elseClasses = elseStatements != null ? String.join(", ", elseStatements.stream().map(stmt -> stmt.getClass().getSimpleName()).toArray(String[]::new)) : "null";
         return String.format(
-            "IfElse:%s" +
-                "condition: %s%s" +
-                "thenStatements: %s%s" +
+            "IfElse (%d, %d):%n\t" +
+                "condition: %s%n\t" +
+                "thenStatements: %s%n\t" +
                 "elseStatements: %s",
-            "\n\t",
-            condition.getClass().getSimpleName(), "\n\t",
-            thenClasses, "\n\t",
+            getLine(),
+            getColumn(),
+            condition.getClass().getSimpleName(),
+            thenClasses,
             elseClasses
         );
     }
