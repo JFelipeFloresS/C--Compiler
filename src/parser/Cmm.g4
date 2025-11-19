@@ -181,51 +181,90 @@ stmtList returns [List<Statement> ast]:
 
 // expression
 expression returns [Expression ast]:
+    logicalOrExpression
+    { $ast = $logicalOrExpression.ast; }
+    ;
+
+logicalOrExpression returns [Expression ast]:
+    e1=logicalAndExpression { $ast = $e1.ast; }
+    (
+        op=LOGICAL_OR e2=logicalAndExpression
+        { $ast = new Logical($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $ast, $op.text, $e2.ast); }
+    )*
+    ;
+
+logicalAndExpression returns [Expression ast]:
+    e1=relationalExpression { $ast = $e1.ast; }
+    (
+        op=LOGICAL_AND e2=relationalExpression
+        { $ast = new Logical($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $ast, $op.text, $e2.ast); }
+    )*
+    ;
+
+relationalExpression returns [Expression ast]:
+    e1=additiveExpression { $ast = $e1.ast; }
+    (
+        op=(RELATIONAL_EQUAL | RELATIONAL_NOT_EQUAL | RELATIONAL_LESS_THAN | RELATIONAL_LESS_EQUAL | RELATIONAL_GREATER_THAN | RELATIONAL_GREATER_EQUAL) e2=additiveExpression
+        { $ast = new Relational($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $ast, $op.text, $e2.ast); }
+    )*
+    ;
+
+additiveExpression returns [Expression ast]:
+    e1=multiplicativeExpression { $ast = $e1.ast; }
+    (
+        op=(PLUS | MINUS) e2=multiplicativeExpression
+        { $ast = new Arithmetic($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $ast, $op.text, $e2.ast); }
+    )*
+    ;
+
+multiplicativeExpression returns [Expression ast]:
+    e1=unaryExpression { $ast = $e1.ast; }
+    (
+        op=(MULTIPLY | DIVIDE | MODULO) e2=unaryExpression
+        {
+            if ($op.type == CmmParser.MODULO) {
+                $ast = new Modulus($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $ast, $e2.ast);
+            } else {
+                $ast = new Arithmetic($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $ast, $op.text, $e2.ast);
+            }
+        }
+    )*
+    ;
+
+unaryExpression returns [Expression ast]:
     // 1: cast
-    lp=LEFT_PAREN castType=builtInType RIGHT_PAREN e=expression
+    lp=LEFT_PAREN castType=builtInType RIGHT_PAREN e=unaryExpression
     { $ast = new Cast($lp.getLine(), $lp.getCharPositionInLine()+1, $castType.ast, $e.ast); }
-    // 2: assignable expression
-    | assignableExpression
-    { $ast = $assignableExpression.ast; }
-    // 3: unary minus
-    | min=MINUS expression
-    { $ast = new UnaryMinus($min.getLine(), $min.getCharPositionInLine()+1, $expression.ast); }
-    // 4: logical not
-    | logNot=LOGICAL_NOT expression
-    { $ast = new LogicalNot($logNot.getLine(), $logNot.getCharPositionInLine()+1, $expression.ast); }
-    // 5: arithmetic additive
-    | e1=expression op=(PLUS | MINUS) e2=expression
-    { $ast = new Arithmetic($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $e1.ast, $op.text, $e2.ast); }
-    // 6: arithemtic multiplicative
-    | e1=expression op=(MULTIPLY | DIVIDE) e2=expression
-    { $ast = new Arithmetic($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $e1.ast, $op.text, $e2.ast); }
-    // 7: arithmetic modulus
-    | e1=expression MODULO e2=expression
-    { $ast = new Modulus($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $e1.ast, $e2.ast); }
-    // 8: relational comparison
-    | e1=expression op=(RELATIONAL_LESS_THAN | RELATIONAL_LESS_EQUAL | RELATIONAL_GREATER_THAN | RELATIONAL_GREATER_EQUAL) e2=expression
-    { $ast = new Relational($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $e1.ast, $op.text, $e2.ast); }
-    // 9: relational equality
-    | e1=expression op=(RELATIONAL_EQUAL | RELATIONAL_NOT_EQUAL) e2=expression
-    { $ast = new Relational($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $e1.ast, $op.text, $e2.ast); }
-    // 10: logical
-    | e1=expression op=(LOGICAL_AND | LOGICAL_OR) e2=expression
-    { $ast = new Logical($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $e1.ast, $op.text, $e2.ast); }
-    // 11: procedure invoke without assignment
-    | functionInvocation
-    { $ast = $functionInvocation.ast; }
-    // 12: parentheses
-    | lp=LEFT_PAREN expression RIGHT_PAREN
+    // 2: unary minus
+    | min=MINUS e=unaryExpression
+    { $ast = new UnaryMinus($min.getLine(), $min.getCharPositionInLine()+1, $e.ast); }
+    // 3: logical not
+    | logNot=LOGICAL_NOT e=unaryExpression
+    { $ast = new LogicalNot($logNot.getLine(), $logNot.getCharPositionInLine()+1, $e.ast); }
+    // 4: primary expression
+    | primaryExpression
+    { $ast = $primaryExpression.ast; }
+    ;
+
+primaryExpression returns [Expression ast]:
+    // 1: parentheses
+    lp=LEFT_PAREN expression RIGHT_PAREN
     { $ast = new Parenthesis($lp.getLine(), $lp.getCharPositionInLine()+1, $expression.ast); }
-    // 13: int literal
+    // 2: int literal
     | INT_CONSTANT
     { $ast = new IntLiteral($INT_CONSTANT.getLine(), $INT_CONSTANT.getCharPositionInLine()+1, LexerHelper.lexemeToInt($INT_CONSTANT.text)); }
-    // 14: double literal
+    // 3: double literal
     | DOUBLE_CONSTANT
     { $ast = new DoubleLiteral($DOUBLE_CONSTANT.getLine(), $DOUBLE_CONSTANT.getCharPositionInLine()+1, LexerHelper.lexemeToDouble($DOUBLE_CONSTANT.text)); }
-    // 15: char literal
+    // 4: char literal
     | CHAR_CONSTANT
     { $ast = new CharLiteral($CHAR_CONSTANT.getLine(), $CHAR_CONSTANT.getCharPositionInLine()+1, LexerHelper.lexemeToChar($CHAR_CONSTANT.text)); }
+    // 5: function invocation
+    | functionInvocation
+    { $ast = $functionInvocation.ast; }
+    // 6: assignable expression
+    | assignableExpression
+    { $ast = $assignableExpression.ast; }
     ;
 
 assignableExpression returns [Expression ast]:

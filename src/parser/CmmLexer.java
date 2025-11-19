@@ -1,4 +1,4 @@
-// Generated from /Users/masters/Projects/C--Compiler/src/parser/Cmm.g4 by ANTLR 4.13.2
+// Generated from src/parser/Cmm.g4 by ANTLR 4.13.2
 package parser;
 
 	import ast.*;
