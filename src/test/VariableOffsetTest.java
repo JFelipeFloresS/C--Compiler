@@ -62,7 +62,7 @@ public class VariableOffsetTest {
 
 	private static void assertOffsets(Program ast) {
 		List<Definition> programDefs = ast.definitions();
-		assertEquals(7, programDefs.size());
+		assertEquals(8, programDefs.size());
 		// int gi;
 		assertEquals(0, ((VariableDefinition) programDefs.get(0)).getOffset());
 
@@ -84,9 +84,12 @@ public class VariableOffsetTest {
 		 */
 		assertEquals(47, ((VariableDefinition) programDefs.get(4)).getOffset());
 
+		// int test;
+		assertEquals(61, ((VariableDefinition) programDefs.get(5)).getOffset());
+
 		// int f(int pi, double pd, char pc)
-		FunctionDefinition fFuncDef = (FunctionDefinition) programDefs.get(5);
-		List<VariableDefinition> fParams = ((FunctionType)fFuncDef.getType()).getParams();
+		FunctionDefinition fFuncDef = (FunctionDefinition) programDefs.get(6);
+		List<VariableDefinition> fParams = ((FunctionType) fFuncDef.getType()).getParams();
 		assertEquals(3, fParams.size());
 
 		// int pi;
@@ -110,7 +113,7 @@ public class VariableOffsetTest {
 		// char lc;
 		assertEquals(-7, fLocalVars.get(2).getOffset());
 
-		FunctionDefinition mainFuncDef = (FunctionDefinition) programDefs.get(6);
+		FunctionDefinition mainFuncDef = (FunctionDefinition) programDefs.get(7);
 		List<VariableDefinition> mainLocalVars = mainFuncDef.getLocalVars();
 		assertEquals(3, mainLocalVars.size());
 

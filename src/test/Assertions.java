@@ -45,12 +45,14 @@ public class Assertions {
 		if (expected != actual) {
 			throw new AssertionError("Expected: " + expected + ", but got: " + actual);
 		}
+		System.out.println("Asserted expected: " + expected);
 	}
 
 	public static void assertEquals(String expected, String actual) {
 		if (!expected.equals(actual)) {
 			throw new AssertionError("Expected: " + expected + ", but got: " + actual);
 		}
+		System.out.println("Asserted expected: " + expected);
 	}
 
 }

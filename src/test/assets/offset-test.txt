@@ -8,6 +8,7 @@ struct {
   double b;
   char c;
 } gStruct, anotherStruct;
+int test;
 
 // * Functions
 int f(int pi, double pd, char pc) {
