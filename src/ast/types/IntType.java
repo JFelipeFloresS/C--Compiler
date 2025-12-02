@@ -86,4 +86,9 @@ public class IntType extends AbstractType {
 	public boolean isBuiltInType() {
 		return true;
 	}
+
+	@Override
+	public int numberOfBytes() {
+		return 2;
+	}
 }

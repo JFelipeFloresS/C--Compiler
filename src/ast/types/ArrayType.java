@@ -152,4 +152,9 @@ public class ArrayType extends AbstractType {
 		result = 31 * result + Integer.hashCode(size);
 		return result;
 	}
+
+	@Override
+	public int numberOfBytes() {
+		return this.getElementType().numberOfBytes() * this.getSize();
+	}
 }

@@ -1,0 +1,48 @@
+// * Global variables
+int gi;
+double gd;
+char gc;
+int[10] arr, arr2;
+struct {
+  int a;
+  double b;
+  char c;
+} gStruct, anotherStruct;
+
+// * Functions
+int f(int pi, double pd, char pc) {
+  double ld;
+  int li;
+  char lc;
+
+  li = pi;
+  ld = pd;
+  lc = pc;
+  arr[2] = li;
+  gStruct.a = li;
+  gStruct.b = ld;
+  gStruct.c = lc;
+
+  return pi;
+}
+
+// * Main program
+void main() {
+  double ld;
+  int li;
+  char lc;
+
+  ld = 0.0;
+  li = 0;
+  lc = '0';
+
+  gi = 3 + li;
+  gc = lc;
+  gd = ld * 3.8;
+  f(gi, gd, gc);
+
+  arr2[5] = arr[2] + li;
+  anotherStruct.a = gStruct.a;
+  anotherStruct.b = gStruct.b;
+  anotherStruct.c = gStruct.c;
+}

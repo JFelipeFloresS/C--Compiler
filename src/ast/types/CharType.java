@@ -92,4 +92,9 @@ public class CharType extends AbstractType {
 	public boolean isBuiltInType() {
 		return true;
 	}
+
+	@Override
+	public int numberOfBytes() {
+		return 1;
+	}
 }

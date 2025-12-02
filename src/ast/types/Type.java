@@ -21,4 +21,6 @@ public interface Type extends Locatable {
 	Type squareBrackets(Type type);
 
 	boolean isBuiltInType();
+
+	int numberOfBytes();
 }

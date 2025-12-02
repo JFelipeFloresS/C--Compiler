@@ -145,4 +145,9 @@ public class FunctionType extends AbstractType {
 			params.hashCode()
 		);
 	}
+
+	@Override
+	public int numberOfBytes() {
+		return 0;
+	}
 }

@@ -43,4 +43,9 @@ public class VoidType extends AbstractType {
 	public int hashCode() {
 		return 31 * getLine() + getColumn();
 	}
+
+	@Override
+	public int numberOfBytes() {
+		return 0;
+	}
 }

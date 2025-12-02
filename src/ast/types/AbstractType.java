@@ -88,4 +88,6 @@ public abstract class AbstractType extends AbstractLocatable implements Type {
 		return Objects.hash(Integer.hashCode(getLine()),
 			Integer.hashCode(getColumn()));
 	}
+
+	public abstract int numberOfBytes();
 }

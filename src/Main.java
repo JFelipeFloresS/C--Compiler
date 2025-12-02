@@ -47,6 +47,8 @@ public class Main {
 			ErrorHandler.getErrorHandler().showErrors(System.err);
 			System.err.println("Program with semantic errors. No code was generated.");
 			System.exit(1);
+		} else {
+			ast.accept(new visitor.OffsetVisitor(), null);
 		}
 
 		System.out.println(ast);

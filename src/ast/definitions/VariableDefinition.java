@@ -9,6 +9,8 @@ import java.util.Objects;
 
 public class VariableDefinition extends AbstractDefinition {
 
+	private int offset;
+
 	public VariableDefinition(int line, int col, Type type, List<Id> names) {
 		super(line, col, type, names);
 	}
@@ -71,4 +73,11 @@ public class VariableDefinition extends AbstractDefinition {
 		return visitor.visit(this, param);
 	}
 
+	public int getOffset() {
+		return offset;
+	}
+
+	public void setOffset(int offset) {
+		this.offset = offset;
+	}
 }

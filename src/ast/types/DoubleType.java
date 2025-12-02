@@ -86,4 +86,9 @@ public class DoubleType extends AbstractType {
 	public boolean isBuiltInType() {
 		return true;
 	}
+
+	@Override
+	public int numberOfBytes() {
+		return 4;
+	}
 }

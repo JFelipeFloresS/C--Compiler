@@ -89,4 +89,9 @@ public class ErrorType extends AbstractType {
 	public int hashCode() {
 		return 42; // All ErrorType instances are considered equal
 	}
+
+	@Override
+	public int numberOfBytes() {
+		return 0;
+	}
 }

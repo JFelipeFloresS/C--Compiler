@@ -96,6 +96,11 @@ public class StructRecordField extends AbstractType {
 	}
 
 	@Override
+	public int numberOfBytes() {
+		return type.numberOfBytes() * names.size();
+	}
+
+	@Override
 	public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
 		return visitor.visit(this, param);
 	}
