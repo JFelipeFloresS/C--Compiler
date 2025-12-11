@@ -11,13 +11,12 @@ import visitor.IdentificationVisitor;
 import visitor.TypeCheckingVisitor;
 import visitor.cg.ExecuteCGVisitor;
 
-import static utils.FileUtils.getInputAndOutputFilePathFromFileChooser;
-
 public class Main {
 
 	public static void main(String... args) throws Exception {
 		if (args.length < 2) {
-			args = getInputAndOutputFilePathFromFileChooser();
+//			args = getInputAndOutputFilePathFromFileChooser();
+			args = new String[]{"/Users/masters/Projects/C--Compiler/./lab_inputs/lab12/input-1.txt", "/Users/masters/Projects/C--Compiler/./test_output.txt"};
 		}
 
 		// create a lexer that feeds off of input CharStream

@@ -2,12 +2,11 @@ package cg;
 
 import ast.definitions.FunctionDefinition;
 import ast.definitions.VariableDefinition;
+import ast.expressions.ArrayAccess;
 import ast.expressions.Id;
+import ast.expressions.StructAccess;
 import ast.locatable.Locatable;
-import ast.types.CharType;
-import ast.types.DoubleType;
-import ast.types.IntType;
-import ast.types.Type;
+import ast.types.*;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -20,6 +19,8 @@ public class CG {
 
 	private int insetLevel = 0;
 
+	private int labels = 0;
+
 	public CG(String outputFilename, String sourceFilename) {
 		try {
 			this.out = new PrintWriter(outputFilename);
@@ -29,6 +30,25 @@ public class CG {
 		}
 		source(sourceFilename);
 		callMain();
+	}
+
+	public String nextLabel() {
+		return "label" + (labels++);
+	}
+
+	public void label(String label) {
+		out.println(label + ":");
+		out.flush();
+	}
+
+	public void jmpIfFalse(String label) {
+		out.println(getInset() + "jz\t" + label);
+		out.flush();
+	}
+
+	public void jmp(String label) {
+		out.println(getInset() + "jmp\t" + label);
+		out.flush();
 	}
 
 	private String getInset() {
@@ -112,32 +132,28 @@ public class CG {
 		switch (fromType) {
 			case IntType _ when toType instanceof DoubleType -> {
 				out.println(getInset() + "i2f");
-				out.flush();
 			}
 			case DoubleType _ when toType instanceof IntType -> {
 				out.println(getInset() + "f2i");
-				out.flush();
 			}
 			case CharType _ when toType instanceof IntType -> {
 				out.println(getInset() + "b2i");
-				out.flush();
 			}
 			case IntType _ when toType instanceof CharType -> {
 				out.println(getInset() + "i2b");
-				out.flush();
 			}
 			case CharType _ when toType instanceof DoubleType -> {
 				out.println(getInset() + "b2i");
 				out.println(getInset() + "i2f");
-				out.flush();
 			}
 			case DoubleType _ when toType instanceof CharType -> {
 				out.println(getInset() + "f2i");
 				out.println(getInset() + "i2b");
-				out.flush();
+
 			}
 			default -> throw new RuntimeException("Unsupported cast from " + fromType + " to " + toType);
 		}
+		out.flush();
 	}
 
 	/**
@@ -153,13 +169,21 @@ public class CG {
 
 	public void declareFunction(FunctionDefinition functionDefinition) {
 		out.println("\n" + functionDefinition.getNames().getFirst().getName() + ":");
-		out.flush();
 		insetLevel++;
+		comment("Parameters");
+		((FunctionType) functionDefinition.getType()).getParams().forEach(this::declaration);
+		comment("Local variables");
+		functionDefinition.getLocalVars().forEach(this::declaration);
+		int localBytes = functionDefinition.getLocalVars().stream().mapToInt(v -> v.getType().numberOfBytes() * v.getNames().size()).sum();
+		out.println(getInset() + "enter\t" + localBytes);
+		out.flush();
 	}
 
 	public void endFunctionDeclaration(FunctionDefinition functionDefinition) {
-		// TODO figure out how to set the return value properly
-		out.println(getInset() + "ret\t0, 0, 0");
+		FunctionType functionType = (FunctionType) functionDefinition.getType();
+		int localBytes = functionDefinition.getLocalVars().stream().mapToInt(v -> v.getType().numberOfBytes() * v.getNames().size()).sum();
+		int paramsBytes = functionType.getParams().stream().mapToInt(v -> v.getType().numberOfBytes() * v.getNames().size()).sum();
+		out.println(getInset() + "ret\t" + functionType.getReturnType().numberOfBytes() + ", " + localBytes + ", " + paramsBytes);
 		out.flush();
 		insetLevel--;
 	}
@@ -174,7 +198,56 @@ public class CG {
 		// need to calculate the offset of the specific variable in case of multiple declarations
 		int varIndex = varDefinition.getNames().stream().map(Id::getName).toList().indexOf(variable.getName());
 		int offset = initialOffset + (varIndex * varDefinition.getType().numberOfBytes());
-		pusha(offset);
+
+		if (varDefinition.getScope() == 0) { // Global
+			pusha(offset);
+		} else { // Local
+			out.println(getInset() + "push\tbp");
+			out.println(getInset() + "pushi\t" + offset);
+			out.println(getInset() + "addi");
+			out.flush();
+		}
+	}
+
+	public void pushArrayElementAddress(ArrayAccess arrayAccess) {
+		// * Push size of element
+		ArrayType arrayType = (ArrayType) arrayAccess.getArray().getType();
+		Type elementType = arrayType.getElementType();
+		int elementSize = elementType.numberOfBytes();
+		out.println(getInset() + "pushi\t" + elementSize);
+		// * Push index
+		Type indexType = arrayAccess.getIndex().getType();
+		// * Multiply index by the size of the element type
+		mul(indexType);
+		// * Add to base address
+		add(indexType);
+		out.flush();
+	}
+
+	public void pushStructFieldAddress(StructAccess structAccess) {
+		// * Pushes the address of the struct field
+		// * Push base address of the struct
+		// * Calculate offset of the field
+		StructType structType = (StructType) structAccess.getStructExpression().getType();
+		int offset = 0;
+		String fieldName = structAccess.getFieldName();
+		boolean fieldFound = false;
+		for (StructRecordField field : structType.getFields()) {
+			if (field.getNames().stream().anyMatch(nameId -> nameId.getName().equals(fieldName))) {
+				fieldFound = true;
+				break;
+			}
+			offset += field.getType().numberOfBytes() * field.getNames().size();
+		}
+
+		if (!fieldFound) {
+			throw new IllegalStateException("Field " + fieldName + " not found in struct " + structType);
+		}
+
+		// * Add offset to base address
+		out.println(getInset() + "pushi\t" + offset);
+		out.println(getInset() + "addi");
+		out.flush();
 	}
 
 	// * To generate debug information
@@ -190,9 +263,14 @@ public class CG {
 	}
 
 	private void callMain() {
-		comment("Invocation to the main function");
-		out.println("call main");
+		callProcedure("main");
 		out.println("halt");
+		out.flush();
+	}
+
+	public void callProcedure(String procName) {
+		comment("Invocation to the " + procName + " function");
+		out.println(getInset() + "call " + procName);
 		out.flush();
 	}
 

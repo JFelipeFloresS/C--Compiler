@@ -229,6 +229,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 		if (!(arrayAccess.getIndex().getType() instanceof IntType)) {
 			ErrorType typeError = getIndexTypeError(arrayAccess.getIndex().getType(), arrayAccess);
 			arrayAccess.getIndex().setType(typeError);
+			arrayAccess.setType(typeError);
 			return null;
 		}
 

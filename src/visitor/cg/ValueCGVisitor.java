@@ -9,7 +9,7 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 
 	public ValueCGVisitor(CG cg) {
 		super(cg);
-		this.addressCGVisitor = new AddressCGVisitor(cg);
+		this.addressCGVisitor = new AddressCGVisitor(cg, this);
 	}
 
 	@Override
@@ -79,6 +79,13 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 	@Override
 	public Void visit(CharLiteral charLiteral, Void param) {
 		cg.push(charLiteral.getValue());
+		return null;
+	}
+
+	@Override
+	public Void visit(ArrayAccess arrayAccess, Void param) {
+		arrayAccess.accept(this.addressCGVisitor, null);
+		cg.load(arrayAccess.getType());
 		return null;
 	}
 
