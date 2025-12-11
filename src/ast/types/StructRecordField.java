@@ -96,6 +96,11 @@ public class StructRecordField extends AbstractType {
 	}
 
 	@Override
+	public char suffix() {
+		return type.suffix();
+	}
+
+	@Override
 	public int numberOfBytes() {
 		return type.numberOfBytes() * names.size();
 	}

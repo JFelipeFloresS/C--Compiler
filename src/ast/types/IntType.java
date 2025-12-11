@@ -88,6 +88,11 @@ public class IntType extends AbstractType {
 	}
 
 	@Override
+	public char suffix() {
+		return 'i';
+	}
+
+	@Override
 	public int numberOfBytes() {
 		return 2;
 	}

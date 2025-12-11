@@ -1,4 +1,5 @@
 import ast.Program;
+import cg.CG;
 import error_handler.ErrorHandler;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CharStream;
@@ -8,13 +9,14 @@ import parser.CmmLexer;
 import parser.CmmParser;
 import visitor.IdentificationVisitor;
 import visitor.TypeCheckingVisitor;
+import visitor.cg.ExecuteCGVisitor;
 
 import static utils.FileUtils.getInputAndOutputFilePathFromFileChooser;
 
 public class Main {
 
 	public static void main(String... args) throws Exception {
-		if (args.length < 1) {
+		if (args.length < 2) {
 			args = getInputAndOutputFilePathFromFileChooser();
 		}
 
@@ -49,6 +51,7 @@ public class Main {
 			System.exit(1);
 		} else {
 			ast.accept(new visitor.OffsetVisitor(), null);
+			ast.accept(new ExecuteCGVisitor(new CG(args[1], args[0])), null);
 		}
 
 		System.out.println(ast);

@@ -1,0 +1,313 @@
+
+#source	"input-1.txt"
+
+	' * [10,real] v (offset 0)
+
+' Invocation to the main function
+call main
+halt
+
+
+#line	5
+
+ main:
+	' * Parameters
+	' * Local variables
+	' * real value (offset -4)
+	' * int i (offset -6)
+	' * int j (offset -8)
+	' * [4,[5,int]] w (offset -48)
+	enter	48
+
+#line	12
+	' * Read
+	push	bp
+	pushi	-6
+	addi
+	ini
+	storei
+
+#line	13
+	push	bp
+	pushi	-4
+	addi
+	push	bp
+	pushi	-6
+	addi
+	loadi
+	i2f
+	pushf	10.0
+	divf
+	storef
+
+#line	15
+	push	bp
+	pushi	-6
+	addi
+	pushi	0
+	storei
+	' * While
+
+#line	16
+ label0:
+	push	bp
+	pushi	-6
+	addi
+	loadi
+	pushi	10
+	lti
+	jz	label1
+	' * Body of the while statement
+
+#line	17
+	pusha	0
+	push	bp
+	pushi	-6
+	addi
+	loadi
+	pushi	4
+	muli
+	addi
+	push	bp
+	pushi	-4
+	addi
+	loadf
+	storef
+
+#line	18
+	' * Write
+	push	bp
+	pushi	-6
+	addi
+	loadi
+	outi
+
+#line	18
+	' * Write
+	pushb	58
+	outb
+
+#line	18
+	' * Write
+	pusha	0
+	push	bp
+	pushi	-6
+	addi
+	loadi
+	pushi	4
+	muli
+	addi
+	loadf
+	outf
+
+#line	18
+	' * Write
+	pushb	32
+	outb
+	' * If statement
+
+#line	19
+	push	bp
+	pushi	-6
+	addi
+	loadi
+	pushi	2
+	modi
+	jz	label2
+	' * Body of the if branch
+
+#line	20
+	' * Write
+	pushb	111
+	outb
+
+#line	20
+	' * Write
+	pushb	100
+	outb
+
+#line	20
+	' * Write
+	pushb	100
+	outb
+
+#line	20
+	' * Write
+	pushb	10
+	outb
+	jmp	label3
+ label2:
+	' * Body of the else branch
+
+#line	23
+	' * Write
+	pushb	101
+	outb
+
+#line	23
+	' * Write
+	pushb	118
+	outb
+
+#line	23
+	' * Write
+	pushb	101
+	outb
+
+#line	23
+	' * Write
+	pushb	110
+	outb
+
+#line	23
+	' * Write
+	pushb	10
+	outb
+ label3:
+
+#line	25
+	push	bp
+	pushi	-6
+	addi
+	push	bp
+	pushi	-6
+	addi
+	loadi
+	pushi	1
+	addi
+	storei
+	jmp	label0
+ label1:
+
+#line	27
+	' * Write
+	pushb	10
+	outb
+
+#line	29
+	push	bp
+	pushi	-6
+	addi
+	pushi	0
+	storei
+	' * While
+
+#line	30
+ label4:
+	push	bp
+	pushi	-6
+	addi
+	loadi
+	pushi	4
+	lti
+	jz	label5
+	' * Body of the while statement
+
+#line	31
+	push	bp
+	pushi	-8
+	addi
+	pushi	0
+	storei
+	' * While
+
+#line	32
+ label6:
+	push	bp
+	pushi	-8
+	addi
+	loadi
+	pushi	5
+	lti
+	jz	label7
+	' * Body of the while statement
+
+#line	33
+	push	bp
+	pushi	-48
+	addi
+	push	bp
+	pushi	-6
+	addi
+	loadi
+	pushi	10
+	muli
+	addi
+	push	bp
+	pushi	-8
+	addi
+	loadi
+	pushi	2
+	muli
+	addi
+	push	bp
+	pushi	-6
+	addi
+	loadi
+	push	bp
+	pushi	-8
+	addi
+	loadi
+	addi
+	storei
+
+#line	34
+	' * Write
+	push	bp
+	pushi	-48
+	addi
+	push	bp
+	pushi	-6
+	addi
+	loadi
+	pushi	10
+	muli
+	addi
+	push	bp
+	pushi	-8
+	addi
+	loadi
+	pushi	2
+	muli
+	addi
+	loadi
+	outi
+
+#line	34
+	' * Write
+	pushb	32
+	outb
+
+#line	35
+	push	bp
+	pushi	-8
+	addi
+	push	bp
+	pushi	-8
+	addi
+	loadi
+	pushi	1
+	addi
+	storei
+	jmp	label6
+ label7:
+
+#line	37
+	' * Write
+	pushb	10
+	outb
+
+#line	38
+	push	bp
+	pushi	-6
+	addi
+	push	bp
+	pushi	-6
+	addi
+	loadi
+	pushi	1
+	addi
+	storei
+	jmp	label4
+ label5:
+	ret	0, 48, 0

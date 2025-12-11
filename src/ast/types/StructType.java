@@ -98,6 +98,11 @@ public class StructType extends AbstractType {
 	}
 
 	@Override
+	public char suffix() {
+		return 's';
+	}
+
+	@Override
 	public int numberOfBytes() {
 		return fields.stream()
 			.mapToInt(field -> field.getType().numberOfBytes())

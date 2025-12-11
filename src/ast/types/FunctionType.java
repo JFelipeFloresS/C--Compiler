@@ -147,6 +147,11 @@ public class FunctionType extends AbstractType {
 	}
 
 	@Override
+	public char suffix() {
+		throw new RuntimeException("Do not call suffix on FunctionType");
+	}
+
+	@Override
 	public int numberOfBytes() {
 		return 0;
 	}

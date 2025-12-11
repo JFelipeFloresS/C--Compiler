@@ -32,10 +32,10 @@ public class FileUtils {
 		System.out.println("Select input file:");
 		paths[0] = getFilePathFromFileChooser();
 		System.out.println("Selected input file: " + paths[0]);
-		// commenting out output file selection until implementation is done
-//    System.out.println("Select output file:");
-//    paths[1] = getFilePathFromFileChooser();
-//    System.out.println("Selected output file: " + paths[1]);
+
+		System.out.println("Select output file:");
+		paths[1] = getFilePathFromFileChooser();
+		System.out.println("Selected output file: " + paths[1]);
 
 		return paths;
 	}

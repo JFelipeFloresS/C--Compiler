@@ -459,8 +459,8 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 
 	@Override
 	public Void visit(Modulus modulus, Void param) {
-		super.visit(modulus, param);
-
+		modulus.getLeft().accept(this, null);
+		modulus.getRight().accept(this, null);
 		if (modulus.getLeft().getType() != null && modulus.getRight().getType() != null) {
 			modulus.setType(
 				modulus.getLeft().getType().arithmetic(modulus.getRight().getType(), modulus)

@@ -1,0 +1,30 @@
+char c; 
+int a;
+double r;
+int i;
+ 
+void main() {	
+	c='a';
+	write c; write '\n';
+
+	a=1;
+	i=(int)'0'*3;
+	
+	write a; 	write ' '; 
+	write i; 	write '\n';
+		
+	read r;
+	write (double)2*r; 		write '\n';
+	
+	write (double)3-4.5; 	write ' '; 
+    write (double)'0'/48.0; write ' ';
+    write 0%1; 				write ' ';
+    write '0'+'1'; 			write '\n';
+    
+	write 1<2;	write ' ';
+	write 4>=3;	write ' ';
+	write 5==5;	write ' ';
+	write 1&&2;	write ' ';
+	write 0||3;	write ' ';
+	write !0;	write '\n';
+}

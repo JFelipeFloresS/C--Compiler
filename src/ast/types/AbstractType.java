@@ -70,6 +70,10 @@ public abstract class AbstractType extends AbstractLocatable implements Type {
 			return false;
 		}
 
+		if (!this.getClass().equals(that.getClass())) {
+			return false;
+		}
+
 		if (this.getLine() != that.getLine()) {
 			System.out.println(this.getClass().getSimpleName() + " line numbers differ: " + this.getLine() + " != " + that.getLine());
 			return false;
@@ -85,9 +89,14 @@ public abstract class AbstractType extends AbstractLocatable implements Type {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(Integer.hashCode(getLine()),
+		return Objects.hash(this.getClass().getSimpleName(),
+			Integer.hashCode(getLine()),
 			Integer.hashCode(getColumn()));
 	}
 
+	@Override
+	public abstract char suffix();
+
+	@Override
 	public abstract int numberOfBytes();
 }

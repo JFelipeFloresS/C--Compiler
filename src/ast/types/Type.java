@@ -22,5 +22,7 @@ public interface Type extends Locatable {
 
 	boolean isBuiltInType();
 
+	char suffix();
+
 	int numberOfBytes();
 }

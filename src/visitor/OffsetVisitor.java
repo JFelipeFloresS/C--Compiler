@@ -42,8 +42,8 @@ public class OffsetVisitor extends AbstractVisitor<Void, Void> {
 		// Calculate local variable offsets (negative)
 		int localBytesSum = 0;
 		for (VariableDefinition varDef : funcDefinition.getLocalVars()) {
-			localBytesSum += varDef.getType().numberOfBytes();
 			varDef.setOffset(-localBytesSum);
+			localBytesSum += varDef.getType().numberOfBytes();
 		}
 
 		return null;

@@ -88,6 +88,11 @@ public class DoubleType extends AbstractType {
 	}
 
 	@Override
+	public char suffix() {
+		return 'f';
+	}
+
+	@Override
 	public int numberOfBytes() {
 		return 4;
 	}

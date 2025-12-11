@@ -154,6 +154,11 @@ public class ArrayType extends AbstractType {
 	}
 
 	@Override
+	public char suffix() {
+		return this.getElementType().suffix();
+	}
+
+	@Override
 	public int numberOfBytes() {
 		return this.getElementType().numberOfBytes() * this.getSize();
 	}
