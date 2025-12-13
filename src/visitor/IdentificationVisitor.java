@@ -22,15 +22,25 @@ public class IdentificationVisitor extends AbstractVisitor<Void, Void> {
 
 	@Override
 	public Void visit(VariableDefinition varDef, Void param) {
-		symbolTable.insert(varDef);
+		varDef.getType().accept(this, param);
+
+		if (!symbolTable.insert(varDef)) {
+			new ErrorType("Error: Variable already defined in " + symbolTable.getScopeName(symbolTable.getCurrentScope()), varDef);
+		}
+
 		if (varDef.getType() instanceof StructType structType) {
-			for (StructRecordField field : structType.getFields()) {
-				field.getType().accept(this, param);
-				field.setStructDef(varDef);
-			}
 			structType.setStructDefinition(varDef);
-		} else {
-			varDef.getType().accept(this, param);
+			structType.getFields().forEach(field -> {
+				field.accept(this, param);
+				if (field.getType() instanceof StructType nestedStructType) {
+					nestedStructType.setStructDefinition(varDef);
+					nestedStructType.accept(this, param);
+				}
+				field.getNames().forEach(id -> {
+					id.setDefinition(varDef);
+					id.accept(this, param);
+				});
+			});
 		}
 		return null;
 	}
@@ -57,14 +67,19 @@ public class IdentificationVisitor extends AbstractVisitor<Void, Void> {
 	@Override
 	public Void visit(Id id, Void param) {
 		id.setScope(symbolTable.getCurrentScope());
+		Definition idDef = id.getDefinition();
 		Definition varDef = symbolTable.find(id.getName());
-		if (varDef == null) {
+		if (varDef == null && (idDef == null || !(idDef.getType() instanceof StructType))) {
 			id.setType(new ErrorType("Error: Variable \"" + id.getName() + "\" not defined in " + symbolTable.getScopeName(symbolTable.getCurrentScope()), id));
-		} else {
-			id.setScope(symbolTable.getCurrentScope());
-			id.setDefinition(varDef);
-			id.setType(varDef.getType());
+			return null;
+		} else if (varDef == null) {
+			varDef = id.getDefinition();
 		}
+
+		id.setScope(symbolTable.getCurrentScope());
+		id.setDefinition(varDef);
+		id.setType(varDef.getType());
+
 		return null;
 	}
 
@@ -88,17 +103,11 @@ public class IdentificationVisitor extends AbstractVisitor<Void, Void> {
 
 	@Override
 	public Void visit(StructType structType, Void param) {
-		if (structType.getStructDefinition() == null) {
-			for (StructRecordField field : structType.getFields()) {
-				field.accept(this, param);
-			}
-		}
 		return null;
 	}
 
 	@Override
 	public Void visit(StructRecordField recordField, Void param) {
-		recordField.getType().accept(this, param);
 		return null;
 	}
 

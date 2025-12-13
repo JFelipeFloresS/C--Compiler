@@ -4,6 +4,7 @@ import ast.Program;
 import ast.definitions.FunctionDefinition;
 import ast.definitions.VariableDefinition;
 import ast.types.FunctionType;
+import ast.types.StructType;
 
 public class OffsetVisitor extends AbstractVisitor<Void, Void> {
 
@@ -42,7 +43,7 @@ public class OffsetVisitor extends AbstractVisitor<Void, Void> {
 		// Calculate local variable offsets (negative)
 		int localBytesSum = 0;
 		for (VariableDefinition varDef : funcDefinition.getLocalVars()) {
-			localBytesSum += varDef.getType().numberOfBytes() * varDef.getNames().size();
+			localBytesSum += varDef.getType().numberOfBytes();
 			varDef.setOffset(-localBytesSum);
 		}
 
@@ -52,8 +53,12 @@ public class OffsetVisitor extends AbstractVisitor<Void, Void> {
 	@Override
 	public Void visit(VariableDefinition varDefinition, Void param) {
 		varDefinition.setOffset(bytesGlobalsSum);
-		bytesGlobalsSum += (varDefinition.getType().numberOfBytes() * varDefinition.getNames().size());
+		bytesGlobalsSum += varDefinition.getType().numberOfBytes();
 		return null;
 	}
 
+	@Override
+	public Void visit(StructType structType, Void p) {
+		return null;
+	}
 }

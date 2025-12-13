@@ -104,9 +104,11 @@ public class StructType extends AbstractType {
 
 	@Override
 	public int numberOfBytes() {
-		return fields.stream()
-			.mapToInt(StructRecordField::numberOfBytes)
-			.sum();
+		int numberOfBytes = 0;
+		for (StructRecordField field : fields) {
+			numberOfBytes += field.numberOfBytes();
+		}
+		return numberOfBytes;
 	}
 
 	public VariableDefinition getStructDefinition() {

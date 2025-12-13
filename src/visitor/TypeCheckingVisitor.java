@@ -15,6 +15,20 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 	// STATEMENTS
 
 	@Override
+	public Void visit(VariableDefinition varDef, Void param) {
+		varDef.getType().accept(this, param);
+		varDef.getNames().forEach(name -> {
+			name.setDefinition(varDef);
+			name.accept(this, param);
+		});
+		if (varDef.getType() instanceof StructType structType) {
+			structType.setStructDefinition(varDef);
+			structType.accept(this, param);
+		}
+		return null;
+	}
+
+	@Override
 	public Void visit(Assignment assignment, Void param) {
 		assignment.getTarget().accept(this, null);
 		assignment.getValue().accept(this, null);
@@ -511,8 +525,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 
 	@Override
 	public Void visit(StructType structType, Void param) {
-		structType.getFields().forEach(f -> f.accept(this, null));
-		structType.setType(structType);
 		return null;
 	}
 

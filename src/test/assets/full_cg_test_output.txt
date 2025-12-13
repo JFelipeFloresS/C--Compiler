@@ -493,7 +493,7 @@ label5:
 #line	75
 	' * Assignment
 	pusha	48
-	pushi	2
+	pushi	0
 	addi
 	pushi	10
 	storei
@@ -501,7 +501,7 @@ label5:
 #line	76
 	' * Assignment
 	pusha	48
-	pushi	6
+	pushi	2
 	addi
 	pushf	20.5
 	storef
@@ -509,9 +509,9 @@ label5:
 #line	77
 	' * Assignment
 	pusha	48
-	pushi	15
+	pushi	10
 	addi
-	pushi	1
+	pushi	0
 	addi
 	pushb	65
 	storeb
@@ -519,9 +519,9 @@ label5:
 #line	78
 	' * Assignment
 	pusha	48
-	pushi	15
+	pushi	10
 	addi
-	pushi	5
+	pushi	1
 	addi
 	pushi	1
 	pushi	2
@@ -533,7 +533,7 @@ label5:
 #line	80
 	' * Write
 	pusha	48
-	pushi	2
+	pushi	0
 	addi
 	loadi
 	outi
@@ -546,7 +546,7 @@ label5:
 #line	82
 	' * Write
 	pusha	48
-	pushi	6
+	pushi	2
 	addi
 	loadf
 	f2i
@@ -560,9 +560,9 @@ label5:
 #line	84
 	' * Write
 	pusha	48
-	pushi	15
+	pushi	10
 	addi
-	pushi	1
+	pushi	0
 	addi
 	loadb
 	outb
@@ -575,9 +575,9 @@ label5:
 #line	86
 	' * Write
 	pusha	48
-	pushi	15
+	pushi	10
 	addi
-	pushi	5
+	pushi	1
 	addi
 	pushi	1
 	pushi	2
@@ -594,7 +594,7 @@ label5:
 #line	89
 	' * Assignment
 	pusha	48
-	pushi	10
+	pushi	6
 	addi
 	pushf	3.14
 	storef
@@ -602,7 +602,7 @@ label5:
 #line	90
 	' * Write
 	pusha	48
-	pushi	10
+	pushi	6
 	addi
 	loadf
 	outf

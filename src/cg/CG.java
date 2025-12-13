@@ -100,10 +100,15 @@ public class CG {
 		out.flush();
 	}
 
+	public void pushBasePointer() {
+		out.println(getInset() + "push\tbp");
+		out.flush();
+	}
+
 	/**
 	 * Pushes the address given by the offset in the output file
 	 *
-	 * @param offset
+	 * @param offset the offset to push
 	 */
 	public void pusha(int offset) {
 		out.println(getInset() + "pusha\t" + offset);
@@ -293,7 +298,7 @@ public class CG {
 		functionDefinition.getLocalVars().forEach(this::declaration);
 
 		// reserve space for local variables
-		int localBytes = functionDefinition.getLocalVars().stream().mapToInt(v -> v.getType().numberOfBytes() * v.getNames().size()).sum();
+		int localBytes = functionDefinition.getLocalVars().stream().mapToInt(v -> v.getType().numberOfBytes()).sum();
 		out.println(getInset() + "enter\t" + localBytes);
 		out.flush();
 	}
@@ -307,8 +312,8 @@ public class CG {
 		FunctionType functionType = (FunctionType) functionDefinition.getType();
 
 		// calculate bytes for local variables and parameters
-		int localBytes = functionDefinition.getLocalVars().stream().mapToInt(v -> v.getType().numberOfBytes() * v.getNames().size()).sum();
-		int paramsBytes = functionType.getParams().stream().mapToInt(v -> v.getType().numberOfBytes() * v.getNames().size()).sum();
+		int localBytes = functionDefinition.getLocalVars().stream().mapToInt(v -> v.getType().numberOfBytes()).sum();
+		int paramsBytes = functionType.getParams().stream().mapToInt(v -> v.getType().numberOfBytes()).sum();
 
 		// return statement with return type, local vars size and params size
 		out.println(getInset() + "ret\t" + functionType.getReturnType().numberOfBytes() + ", " + localBytes + ", " + paramsBytes);
@@ -334,9 +339,9 @@ public class CG {
 		if (varDefinition.getScope() == 0) { // Global
 			pusha(offset);
 		} else { // Local
-			out.println(getInset() + "push\tbp");
-			out.println(getInset() + "pushi\t" + offset);
-			out.println(getInset() + "addi");
+			pushBasePointer();
+			push(offset);
+			add(new IntType());
 			out.flush();
 		}
 	}
@@ -352,7 +357,7 @@ public class CG {
 		int elementSize = elementType.numberOfBytes();
 
 		// push size of base type
-		out.println(getInset() + "pushi\t" + elementSize);
+		push(elementSize);
 
 		Type indexType = arrayAccess.getIndex().getType();
 
@@ -383,16 +388,15 @@ public class CG {
 			for (int i = 0; i < field.getNames().size(); i++) {
 				// if found, calculate offset and break
 				if (field.getNames().get(i).getName().equals(fieldName)) {
-					offset += (i + 1) * field.getType().numberOfBytes();
 					fieldFound = true;
 					break;
 				}
+				// if not found, add the size of the entire field (all names) to find the correct offset
+				offset += field.getType().numberOfBytes();
 			}
 			if (fieldFound) {
 				break;
 			}
-			// if not found, add the size of the entire field (all names) to find the correct offset
-			offset += field.numberOfBytes();
 		}
 
 		if (!fieldFound) {
@@ -400,8 +404,8 @@ public class CG {
 		}
 
 		// add field offset to base address
-		out.println(getInset() + "pushi\t" + offset);
-		out.println(getInset() + "addi");
+		push(offset);
+		add(new IntType());
 		out.flush();
 	}
 
