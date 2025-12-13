@@ -26,7 +26,9 @@ public class IdentificationVisitor extends AbstractVisitor<Void, Void> {
 		if (varDef.getType() instanceof StructType structType) {
 			for (StructRecordField field : structType.getFields()) {
 				field.getType().accept(this, param);
+				field.setStructDef(varDef);
 			}
+			structType.setStructDefinition(varDef);
 		} else {
 			varDef.getType().accept(this, param);
 		}

@@ -3,10 +3,10 @@
 int[8][3] fibonacci;
 struct {
     int x;
-    double y;
+    double y, z;
     struct {
         char a;
-        int b;
+        int[2] b;
     } nested;
 } exampleStruct;
 
@@ -75,7 +75,7 @@ void main(){
   exampleStruct.x = 10;
   exampleStruct.y = 20.5;
   exampleStruct.nested.a = 'A';
-  exampleStruct.nested.b = 100;
+  exampleStruct.nested.b[1] = 100;
 
   write exampleStruct.x;        // Shows 10
   write '\n';
@@ -83,7 +83,12 @@ void main(){
   write '\n';
   write exampleStruct.nested.a; // Shows 'A'
   write '\n';
-  write exampleStruct.nested.b; // Shows 100
+  write exampleStruct.nested.b[1]; // Shows 100
+  write '\n';
+
+  exampleStruct.z = 3.14;
+  write exampleStruct.z; // Shows 3.14
+  write '\n';
 
 }
 

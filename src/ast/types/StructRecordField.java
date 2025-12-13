@@ -1,5 +1,6 @@
 package ast.types;
 
+import ast.definitions.VariableDefinition;
 import ast.expressions.Id;
 import ast.locatable.Locatable;
 import visitor.Visitor;
@@ -10,6 +11,7 @@ public class StructRecordField extends AbstractType {
 
 	private final Type type;
 	private final List<Id> names;
+	private VariableDefinition structDef;
 
 	public StructRecordField(int line, int column, Type type, List<Id> names) {
 		super(line, column);
@@ -108,5 +110,13 @@ public class StructRecordField extends AbstractType {
 	@Override
 	public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
 		return visitor.visit(this, param);
+	}
+
+	public VariableDefinition getStructDef() {
+		return structDef;
+	}
+
+	public void setStructDef(VariableDefinition structDef) {
+		this.structDef = structDef;
 	}
 }

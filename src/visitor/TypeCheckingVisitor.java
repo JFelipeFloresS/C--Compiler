@@ -296,11 +296,34 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 
 	@Override
 	public Void visit(StructAccess structAccess, Void param) {
-		super.visit(structAccess, param);
-		if (structAccess.getType() instanceof ErrorType) {
+		structAccess.getStructExpression().accept(this, null);
+
+		Type structType = structAccess.getStructExpression().getType();
+
+		if (structType instanceof ErrorType) {
+			structAccess.setType(structType);
 			return null;
 		}
-		structAccess.setType(structAccess.getStructRecordField().getType());
+
+		if (!(structType instanceof StructType)) {
+			ErrorType typeError = getNonStructTypeError(structType, structAccess);
+			structAccess.setType(typeError);
+			return null;
+		}
+
+		StructType sType = (StructType) structType;
+		StructRecordField fieldDef = sType.getField(structAccess.getFieldName());
+
+		if (fieldDef == null) {
+			ErrorType typeError = new ErrorType(
+				"Error: Struct type " + getPrettyTypeName(structType) + " has no field named \"" + structAccess.getFieldName() + "\".",
+				structAccess
+			);
+			structAccess.setType(typeError);
+			return null;
+		}
+
+		structAccess.setType(fieldDef.getType());
 		return null;
 	}
 
@@ -483,6 +506,13 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 		if (arrayType.getElementType().getType() != null)
 			arrayType.setType(arrayType.getElementType().getType());
 
+		return null;
+	}
+
+	@Override
+	public Void visit(StructType structType, Void param) {
+		structType.getFields().forEach(f -> f.accept(this, null));
+		structType.setType(structType);
 		return null;
 	}
 
