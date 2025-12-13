@@ -105,7 +105,7 @@ public class StructType extends AbstractType {
 	@Override
 	public int numberOfBytes() {
 		return fields.stream()
-			.mapToInt(field -> field.getType().numberOfBytes())
+			.mapToInt(StructRecordField::numberOfBytes)
 			.sum();
 	}
 

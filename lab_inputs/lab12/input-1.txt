@@ -38,8 +38,5 @@ void main() {
 		i=i+1;
 	}
 
-	w[3][4]=42;
-    write w[3][4]; write '\n';
-
 }
 	

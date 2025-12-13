@@ -13,6 +13,9 @@ halt
 ' * Function definition: Id: main (6, 6)
 
 main:
+	' * Parameters
+	' * Local variables
+	enter	0
 
 #line	7
 	' * Assignment

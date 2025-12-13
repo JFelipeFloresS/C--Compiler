@@ -90,9 +90,23 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 	}
 
 	@Override
+	public Void visit(StructAccess structAccess, Void param) {
+		structAccess.accept(this.addressCGVisitor, null);
+		cg.load(structAccess.getType());
+		return null;
+	}
+
+	@Override
 	public Void visit(Cast cast, Void param) {
 		cast.getExpression().accept(this, null);
 		cg.cast(cast.getExpression().getType(), cast.getType());
+		return null;
+	}
+
+	@Override
+	public Void visit(FunctionInvocation functionInvocation, Void param) {
+		functionInvocation.getParameters().forEach(arg -> arg.accept(this, null));
+		cg.callFunction(functionInvocation.getFunctionId().getName());
 		return null;
 	}
 }

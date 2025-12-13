@@ -220,6 +220,11 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 
 		Type arrayType = arrayAccess.getArray().getType();
 
+		if (arrayType instanceof ErrorType) {
+			arrayAccess.setType(arrayType);
+			return null;
+		}
+
 		if (!(arrayType instanceof ArrayType)) {
 			ErrorType typeError = getNonArrayTypeError(arrayType, arrayAccess);
 			arrayAccess.setType(typeError);

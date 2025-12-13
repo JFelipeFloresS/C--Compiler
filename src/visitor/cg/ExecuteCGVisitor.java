@@ -4,6 +4,8 @@ import ast.Program;
 import ast.definitions.FunctionDefinition;
 import ast.definitions.VariableDefinition;
 import ast.statements.*;
+import ast.types.FunctionType;
+import ast.types.VoidType;
 import cg.CG;
 
 public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
@@ -62,8 +64,19 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
 	public Void visit(FunctionDefinition functionDefinition, Void param) {
 		cg.comment("Function definition: " + functionDefinition.getNames().getFirst());
 		cg.declareFunction(functionDefinition);
-		functionDefinition.getStmtsBlock().forEach(stmt -> stmt.accept(this, null));
-		cg.endFunctionDeclaration(functionDefinition);
+		boolean hasReturnStatement = false;
+		for (Statement stmt : functionDefinition.getStmtsBlock()) {
+			stmt.accept(this, null);
+			if (stmt instanceof Return) {
+				hasReturnStatement = true;
+				break;
+			}
+		}
+
+		if (!hasReturnStatement && ((FunctionType) functionDefinition.getType()).getReturnType() instanceof VoidType) {
+			cg.returnFunction(functionDefinition);
+		}
+
 		return null;
 	}
 
@@ -82,7 +95,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
 		cg.line(procedureInvocation);
 		cg.comment("Procedure Invocation: " + procedureInvocation.getProcedureId().getName());
 		procedureInvocation.getParameters().forEach(arg -> arg.accept(this.valueCGVisitor, null));
-		cg.callProcedure(procedureInvocation.getProcedureId().getName());
+		cg.callProcedure(procedureInvocation.getProcedureId().getName(), ((FunctionType) procedureInvocation.getType()).getReturnType());
 		return null;
 	}
 
@@ -119,6 +132,17 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
 			ifElseStmtm.getElseStatements().forEach(stmt -> stmt.accept(this, null));
 		}
 		cg.label(endLabel);
+		return null;
+	}
+
+	@Override
+	public Void visit(Return returnStmtm, Void param) {
+		cg.line(returnStmtm);
+		cg.comment("Return statement");
+		if (returnStmtm.getExpression() != null) {
+			returnStmtm.getExpression().accept(this.valueCGVisitor, null);
+		}
+		cg.returnFunction(returnStmtm.getFuncDef());
 		return null;
 	}
 }

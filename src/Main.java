@@ -16,7 +16,7 @@ public class Main {
 	public static void main(String... args) throws Exception {
 		if (args.length < 2) {
 //			args = getInputAndOutputFilePathFromFileChooser();
-			args = new String[]{"/Users/masters/Projects/C--Compiler/./lab_inputs/lab12/input-1.txt", "/Users/masters/Projects/C--Compiler/./test_output.txt"};
+			args = new String[]{"/Users/masters/Projects/C--Compiler/./lab_inputs/lab12/input-2.txt", "/Users/masters/Projects/C--Compiler/./test_output.txt"};
 		}
 
 		// create a lexer that feeds off of input CharStream
@@ -50,7 +50,7 @@ public class Main {
 			System.exit(1);
 		} else {
 			ast.accept(new visitor.OffsetVisitor(), null);
-			ast.accept(new ExecuteCGVisitor(new CG(args[1], args[0])), null);
+			ast.accept(new ExecuteCGVisitor(new CG(args[0], args[1])), null);
 		}
 
 		System.out.println(ast);
