@@ -3,6 +3,7 @@ package visitor;
 import ast.Program;
 import ast.definitions.FunctionDefinition;
 import ast.definitions.VariableDefinition;
+import ast.types.ArrayType;
 import ast.types.FunctionType;
 import ast.types.StructType;
 
@@ -53,7 +54,11 @@ public class OffsetVisitor extends AbstractVisitor<Void, Void> {
 	@Override
 	public Void visit(VariableDefinition varDefinition, Void param) {
 		varDefinition.setOffset(bytesGlobalsSum);
-		bytesGlobalsSum += varDefinition.getType().numberOfBytes();
+		if (varDefinition.getType() instanceof ArrayType || varDefinition.getType() instanceof StructType) {
+			bytesGlobalsSum += varDefinition.getType().numberOfBytes() * varDefinition.getNames().size();
+		} else {
+			bytesGlobalsSum += varDefinition.getType().numberOfBytes();
+		}
 		return null;
 	}
 

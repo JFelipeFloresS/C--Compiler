@@ -1,17 +1,24 @@
+
 #source	"./src/test/assets/basic_cg_test_input.txt"
 
-call   main
+' * Invocation to the main function
+call	main
 halt
-
+' * CharType(1, 1) c (offset 0)
+' * IntType(2, 1) a (offset 1)
+' * DoubleType(3, 1) r (offset 3)
+' * IntType(4, 1) i (offset 7)
 
 #line	6
+' * Function definition: Id: main (6, 6)
 
- main:
+main:
 	' * Parameters
 	' * Local variables
 	enter	0
 
 #line	7
+	' * Assignment
 	pusha	0
 	pushb	97
 	storeb
@@ -28,11 +35,13 @@ halt
 	outb
 
 #line	10
+	' * Assignment
 	pusha	1
 	pushi	1
 	storei
 
 #line	11
+	' * Assignment
 	pusha	7
 	pushb	48
 	b2i

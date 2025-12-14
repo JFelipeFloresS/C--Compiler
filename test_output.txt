@@ -1,19 +1,20 @@
 
-#source	"/Users/masters/Projects/C--Compiler/./lab_inputs/lab12/input-2.txt"
+#source	"/Users/masters/Projects/C--Compiler/./input.txt"
 
 ' * Invocation to the main function
-call main
+call	main
 halt
-' * ArrayType(3, 1) ArrayType(3, 1) IntType(3, 1)[8][3] fibonacci (offset 0)
+' * ArrayType(1, 1) ArrayType(1, 1) IntType(1, 1)[8][3] fibonacci (offset 0)
 
-#line	5
-' * Function definition: Id: p (5, 6)
+#line	3
+' * Function definition: Id: p (3, 6)
 
 p:
 	' * Parameters
 	' * Local variables
 	enter	0
 	ret	0, 0, 0
+' * CharType(5, 1) global (offset 48)
 
 #line	7
 ' * Function definition: Id: f (7, 5)
@@ -314,7 +315,7 @@ main:
 #line	41
 	' * Procedure Invocation: p
 	' * Invocation to the p function
-	call p
+	call	p
 
 #line	42
 	' * Assignment
@@ -345,7 +346,7 @@ main:
 	loadb
 	b2i
 	' * Invocation to the f function
-	call f
+	call	f
 	outi
 
 #line	47
@@ -358,13 +359,13 @@ main:
 	pushf	1.3
 	pushi	2
 	' * Invocation to the f function
-	call f
+	call	f
 	popi
 
 #line	51
 	' * Procedure Invocation: initialize
 	' * Invocation to the initialize function
-	call initialize
+	call	initialize
 
 #line	52
 	' * Assignment

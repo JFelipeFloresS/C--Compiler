@@ -369,7 +369,7 @@ public class CG {
 	private void pushArrayElementAddress(ArrayAccess arrayAccess) {
 		// element size
 		ArrayType arrayType = (ArrayType) arrayAccess.getArray().getType();
-		push(arrayType.getSize());
+		stepImplementation(arrayAccess);
 
 		// I haven't been able to implement the array access based on the index properly but commented out is my latest attempt
 		// remove the push(arrayElementType.numberOfBytes()) line above and uncomment the code below to use it
@@ -404,9 +404,25 @@ public class CG {
 //
 //		// multiply by size of each element
 //		push(arrayElementType.numberOfBytes());
-		mul(new IntType());
+//		mul(new IntType());
+//
+//		add(new IntType());
+	}
 
-		add(new IntType());
+	private void stepImplementation(ArrayAccess arrayAccess) {
+		ArrayType arrayType = (ArrayType) arrayAccess.getArray().getType();
+		Type elementType = arrayType.getElementType();
+		int elementSize = elementType.numberOfBytes();
+
+		// push size of base type
+		out.println(getInset() + "pushi\t" + elementSize);
+
+		Type indexType = arrayAccess.getIndex().getType();
+		// multiply index by size of base type to get offset
+		mul(indexType);
+		// add offset to base address
+		add(indexType);
+		out.flush();
 	}
 
 	private int getArrayAccessDepth(Expression expr) {

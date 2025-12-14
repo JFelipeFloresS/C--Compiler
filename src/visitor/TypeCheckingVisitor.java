@@ -329,11 +329,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 		StructRecordField fieldDef = sType.getField(structAccess.getFieldName());
 
 		if (fieldDef == null) {
-			ErrorType typeError = new ErrorType(
-				"Error: Struct type " + getPrettyTypeName(structType) + " has no field named \"" + structAccess.getFieldName() + "\".",
-				structAccess
-			);
-			structAccess.setType(typeError);
 			return null;
 		}
 

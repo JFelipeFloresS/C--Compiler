@@ -2,7 +2,7 @@
 #source	"./src/test/assets/basic_cg_test_input.txt"
 
 ' * Invocation to the main function
-call main
+call	main
 halt
 ' * CharType(1, 1) c (offset 0)
 ' * IntType(2, 1) a (offset 1)

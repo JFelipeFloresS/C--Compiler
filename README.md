@@ -42,5 +42,6 @@ java -cp out Main input.txt output.txt
 
 ## Input/output
 
-By default, the input file is defined as [input.txt](./input.txt) and the output is [output.txt](./output.txt). Extra
-input to check specific lab features can be found in the [lab_inputs](./lab_inputs) folder.
+The input file is a C-- source code file, and the output file is the generated assembly code file for MAPL
+
+When running the compiler, if no input/output file names are provided, a file dialog will open to select them.

@@ -29,20 +29,29 @@ public class IdentificationVisitor extends AbstractVisitor<Void, Void> {
 		}
 
 		if (varDef.getType() instanceof StructType structType) {
-			structType.setStructDefinition(varDef);
-			structType.getFields().forEach(field -> {
-				field.accept(this, param);
-				if (field.getType() instanceof StructType nestedStructType) {
-					nestedStructType.setStructDefinition(varDef);
-					nestedStructType.accept(this, param);
-				}
-				field.getNames().forEach(id -> {
-					id.setDefinition(varDef);
-					id.accept(this, param);
-				});
-			});
+			structFieldsRecursion(structType, varDef, param);
 		}
 		return null;
+	}
+
+	private void structFieldsRecursion(Type type, VariableDefinition varDef, Void param) {
+		if (!(type instanceof StructType structType)) {
+			return;
+		}
+
+		structType.setStructDefinition(varDef);
+		structType.getFields().forEach(field -> {
+			field.accept(this, param);
+			if (field.getType() instanceof StructType nestedStructType) {
+				nestedStructType.setStructDefinition(varDef);
+				nestedStructType.accept(this, param);
+				structFieldsRecursion(nestedStructType, varDef, param);
+			}
+			field.getNames().forEach(id -> {
+				id.setDefinition(varDef);
+				id.accept(this, param);
+			});
+		});
 	}
 
 	@Override

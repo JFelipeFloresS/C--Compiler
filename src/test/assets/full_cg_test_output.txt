@@ -124,11 +124,11 @@ initialize:
 	' * Assignment
 	pusha	0
 	pushi	0
-	pushi	3
+	pushi	16
 	muli
 	addi
 	pushi	0
-	pushi	8
+	pushi	2
 	muli
 	addi
 	pushi	0
@@ -138,11 +138,11 @@ initialize:
 	' * Assignment
 	pusha	0
 	pushi	0
-	pushi	3
+	pushi	16
 	muli
 	addi
 	pushi	1
-	pushi	8
+	pushi	2
 	muli
 	addi
 	pushi	1
@@ -152,11 +152,11 @@ initialize:
 	' * Assignment
 	pusha	0
 	pushi	0
-	pushi	3
+	pushi	16
 	muli
 	addi
 	pushi	2
-	pushi	8
+	pushi	2
 	muli
 	addi
 	pushi	1
@@ -189,11 +189,11 @@ label2:
 	pushi	-2
 	addi
 	loadi
-	pushi	3
+	pushi	16
 	muli
 	addi
 	pushi	0
-	pushi	8
+	pushi	2
 	muli
 	addi
 	pusha	0
@@ -203,11 +203,11 @@ label2:
 	loadi
 	pushi	1
 	subi
-	pushi	3
+	pushi	16
 	muli
 	addi
 	pushi	1
-	pushi	8
+	pushi	2
 	muli
 	addi
 	loadi
@@ -220,11 +220,11 @@ label2:
 	pushi	-2
 	addi
 	loadi
-	pushi	3
+	pushi	16
 	muli
 	addi
 	pushi	1
-	pushi	8
+	pushi	2
 	muli
 	addi
 	pusha	0
@@ -234,11 +234,11 @@ label2:
 	loadi
 	pushi	1
 	subi
-	pushi	3
+	pushi	16
 	muli
 	addi
 	pushi	2
-	pushi	8
+	pushi	2
 	muli
 	addi
 	loadi
@@ -251,11 +251,11 @@ label2:
 	pushi	-2
 	addi
 	loadi
-	pushi	3
+	pushi	16
 	muli
 	addi
 	pushi	2
-	pushi	8
+	pushi	2
 	muli
 	addi
 	pusha	0
@@ -263,11 +263,11 @@ label2:
 	pushi	-2
 	addi
 	loadi
-	pushi	3
+	pushi	16
 	muli
 	addi
 	pushi	0
-	pushi	8
+	pushi	2
 	muli
 	addi
 	loadi
@@ -276,11 +276,11 @@ label2:
 	pushi	-2
 	addi
 	loadi
-	pushi	3
+	pushi	16
 	muli
 	addi
 	pushi	1
-	pushi	8
+	pushi	2
 	muli
 	addi
 	loadi
@@ -416,11 +416,11 @@ label4:
 	pushi	-2
 	addi
 	loadi
-	pushi	3
+	pushi	16
 	muli
 	addi
 	pushi	0
-	pushi	8
+	pushi	2
 	muli
 	addi
 	loadi
@@ -438,11 +438,11 @@ label4:
 	pushi	-2
 	addi
 	loadi
-	pushi	3
+	pushi	16
 	muli
 	addi
 	pushi	1
-	pushi	8
+	pushi	2
 	muli
 	addi
 	loadi
@@ -460,11 +460,11 @@ label4:
 	pushi	-2
 	addi
 	loadi
-	pushi	3
+	pushi	16
 	muli
 	addi
 	pushi	2
-	pushi	8
+	pushi	2
 	muli
 	addi
 	loadi
@@ -534,8 +534,6 @@ label5:
 	pushi	0
 	pushi	2
 	muli
-	pushi	2
-	muli
 	addi
 	pushi	50
 	storei
@@ -550,19 +548,13 @@ label5:
 	pushi	1
 	pushi	2
 	muli
-	pushi	2
-	muli
 	addi
 	pusha	0
 	pushi	7
-	pushi	3
-	muli
 	pushi	16
 	muli
 	addi
 	pushi	2
-	pushi	8
-	muli
 	pushi	2
 	muli
 	addi
@@ -634,8 +626,6 @@ label5:
 	pushi	0
 	pushi	2
 	muli
-	pushi	2
-	muli
 	addi
 	loadi
 	outi
@@ -653,8 +643,6 @@ label5:
 	pushi	1
 	addi
 	pushi	1
-	pushi	2
-	muli
 	pushi	2
 	muli
 	addi
