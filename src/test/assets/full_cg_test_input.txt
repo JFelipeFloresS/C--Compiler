@@ -74,20 +74,22 @@ void main(){
 
   exampleStruct.x = 10;
   exampleStruct.y = 20.5;
+  exampleStruct.z = 3.14;
   exampleStruct.nested.a = 'A';
-  exampleStruct.nested.b[1] = 100;
+  exampleStruct.nested.b[0] = 50;
+  exampleStruct.nested.b[1] = fibonacci[7][2];
 
   write exampleStruct.x;        // Shows 10
   write '\n';
   write (int)exampleStruct.y;  // Shows 20
   write '\n';
+  write exampleStruct.z; // Shows 3.14
+  write '\n';
   write exampleStruct.nested.a; // Shows 'A'
   write '\n';
-  write exampleStruct.nested.b[1]; // Shows 100
+  write exampleStruct.nested.b[0]; // Shows 50
   write '\n';
-
-  exampleStruct.z = 3.14;
-  write exampleStruct.z; // Shows 3.14
+  write exampleStruct.nested.b[1]; // Shows 34
   write '\n';
 
 }

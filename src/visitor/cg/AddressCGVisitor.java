@@ -22,11 +22,13 @@ public class AddressCGVisitor extends AbstractCGVisitor<Void, Void> {
 
 	@Override
 	public Void visit(ArrayAccess arrayAccess, Void param) {
+		// base address
 		arrayAccess.getArray().accept(this, param);
+		// index
 		arrayAccess.getIndex().accept(this.valueCGVisitor, param);
 
-		// * Pushes the address of the array element
-		cg.pushArrayElementAddress(arrayAccess);
+		cg.pushAddress(arrayAccess);
+
 		return null;
 	}
 
@@ -34,7 +36,7 @@ public class AddressCGVisitor extends AbstractCGVisitor<Void, Void> {
 	public Void visit(StructAccess structAccess, Void param) {
 		// * Pushes the address of the struct field
 		structAccess.getStructExpression().accept(this, param);
-		cg.pushStructFieldAddress(structAccess);
+		cg.pushAddress(structAccess);
 		return null;
 	}
 }

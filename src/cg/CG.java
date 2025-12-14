@@ -3,6 +3,7 @@ package cg;
 import ast.definitions.FunctionDefinition;
 import ast.definitions.VariableDefinition;
 import ast.expressions.ArrayAccess;
+import ast.expressions.Expression;
 import ast.expressions.Id;
 import ast.expressions.StructAccess;
 import ast.locatable.Locatable;
@@ -236,10 +237,6 @@ public class CG {
 	 * @param toType   the type to cast to
 	 */
 	public void cast(Type fromType, Type toType) {
-		// if same type, no cast needed
-		if (fromType.equals(toType)) {
-			return;
-		}
 		switch (fromType) {
 			case IntType _ when toType instanceof DoubleType -> out.println(getInset() + "i2f");
 			case DoubleType _ when toType instanceof IntType -> out.println(getInset() + "f2i");
@@ -256,6 +253,9 @@ public class CG {
 				out.println(getInset() + "i2b");
 
 			}
+			case CharType _ when toType instanceof CharType -> {/* no cast needed */}
+			case IntType _ when toType instanceof IntType -> {/* no cast needed */}
+			case DoubleType _ when toType instanceof DoubleType -> {/* no cast needed */}
 			default -> throw new RuntimeException("Unsupported cast from " + fromType + " to " + toType);
 		}
 		out.flush();
@@ -324,11 +324,26 @@ public class CG {
 	}
 
 	/**
+	 * Pushes the address of a local or global variable, array element, or struct field
+	 *
+	 * @param expression the expression to get the address of
+	 */
+	public void pushAddress(Expression expression) {
+		switch (expression) {
+			case Id id -> pushAddress(id);
+			case ArrayAccess arrayAccess -> pushArrayElementAddress(arrayAccess);
+			case StructAccess structAccess -> pushStructFieldAddress(structAccess);
+			default ->
+				throw new IllegalArgumentException("Expression type not supported for pushAddress: " + expression.getClass().getSimpleName());
+		}
+	}
+
+	/**
 	 * Pushes the address of a local or global variable in the output file
 	 *
 	 * @param variable the variable identifier
 	 */
-	public void pushAddress(Id variable) {
+	private void pushAddress(Id variable) {
 		VariableDefinition varDefinition = (VariableDefinition) variable.getDefinition();
 		int initialOffset = varDefinition.getOffset();
 
@@ -351,22 +366,56 @@ public class CG {
 	 *
 	 * @param arrayAccess the array access expression
 	 */
-	public void pushArrayElementAddress(ArrayAccess arrayAccess) {
+	private void pushArrayElementAddress(ArrayAccess arrayAccess) {
+		// element size
 		ArrayType arrayType = (ArrayType) arrayAccess.getArray().getType();
-		Type elementType = arrayType.getElementType();
-		int elementSize = elementType.numberOfBytes();
+		push(arrayType.getSize());
 
-		// push size of base type
-		push(elementSize);
+		// I haven't been able to implement the array access based on the index properly but commented out is my latest attempt
+		// remove the push(arrayElementType.numberOfBytes()) line above and uncomment the code below to use it
 
-		Type indexType = arrayAccess.getIndex().getType();
+//		Type arrayElementType = arrayType.getElementType();
+//		while (arrayElementType instanceof ArrayType currArrayType) {
+//			arrayElementType = currArrayType.getElementType();
+//		}
+//
+//		int currArrayAccessDepth = getArrayAccessDepth(arrayAccess);
+//
+//		Type currType = arrayType;
+//		int totalDepth = 0;
+//		while (currType instanceof ArrayType currArrayType) {
+//			totalDepth++;
+//			currType = currArrayType.getElementType();
+//		}
+//
+//		// calculate element size based on remaining dimensions
+//		// get length of current array
+//		currType = arrayType;
+//		int elementSize = ((ArrayType) currType).getSize();
+//		for (int i = 0; i < totalDepth - currArrayAccessDepth; i++) {
+//			elementSize = ((ArrayType) currType).getSize();
+//			currType = ((ArrayType) currType).getElementType();
+//		}
+//
+//		// compute offset
+//		push(elementSize);
+//
+//		mul(new IntType());
+//
+//		// multiply by size of each element
+//		push(arrayElementType.numberOfBytes());
+		mul(new IntType());
 
-		// multiply index by size of base type to get offset
-		mul(indexType);
+		add(new IntType());
+	}
 
-		// add offset to base address
-		add(indexType);
-		out.flush();
+	private int getArrayAccessDepth(Expression expr) {
+		int depth = 0;
+		while (expr instanceof ArrayAccess arrayAccess) {
+			depth++;
+			expr = arrayAccess.getArray();
+		}
+		return depth;
 	}
 
 	/**
@@ -374,7 +423,7 @@ public class CG {
 	 *
 	 * @param structAccess the struct access expression
 	 */
-	public void pushStructFieldAddress(StructAccess structAccess) {
+	private void pushStructFieldAddress(StructAccess structAccess) {
 		StructType structType = (StructType) structAccess.getStructExpression().getType();
 
 		// calculate field offset
@@ -549,6 +598,16 @@ public class CG {
 	 */
 	public void logicalNot() {
 		out.println(getInset() + "not");
+		out.flush();
+	}
+
+	/**
+	 * Performs a unary minus operation in the output file
+	 *
+	 * @param type the type of the operand
+	 */
+	public void unaryMinus(Type type) {
+		out.println(getInset() + "neg" + type.suffix());
 		out.flush();
 	}
 }

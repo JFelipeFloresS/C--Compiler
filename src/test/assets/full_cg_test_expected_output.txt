@@ -509,6 +509,14 @@ label5:
 #line	77
 	' * Assignment
 	pusha	48
+	pushi	6
+	addi
+	pushf	3.14
+	storef
+
+#line	78
+	' * Assignment
+	pusha	48
 	pushi	10
 	addi
 	pushi	0
@@ -516,7 +524,23 @@ label5:
 	pushb	65
 	storeb
 
-#line	78
+#line	79
+	' * Assignment
+	pusha	48
+	pushi	10
+	addi
+	pushi	1
+	addi
+	pushi	0
+	pushi	2
+	muli
+	pushi	2
+	muli
+	addi
+	pushi	50
+	storei
+
+#line	80
 	' * Assignment
 	pusha	48
 	pushi	10
@@ -526,30 +550,31 @@ label5:
 	pushi	1
 	pushi	2
 	muli
+	pushi	2
+	muli
 	addi
-	pushi	100
+	pusha	0
+	pushi	7
+	pushi	3
+	muli
+	pushi	16
+	muli
+	addi
+	pushi	2
+	pushi	8
+	muli
+	pushi	2
+	muli
+	addi
+	loadi
 	storei
 
-#line	80
+#line	82
 	' * Write
 	pusha	48
 	pushi	0
 	addi
 	loadi
-	outi
-
-#line	81
-	' * Write
-	pushb	10
-	outb
-
-#line	82
-	' * Write
-	pusha	48
-	pushi	2
-	addi
-	loadf
-	f2i
 	outi
 
 #line	83
@@ -560,12 +585,11 @@ label5:
 #line	84
 	' * Write
 	pusha	48
-	pushi	10
+	pushi	2
 	addi
-	pushi	0
-	addi
-	loadb
-	outb
+	loadf
+	f2i
+	outi
 
 #line	85
 	' * Write
@@ -575,6 +599,55 @@ label5:
 #line	86
 	' * Write
 	pusha	48
+	pushi	6
+	addi
+	loadf
+	outf
+
+#line	87
+	' * Write
+	pushb	10
+	outb
+
+#line	88
+	' * Write
+	pusha	48
+	pushi	10
+	addi
+	pushi	0
+	addi
+	loadb
+	outb
+
+#line	89
+	' * Write
+	pushb	10
+	outb
+
+#line	90
+	' * Write
+	pusha	48
+	pushi	10
+	addi
+	pushi	1
+	addi
+	pushi	0
+	pushi	2
+	muli
+	pushi	2
+	muli
+	addi
+	loadi
+	outi
+
+#line	91
+	' * Write
+	pushb	10
+	outb
+
+#line	92
+	' * Write
+	pusha	48
 	pushi	10
 	addi
 	pushi	1
@@ -582,32 +655,13 @@ label5:
 	pushi	1
 	pushi	2
 	muli
+	pushi	2
+	muli
 	addi
 	loadi
 	outi
 
-#line	87
-	' * Write
-	pushb	10
-	outb
-
-#line	89
-	' * Assignment
-	pusha	48
-	pushi	6
-	addi
-	pushf	3.14
-	storef
-
-#line	90
-	' * Write
-	pusha	48
-	pushi	6
-	addi
-	loadf
-	outf
-
-#line	91
+#line	93
 	' * Write
 	pushb	10
 	outb
